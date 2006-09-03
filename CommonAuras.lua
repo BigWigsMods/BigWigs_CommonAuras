@@ -157,6 +157,8 @@ function BigWigsCommonAuras:SpellStatus_SpellCastInstant(sId, sName, sRank, sFul
 		self:TriggerEvent("BigWigs_SendSync", "BWCASW")
 	elseif sName == L["Challenging Shout"] then
 		self:TriggerEvent("BigWigs_SendSync", "BWCACS")
+	elseif sName == L["Challenging Roar"] then
+		self:TriggerEvent("BigWigs_SendSync", "BWCACR")
 	end
 end
 
