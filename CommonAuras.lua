@@ -30,12 +30,17 @@ L:RegisterTranslations("enUS", function() return {
 	cs_cast = "%s used challenging shout!",
 	cs_bar = "%s Challenging Shout",
 
+	cr_cast = "%s used challenging roar!",
+	cr_bar = "%s Challenging Roar",
+
 	["Fear Ward"] = true,
 	["Toggle Fear Ward display."] = true,
 	["Shield Wall"] = true,
 	["Toggle Shield Wall display."] = true,
 	["Challenging Shout"] = true,
 	["Toggle Challenging Shout display."] = true,
+	["Challenging Roar"] = true,
+	["Toggle Challenging Roar display."] = true,
 	["broadcast"] = true,
 	["Broadcast"] = true,
 	["Toggle broadcasting the messages to raid."] = true,
@@ -56,6 +61,7 @@ BigWigsCommonAuras.defaultDB = {
 	fearward = true,
 	shieldwall = true,
 	challengingshout = true,
+	challengingroar = true,
 	broadcast = false,
 }
 
@@ -86,6 +92,13 @@ BigWigsCommonAuras.consoleOptions = {
 			get = function() return BigWigsCommonAuras.db.profile.challengingshout end,
 			set = function(v) BigWigsCommonAuras.db.profile.challengingshout = v end,
 		},
+		["challengingroar"] = {
+			type = "toggle",
+			name = L["Challenging Roar"],
+			desc = L["Toggle Challenging Roar display."],
+			get = function() return BigWigsCommonAuras.db.profile.challengingroar end,
+			set = function(v) BigWigsCommonAuras.db.profile.challengingroar = v end,
+		},
 		["broadcast"] = {
 			type = "toggle",
 			name = L["Broadcast"],
@@ -103,8 +116,8 @@ BigWigsCommonAuras.revision = tonumber(string.sub("$Revision$", 12, -3))
 
 function BigWigsCommonAuras:OnEnable()
 	local _, class = UnitClass("player")
-	local race = UnitRace("player")
-	if class == "WARRIOR" or (class == "PRIEST" and race == "Dwarf") then
+	local _, race = UnitRace("player")
+	if class == "WARRIOR" or class == "DRUID" or (class == "PRIEST" and race == "Dwarf") then
 		if not spellstatus then spellstatus = AceLibrary("SpellStatus-1.0") end
 		self:RegisterEvent("SpellStatus_SpellCastInstant")
 	end
@@ -113,6 +126,7 @@ function BigWigsCommonAuras:OnEnable()
 	self:TriggerEvent("BigWigs_ThrottleSync", "BWCAFW", 5) -- Fear Ward
 	self:TriggerEvent("BigWigs_ThrottleSync", "BWCASW", 5) -- Shield Wall
 	self:TriggerEvent("BigWigs_ThrottleSync", "BWCACS", 5) -- Challenging Shout
+	self:TriggerEvent("BigWigs_ThrottleSync", "BWCACR", 5) -- Challenging Roar
 end
 
 ------------------------------
@@ -130,6 +144,9 @@ function BigWigsCommonAuras:BigWigs_RecvSync( sync, rest, nick )
 	elseif self.db.profile.challengingshout and sync == "BWCACS" then
 		self:TriggerEvent("BigWigs_Message", string.format(L["cs_cast"], nick), "Orange", not self.db.profile.broadcast, false)
 		self:TriggerEvent("BigWigs_StartBar", self, string.format(L["cs_bar"], nick), 6, "Interface\\Icons\\Ability_BullRush", "Orange")
+	elseif self.db.profile.challengingroar and sync == "BWCACR" then
+		self:TriggerEvent("BigWigs_Message", string.format(L["cr_cast"], nick), "Orange", not self.db.profile.broadcast, false)
+		self:TriggerEvent("BigWigs_StartBar", self, string.format(L["cr_bar"], nick), 6, "Interface\\Icons\\Ability_Druid_ChallangingRoar", "Orange")
 	end
 end
 
