@@ -15,7 +15,6 @@
 
 libs\Deformat-2.0\Deformat-2.0.lua
 libs\Gratuity-2.0\Gratuity-2.0.lua
-libs\SpecialEvents-Aura-2.0\SpecialEvents-Aura-2.0.lua
 libs\SpellCache-1.0\SpellCache-1.0.lua
 libs\SpellStatus-1.0\SpellStatus-1.0.lua
 
