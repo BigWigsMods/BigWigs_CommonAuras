@@ -181,7 +181,7 @@ function BigWigsCommonAuras:BigWigs_RecvSync( sync, rest, nick )
 		self:TriggerEvent("BigWigs_Message", string.format(L["cr_cast"], nick), "Orange", not self.db.profile.broadcast, false)
 		self:TriggerEvent("BigWigs_StartBar", self, string.format(L["cr_bar"], nick), 6, "Interface\\Icons\\Ability_Druid_ChallangingRoar", "Orange")
 	elseif self.db.profile.portal and sync == "BWCAP" and rest then
-		local _, _, zone = string.find(rest, "%s: (%s)")
+		local _, _, zone = string.find(rest, ".*: (.*)")
 		self:TriggerEvent("BigWigs_Message", string.format(L["portal_cast"], nick, zone), "Blue", not self.db.profile.broadcast, false)
 		self:TriggerEvent("BigWigs_StartBar", self, rest, 60, portalIcons[rest], "Blue")
 	end
