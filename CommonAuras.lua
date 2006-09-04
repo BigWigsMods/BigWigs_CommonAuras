@@ -16,6 +16,8 @@ local L = AceLibrary("AceLocale-2.0"):new("BigWigs"..name)
 
 local spellstatus = nil
 
+local portalIcons = {}
+
 ------------------------------
 --      Localization        --
 ------------------------------
@@ -33,6 +35,9 @@ L:RegisterTranslations("enUS", function() return {
 	cr_cast = "%s used challenging roar!",
 	cr_bar = "%s Challenging Roar",
 
+	portal_cast = "%s opened a portal to %s!",
+	-- portal_bar is the spellname
+
 	["Fear Ward"] = true,
 	["Toggle Fear Ward display."] = true,
 	["Shield Wall"] = true,
@@ -41,6 +46,8 @@ L:RegisterTranslations("enUS", function() return {
 	["Toggle Challenging Shout display."] = true,
 	["Challenging Roar"] = true,
 	["Toggle Challenging Roar display."] = true,
+	["Portal"] = true,
+	["Toggle Portal reporting."] = true,
 	["broadcast"] = true,
 	["Broadcast"] = true,
 	["Toggle broadcasting the messages to raid."] = true,
@@ -48,6 +55,13 @@ L:RegisterTranslations("enUS", function() return {
 	["Gives timer bars and raid messages about common buffs and debuffs."] = true,
 	["Common Auras"] = true,
 	["commonauras"] = true,
+
+	["Portal: Ironforge"] = true,
+	["Portal: Stormwind"] = true,
+	["Portal: Darnassus"] = true,
+	["Portal: Orgrimmar"] = true,
+	["Portal: Thunder Bluff"] = true,
+	["Portal: Undercity"] = true,
 
 } end )
 
@@ -62,6 +76,7 @@ BigWigsCommonAuras.defaultDB = {
 	shieldwall = true,
 	challengingshout = true,
 	challengingroar = true,
+	portal = true,
 	broadcast = false,
 }
 
@@ -99,6 +114,13 @@ BigWigsCommonAuras.consoleOptions = {
 			get = function() return BigWigsCommonAuras.db.profile.challengingroar end,
 			set = function(v) BigWigsCommonAuras.db.profile.challengingroar = v end,
 		},
+		["portal"] = {
+			type = "toggle",
+			name = L["Portal"],
+			desc = L["Toggle Portal reporting."],
+			get = function() return BigWigsCommonAuras.db.profile.portal end,
+			set = function(v) BigWigsCommonAuras.db.profile.portal = v end,
+		},
 		["broadcast"] = {
 			type = "toggle",
 			name = L["Broadcast"],
@@ -120,13 +142,24 @@ function BigWigsCommonAuras:OnEnable()
 	if class == "WARRIOR" or class == "DRUID" or (class == "PRIEST" and race == "Dwarf") then
 		if not spellstatus then spellstatus = AceLibrary("SpellStatus-1.0") end
 		self:RegisterEvent("SpellStatus_SpellCastInstant")
+	elseif class == "MAGE" then
+		if not spellstatus then spellstatus = AceLibrary("SpellStatus-1.0") end
+		self:RegisterEvent("SpellStatus_SpellCastCastingFinish")
 	end
-	
+
+	portalIcons[L["Portal: Ironforge"]] = "Spell_Arcane_PortalIronForge"
+	portalIcons[L["Portal: Stormwind"]] = "Spell_Arcane_PortalStormWind"
+	portalIcons[L["Portal: Darnassus"]] = "Spell_Arcane_PortalDarnassus"
+	portalIcons[L["Portal: Orgrimmar"]] = "Spell_Arcane_PortalOrgrimmar"
+	portalIcons[L["Portal: Thunder Bluff"]] = "Spell_Arcane_PortalThunderBluff"
+	portalIcons[L["Portal: Undercity"]] = "Spell_Arcane_PortalUnderCity"
+
 	self:RegisterEvent("BigWigs_RecvSync")
 	self:TriggerEvent("BigWigs_ThrottleSync", "BWCAFW", 5) -- Fear Ward
 	self:TriggerEvent("BigWigs_ThrottleSync", "BWCASW", 5) -- Shield Wall
 	self:TriggerEvent("BigWigs_ThrottleSync", "BWCACS", 5) -- Challenging Shout
 	self:TriggerEvent("BigWigs_ThrottleSync", "BWCACR", 5) -- Challenging Roar
+	self:TriggerEvent("BigWigs_ThrottleSync", "BWCAP", 5) -- Portal
 end
 
 ------------------------------
@@ -147,6 +180,10 @@ function BigWigsCommonAuras:BigWigs_RecvSync( sync, rest, nick )
 	elseif self.db.profile.challengingroar and sync == "BWCACR" then
 		self:TriggerEvent("BigWigs_Message", string.format(L["cr_cast"], nick), "Orange", not self.db.profile.broadcast, false)
 		self:TriggerEvent("BigWigs_StartBar", self, string.format(L["cr_bar"], nick), 6, "Interface\\Icons\\Ability_Druid_ChallangingRoar", "Orange")
+	elseif self.db.profile.portal and sync == "BWCAP" and rest then
+		local _, _, zone = string.find(rest, "%s: (%s)")
+		self:TriggerEvent("BigWigs_Message", string.format(L["portal_cast"], nick, zone), "Blue", not self.db.profile.broadcast, false)
+		self:TriggerEvent("BigWigs_StartBar", self, rest, 60, portalIcons[rest], "Blue")
 	end
 end
 
@@ -160,5 +197,10 @@ function BigWigsCommonAuras:SpellStatus_SpellCastInstant(sId, sName, sRank, sFul
 	elseif sName == L["Challenging Roar"] then
 		self:TriggerEvent("BigWigs_SendSync", "BWCACR")
 	end
+end
+
+function BigWigsCommonAuras:SpellStatus_SpellCastCastingFinish(sId, sName, sRank, sFullName, sCastTime)
+	if not string.find(sName, L["Portal"]) then return end
+	self:TriggerEvent("BigWigs_SendSync", "BWCAP "..sName)
 end
 
