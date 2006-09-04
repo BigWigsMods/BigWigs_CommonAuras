@@ -24,16 +24,16 @@ local portalIcons = {}
 
 L:RegisterTranslations("enUS", function() return {
 	fw_cast = "%s fearwarded %s.",
-	fw_bar = "%s FW CD",
+	fw_bar = "%s: FW Cooldown",
 
 	sw_cast = "%s used Shield Wall.",
-	sw_bar = "%s Shield Wall",
+	sw_bar = "%s: Shield Wall",
 
 	cs_cast = "%s used challenging shout!",
-	cs_bar = "%s Challenging Shout",
+	cs_bar = "%s: Challenging Shout",
 
 	cr_cast = "%s used challenging roar!",
-	cr_bar = "%s Challenging Roar",
+	cr_bar = "%s: Challenging Roar",
 
 	portal_cast = "%s opened a portal to %s!",
 	-- portal_bar is the spellname
@@ -189,7 +189,8 @@ end
 
 function BigWigsCommonAuras:SpellStatus_SpellCastInstant(sId, sName, sRank, sFullName, sCastTime)
 	if sName == L["Fear Ward"] then
-		self:TriggerEvent("BigWigs_SendSync", "BWCAFW "..UnitName("target"))
+		local targetName = UnitExists("target") and UnitName("target") or UnitName("player")
+		self:TriggerEvent("BigWigs_SendSync", "BWCAFW "..targetName)
 	elseif sName == L["Shield Wall"] then
 		self:TriggerEvent("BigWigs_SendSync", "BWCASW")
 	elseif sName == L["Challenging Shout"] then
