@@ -15,6 +15,7 @@ local name = "Common Auras"
 local L = AceLibrary("AceLocale-2.0"):new("BigWigs"..name)
 
 local spellstatus = nil
+local lastTank = nil
 
 local portalIcons = {}
 
@@ -155,11 +156,11 @@ function BigWigsCommonAuras:OnEnable()
 	portalIcons[L["Portal: Undercity"]] = "Spell_Arcane_PortalUnderCity"
 
 	self:RegisterEvent("BigWigs_RecvSync")
-	self:TriggerEvent("BigWigs_ThrottleSync", "BWCAFW", 5) -- Fear Ward
-	self:TriggerEvent("BigWigs_ThrottleSync", "BWCASW", 5) -- Shield Wall
-	self:TriggerEvent("BigWigs_ThrottleSync", "BWCACS", 5) -- Challenging Shout
-	self:TriggerEvent("BigWigs_ThrottleSync", "BWCACR", 5) -- Challenging Roar
-	self:TriggerEvent("BigWigs_ThrottleSync", "BWCAP", 5) -- Portal
+	self:TriggerEvent("BigWigs_ThrottleSync", "BWCAFW", 2) -- Fear Ward
+	self:TriggerEvent("BigWigs_ThrottleSync", "BWCASW", 2) -- Shield Wall
+	self:TriggerEvent("BigWigs_ThrottleSync", "BWCACS", 2) -- Challenging Shout
+	self:TriggerEvent("BigWigs_ThrottleSync", "BWCACR", 2) -- Challenging Roar
+	self:TriggerEvent("BigWigs_ThrottleSync", "BWCAP", 2) -- Portal
 end
 
 ------------------------------
@@ -174,12 +175,15 @@ function BigWigsCommonAuras:BigWigs_RecvSync( sync, rest, nick )
 	elseif self.db.profile.shieldwall and sync == "BWCASW" then
 		self:TriggerEvent("BigWigs_Message", string.format(L["sw_cast"], nick), "Yellow", not self.db.profile.broadcast, false)
 		self:TriggerEvent("BigWigs_StartBar", self, string.format(L["sw_bar"], nick), 10, "Interface\\Icons\\Ability_Warrior_ShieldWall", "Yellow")
+		lastTank = nick
 	elseif self.db.profile.challengingshout and sync == "BWCACS" then
 		self:TriggerEvent("BigWigs_Message", string.format(L["cs_cast"], nick), "Orange", not self.db.profile.broadcast, false)
 		self:TriggerEvent("BigWigs_StartBar", self, string.format(L["cs_bar"], nick), 6, "Interface\\Icons\\Ability_BullRush", "Orange")
+		lastTank = nick
 	elseif self.db.profile.challengingroar and sync == "BWCACR" then
 		self:TriggerEvent("BigWigs_Message", string.format(L["cr_cast"], nick), "Orange", not self.db.profile.broadcast, false)
 		self:TriggerEvent("BigWigs_StartBar", self, string.format(L["cr_bar"], nick), 6, "Interface\\Icons\\Ability_Druid_ChallangingRoar", "Orange")
+		lastTank = nick
 	elseif self.db.profile.portal and sync == "BWCAP" and rest then
 		local _, _, zone = string.find(rest, ".*: (.*)")
 		self:TriggerEvent("BigWigs_Message", string.format(L["portal_cast"], nick, zone), "Blue", not self.db.profile.broadcast, false)
@@ -203,5 +207,10 @@ end
 function BigWigsCommonAuras:SpellStatus_SpellCastCastingFinish(sId, sName, sRank, sFullName, sCastTime)
 	if not string.find(sName, L["Portal"]) then return end
 	self:TriggerEvent("BigWigs_SendSync", "BWCAP "..sName)
+end
+
+function BWCATargetLastTank()
+	if not lastTank then return end
+	TargetByName(lastTank, true)
 end
 
