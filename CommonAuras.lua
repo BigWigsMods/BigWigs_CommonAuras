@@ -14,8 +14,12 @@
 local name = "Common Auras"
 local L = AceLibrary("AceLocale-2.0"):new("BigWigs"..name)
 
-local spellstatus = nil
+local spellStatus = nil
 local lastTank = nil
+
+-- Use for detecting instant cast target (Fear Ward)
+local spellTarget = nil
+local spellCasting = nil
 
 local portalIcons = {}
 
@@ -70,7 +74,7 @@ L:RegisterTranslations("enUS", function() return {
 --      Module              --
 ------------------------------
 
-BigWigsCommonAuras = BigWigs:NewModule(name)
+BigWigsCommonAuras = BigWigs:NewModule(name, "AceHook-2.0")
 BigWigsCommonAuras.synctoken = myname
 BigWigsCommonAuras.defaultDB = {
 	fearward = true,
@@ -140,12 +144,20 @@ BigWigsCommonAuras.revision = tonumber(string.sub("$Revision$", 12, -3))
 function BigWigsCommonAuras:OnEnable()
 	local _, class = UnitClass("player")
 	local _, race = UnitRace("player")
-	if class == "WARRIOR" or class == "DRUID" or (class == "PRIEST" and race == "Dwarf") then
-		if not spellstatus then spellstatus = AceLibrary("SpellStatus-1.0") end
+
+	if class == "WARRIOR" or class == "DRUID" then
 		self:RegisterEvent("SpellStatus_SpellCastInstant")
+	elseif class == "PRIEST" and race == "Dwarf" then
+		self:RegisterEvent("SpellStatus_SpellCastInstant")
+		self:Hook("CastSpell")
+		self:Hook("CastSpellByName")
+		self:Hook("SpellTargetUnit")
+		--self:Hook("SpellStopTargeting")
+		self:Hook("TargetUnit")
 	elseif class == "MAGE" then
-		if not spellstatus then spellstatus = AceLibrary("SpellStatus-1.0") end
+		if not spellStatus then spellStatus = AceLibrary("SpellStatus-1.0") end
 		self:RegisterEvent("SpellStatus_SpellCastCastingFinish")
+		self:RegisterEvent("SpellStatus_SpellCastFailure")
 	end
 
 	portalIcons[L["Portal: Ironforge"]] = "Spell_Arcane_PortalIronForge"
@@ -193,7 +205,14 @@ end
 
 function BigWigsCommonAuras:SpellStatus_SpellCastInstant(sId, sName, sRank, sFullName, sCastTime)
 	if sName == L["Fear Ward"] then
-		local targetName = UnitExists("target") and UnitName("target") or UnitName("player")
+		local targetName = nil
+		if spellTarget then
+			targetName = spellTarget
+			spellCasting = nil
+			spellTarget = nil
+		else
+			targetName = UnitExists("target") and UnitName("target") or UnitName("player")
+		end
 		self:TriggerEvent("BigWigs_SendSync", "BWCAFW "..targetName)
 	elseif sName == L["Shield Wall"] then
 		self:TriggerEvent("BigWigs_SendSync", "BWCASW")
@@ -206,8 +225,74 @@ end
 
 function BigWigsCommonAuras:SpellStatus_SpellCastCastingFinish(sId, sName, sRank, sFullName, sCastTime)
 	if not string.find(sName, L["Portal"]) then return end
+	self:ScheduleEvent("bwcaspellcast", self.SpellCast, 0.3, self, sName)
+end
+
+function BigWigsCommonAuras:SpellStatus_SpellCastFailure(sId, sName, sRank, sFullName, isActiveSpell, UIEM_Message, CMSFLP_SpellName, CMSFLP_Message)
+	-- do nothing if we are casting a spell but the error doesn't consern that spell, thanks Iceroth.
+	if (spellStatus:IsCastingOrChanneling() and not spellStatus:IsActiveSpell(sId, sName)) then
+		return
+	end
+	if self:IsEventScheduled("bwcaspellcast") then
+		self:CancelScheduledEvent("bwcaspellcast")
+	end
+end
+
+function BigWigsCommonAuras:SpellCast(sName)
 	self:TriggerEvent("BigWigs_SendSync", "BWCAP "..sName)
 end
+
+
+------------------------------
+--      Hooks               --
+------------------------------
+
+function BigWigsCommonAuras:CastSpell(spellId, spellbookTabNum)
+	self.hooks["CastSpell"](spellId, spellbookTabNum)
+	if UnitExists("target") then
+		spellTarget = UnitName("target")
+	end
+	spellCasting = true
+end
+
+function BigWigsCommonAuras:CastSpellByName(a1, a2)
+	self.hooks["CastSpellByName"](a1, a2)
+	if a1 then
+		spellCasting = true
+		if not SpellIsTargeting() then
+			spellTarget = UnitName("target")
+		end
+	end
+end
+
+function BigWigsCommonAuras:SpellTargetUnit(a1)
+	local shallTargetUnit
+	if SpellIsTargeting() then
+		shallTargetUnit = true
+	end
+	self.hooks["SpellTargetUnit"](a1)
+	if shallTargetUnit and spellCasting and not SpellIsTargeting() then
+		spellTarget = UnitName(a1)
+	end
+end
+
+--[[
+function BigWigsCommonAuras:SpellStopTargeting()
+	self.hooks["SpellStopTargeting"]()
+	spellCasting = nil
+	spellTarget = nil
+end]]
+
+function BigWigsCommonAuras:TargetUnit(a1)
+	self.hooks["TargetUnit"](a1)
+	if spellCasting and UnitExists(a1) then
+		spellTarget = UnitName(a1)
+	end
+end
+
+------------------------------
+--      Macro               --
+------------------------------
 
 function BWCATargetLastTank()
 	if not lastTank then return end
