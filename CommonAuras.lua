@@ -149,7 +149,7 @@ function BigWigsCommonAuras:OnEnable()
 	if class == "WARRIOR" or class == "DRUID" then
 		self:RegisterEvent("SpellStatus_SpellCastInstant")
 		if class == "WARRIOR" then
-			local _, _, _, _, currentRank , _, _, _ = GetTalentInfo( 3 , 13 )
+			local _, _, _, _, currentRank ,_ , _, _ = GetTalentInfo( 3 , 13 )
 			if currentRank == 0 then
 				shieldWallDuration = 10
 			elseif currentRank == 1 then
@@ -199,7 +199,7 @@ function BigWigsCommonAuras:BigWigs_RecvSync( sync, rest, nick )
 		self:TriggerEvent("BigWigs_StartBar", self, string.format(L["fw_bar"], nick), 30, "Interface\\Icons\\Spell_Holy_Excorcism", "Green")
 	elseif self.db.profile.shieldwall and sync == "BWCASW" then
 		self:TriggerEvent("BigWigs_Message", string.format(L["sw_cast"], nick), "Yellow", not self.db.profile.broadcast, false)
-		self:TriggerEvent("BigWigs_StartBar", self, string.format(L["sw_bar"], nick), 10, "Interface\\Icons\\Ability_Warrior_ShieldWall", "Yellow")
+		self:TriggerEvent("BigWigs_StartBar", self, string.format(L["sw_bar"], nick), shieldWallDuration, "Interface\\Icons\\Ability_Warrior_ShieldWall", "Yellow")
 		lastTank = nick
 	elseif self.db.profile.challengingshout and sync == "BWCACS" then
 		self:TriggerEvent("BigWigs_Message", string.format(L["cs_cast"], nick), "Orange", not self.db.profile.broadcast, false)
