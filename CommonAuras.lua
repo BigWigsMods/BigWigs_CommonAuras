@@ -56,7 +56,7 @@ L:RegisterTranslations("enUS", function() return {
 	["Toggle Portal reporting."] = true,
 	["broadcast"] = true,
 	["Broadcast"] = true,
-	["Toggle broadcasting the messages to raid."] = true,
+	["Toggle broadcasting the messages to the raidwarning channel."] = true,
 
 	["Gives timer bars and raid messages about common buffs and debuffs."] = true,
 	["Common Auras"] = true,
@@ -130,7 +130,7 @@ BigWigsCommonAuras.consoleOptions = {
 		["broadcast"] = {
 			type = "toggle",
 			name = L["Broadcast"],
-			desc = L["Toggle broadcasting the messages to raid."],
+			desc = L["Toggle broadcasting the messages to the raidwarning channel."],
 			get = function() return BigWigsCommonAuras.db.profile.broadcast end,
 			set = function(v) BigWigsCommonAuras.db.profile.broadcast = v end,
 		},
