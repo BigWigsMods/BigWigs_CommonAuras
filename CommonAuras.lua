@@ -16,6 +16,7 @@ local L = AceLibrary("AceLocale-2.0"):new("BigWigs"..name)
 
 local spellStatus = nil
 local lastTank = nil
+local shieldWallDuration = nil
 
 -- Use for detecting instant cast target (Fear Ward)
 local spellTarget = nil
@@ -147,13 +148,25 @@ function BigWigsCommonAuras:OnEnable()
 
 	if class == "WARRIOR" or class == "DRUID" then
 		self:RegisterEvent("SpellStatus_SpellCastInstant")
+		if class == "WARRIOR" then
+			local _, _, _, _, currentRank , _, _, _ = GetTalentInfo( 3 , 13 )
+			if currentRank == 0 then
+				shieldWallDuration = 10
+			elseif currentRank == 1 then
+				shieldWallDuration = 13
+			else
+				shieldWallDuration = 15
+			end
+		end
 	elseif class == "PRIEST" and race == "Dwarf" then
 		self:RegisterEvent("SpellStatus_SpellCastInstant")
-		self:Hook("CastSpell")
+		--[[self:Hook("CastSpell")
 		self:Hook("CastSpellByName")
 		self:Hook("SpellTargetUnit")
-		--self:Hook("SpellStopTargeting")
+		self:Hook("SpellStopTargeting")
 		self:Hook("TargetUnit")
+		self:Hook("UseAction")
+		self:HookScript(WorldFrame,"OnMouseDown","BigWigsCommonAurasOnMouseDown")]]
 	elseif class == "MAGE" then
 		if not spellStatus then spellStatus = AceLibrary("SpellStatus-1.0") end
 		self:RegisterEvent("SpellStatus_SpellCastCastingFinish")
@@ -246,6 +259,29 @@ end
 ------------------------------
 --      Hooks               --
 ------------------------------
+--[[
+function BigWigsCommonAuras:UseAction(a1, a2, a3)
+	self.hooks["UseAction"](a1, a2, a3)
+	if GetActionText(a1) then return end
+	if SpellIsTargeting() then return
+	elseif a3 then
+		spellTarget = UnitName("player")
+	elseif UnitExists("target") then
+		spellTarget = UnitName("target")
+	end
+end
+
+function BigWigsCommonAuras:BigWigsCommonAurasOnMouseDown()
+	if UnitName("mouseover") then
+		spellTarget = UnitName("mouseover")
+	elseif GameTooltipTextLeft1:IsVisible() then
+		local _, _, name = string.find(GameTooltipTextLeft1:GetText(), "^Corpse of (.+)$")
+		if name then
+			spellTarget = name
+		end
+	end
+	self.hooks[WorldFrame]["OnMouseDown"]()
+end
 
 function BigWigsCommonAuras:CastSpell(spellId, spellbookTabNum)
 	self.hooks["CastSpell"](spellId, spellbookTabNum)
@@ -276,19 +312,19 @@ function BigWigsCommonAuras:SpellTargetUnit(a1)
 	end
 end
 
---[[
+
 function BigWigsCommonAuras:SpellStopTargeting()
 	self.hooks["SpellStopTargeting"]()
 	spellCasting = nil
 	spellTarget = nil
-end]]
+end
 
 function BigWigsCommonAuras:TargetUnit(a1)
 	self.hooks["TargetUnit"](a1)
 	if spellCasting and UnitExists(a1) then
 		spellTarget = UnitName(a1)
 	end
-end
+end]]
 
 ------------------------------
 --      Macro               --
