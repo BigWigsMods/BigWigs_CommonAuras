@@ -200,14 +200,17 @@ function BigWigsCommonAuras:BigWigs_RecvSync( sync, rest, nick )
 	elseif self.db.profile.shieldwall and sync == "BWCASW" then
 		self:TriggerEvent("BigWigs_Message", string.format(L["sw_cast"], nick), "Yellow", not self.db.profile.broadcast, false)
 		self:TriggerEvent("BigWigs_StartBar", self, string.format(L["sw_bar"], nick), shieldWallDuration, "Interface\\Icons\\Ability_Warrior_ShieldWall", "Yellow")
+		self:SetCandyBarOnClick("BigWigsBar "..string.format(L["sw_bar"], nick), function(name, button, extra) TargetByName(extra, true) end, nick )
 		lastTank = nick
 	elseif self.db.profile.challengingshout and sync == "BWCACS" then
 		self:TriggerEvent("BigWigs_Message", string.format(L["cs_cast"], nick), "Orange", not self.db.profile.broadcast, false)
 		self:TriggerEvent("BigWigs_StartBar", self, string.format(L["cs_bar"], nick), 6, "Interface\\Icons\\Ability_BullRush", "Orange")
+		self:SetCandyBarOnClick("BigWigsBar "..string.format(L["cs_bar"], nick), function(name, button, extra) TargetByName(extra, true) end, nick )
 		lastTank = nick
 	elseif self.db.profile.challengingroar and sync == "BWCACR" then
 		self:TriggerEvent("BigWigs_Message", string.format(L["cr_cast"], nick), "Orange", not self.db.profile.broadcast, false)
 		self:TriggerEvent("BigWigs_StartBar", self, string.format(L["cr_bar"], nick), 6, "Interface\\Icons\\Ability_Druid_ChallangingRoar", "Orange")
+		self:SetCandyBarOnClick("BigWigsBar "..string.format(L["cr_bar"], nick), function(name, button, extra) TargetByName(extra, true) end, nick )
 		lastTank = nick
 	elseif self.db.profile.portal and sync == "BWCAP" and rest then
 		local _, _, zone = string.find(rest, ".*: (.*)")
