@@ -181,11 +181,15 @@ function BigWigsCommonAuras:OnEnable()
 	portalIcons[L["Portal: Undercity"]] = "Spell_Arcane_PortalUnderCity"
 
 	self:RegisterEvent("BigWigs_RecvSync")
-	self:TriggerEvent("BigWigs_ThrottleSync", "BWCAFW", 2) -- Fear Ward
-	self:TriggerEvent("BigWigs_ThrottleSync", "BWCASW", 2) -- Shield Wall
-	self:TriggerEvent("BigWigs_ThrottleSync", "BWCACS", 2) -- Challenging Shout
-	self:TriggerEvent("BigWigs_ThrottleSync", "BWCACR", 2) -- Challenging Roar
-	self:TriggerEvent("BigWigs_ThrottleSync", "BWCAP", 2) -- Portal
+
+	-- XXX Actually, lets not sync anything here, since they are all just fired
+	-- once anyway, and sync'ing sometimes does prevent us from catching 2 CS/SW
+	-- at the same time.
+	--self:TriggerEvent("BigWigs_ThrottleSync", "BWCAFW", 2) -- Fear Ward
+	--self:TriggerEvent("BigWigs_ThrottleSync", "BWCASW", 2) -- Shield Wall
+	--self:TriggerEvent("BigWigs_ThrottleSync", "BWCACS", 2) -- Challenging Shout
+	--self:TriggerEvent("BigWigs_ThrottleSync", "BWCACR", 2) -- Challenging Roar
+	--self:TriggerEvent("BigWigs_ThrottleSync", "BWCAP", 2) -- Portal
 end
 
 ------------------------------
