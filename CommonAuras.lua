@@ -182,14 +182,13 @@ function BigWigsCommonAuras:OnEnable()
 
 	self:RegisterEvent("BigWigs_RecvSync")
 
-	-- XXX Actually, lets not sync anything here, since they are all just fired
-	-- once anyway, and sync'ing sometimes does prevent us from catching 2 CS/SW
-	-- at the same time.
-	--self:TriggerEvent("BigWigs_ThrottleSync", "BWCAFW", 2) -- Fear Ward
-	--self:TriggerEvent("BigWigs_ThrottleSync", "BWCASW", 2) -- Shield Wall
-	--self:TriggerEvent("BigWigs_ThrottleSync", "BWCACS", 2) -- Challenging Shout
-	--self:TriggerEvent("BigWigs_ThrottleSync", "BWCACR", 2) -- Challenging Roar
-	--self:TriggerEvent("BigWigs_ThrottleSync", "BWCAP", 2) -- Portal
+	-- XXX Lets have a low throttle because you'll get 2 syncs from yourself, so
+	-- it results in 2 messages.
+	self:TriggerEvent("BigWigs_ThrottleSync", "BWCAFW", .4) -- Fear Ward
+	self:TriggerEvent("BigWigs_ThrottleSync", "BWCASW", .4) -- Shield Wall
+	self:TriggerEvent("BigWigs_ThrottleSync", "BWCACS", .4) -- Challenging Shout
+	self:TriggerEvent("BigWigs_ThrottleSync", "BWCACR", .4) -- Challenging Roar
+	self:TriggerEvent("BigWigs_ThrottleSync", "BWCAP", .4) -- Portal
 end
 
 ------------------------------
