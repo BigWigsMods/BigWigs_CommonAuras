@@ -198,8 +198,10 @@ function BigWigsCommonAuras:BigWigs_RecvSync( sync, rest, nick )
 		self:TriggerEvent("BigWigs_Message", string.format(L["fw_cast"], nick, rest), "Green", not self.db.profile.broadcast, false)
 		self:TriggerEvent("BigWigs_StartBar", self, string.format(L["fw_bar"], nick), 30, "Interface\\Icons\\Spell_Holy_Excorcism", "Green")
 	elseif self.db.profile.shieldwall and sync == "BWCASW" then
+		local swTime = tonumber(rest)
+		if not swTime then swTime = 10 end -- If the tank uses an old BWCA, just assume 10 seconds.
 		self:TriggerEvent("BigWigs_Message", string.format(L["sw_cast"], nick), "Yellow", not self.db.profile.broadcast, false)
-		self:TriggerEvent("BigWigs_StartBar", self, string.format(L["sw_bar"], nick), shieldWallDuration, "Interface\\Icons\\Ability_Warrior_ShieldWall", "Yellow")
+		self:TriggerEvent("BigWigs_StartBar", self, string.format(L["sw_bar"], nick), swTime, "Interface\\Icons\\Ability_Warrior_ShieldWall", "Yellow")
 		self:SetCandyBarOnClick("BigWigsBar "..string.format(L["sw_bar"], nick), function(name, button, extra) TargetByName(extra, true) end, nick )
 		lastTank = nick
 	elseif self.db.profile.challengingshout and sync == "BWCACS" then
@@ -231,7 +233,7 @@ function BigWigsCommonAuras:SpellStatus_SpellCastInstant(sId, sName, sRank, sFul
 		end
 		self:TriggerEvent("BigWigs_SendSync", "BWCAFW "..targetName)
 	elseif sName == L["Shield Wall"] then
-		self:TriggerEvent("BigWigs_SendSync", "BWCASW")
+		self:TriggerEvent("BigWigs_SendSync", "BWCASW "..tostring(shieldWallDuration))
 	elseif sName == L["Challenging Shout"] then
 		self:TriggerEvent("BigWigs_SendSync", "BWCACS")
 	elseif sName == L["Challenging Roar"] then
