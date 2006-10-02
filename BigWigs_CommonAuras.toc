@@ -10,7 +10,8 @@
 ## X-BigWigsModule: BigWigsCommonAuras
 ## Version: 1
 ## Dependencies: BigWigs
-## OptionalDeps: Ace2, SpecialEventsEmbed, GratuityLib, Deformat
+## OptionalDeps: Ace2, SpellStatusLib, SpellCacheLib, GratuityLib, Deformat
+## X-Embeds: Deformat, GratuityLib, SpellCacheLib, SpellStatusLib
 ## SavedVariables: BigWigsCommonAurasDB
 
 libs\Deformat-2.0\Deformat-2.0.lua

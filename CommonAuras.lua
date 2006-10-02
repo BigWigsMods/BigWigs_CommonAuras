@@ -232,7 +232,11 @@ function BigWigsCommonAuras:SpellStatus_SpellCastInstant(sId, sName, sRank, sFul
 			spellCasting = nil
 			spellTarget = nil
 		else
-			targetName = UnitExists("target") and UnitName("target") or UnitName("player")
+			if UnitExists("target") and UnitIsPlayer("target") and not UnitIsEnemy("target", "player") then
+				targetName = UnitName("target")
+			else
+				targetName = UnitName("player")
+			end
 		end
 		self:TriggerEvent("BigWigs_SendSync", "BWCAFW "..targetName)
 	elseif sName == L["Shield Wall"] then
