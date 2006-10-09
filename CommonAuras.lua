@@ -71,6 +71,39 @@ L:RegisterTranslations("enUS", function() return {
 
 } end )
 
+L:RegisterTranslations("deDE", function() return {
+	fw_cast = "%s sch\195\188tzt %s vor Furcht.",
+	fw_bar = "%s: FS Cooldown",
+
+	sw_cast = "%s benutzt Schildwall.",
+	sw_bar = "%s: Schildwall",
+
+	cs_cast = "%s benutzt Herausforderungsruf!",
+	cs_bar = "%s: Herausforderungsruf",
+
+	cr_cast = "%s benutzt Herausforderndes Gebr\195\188ll!",
+	cr_bar = "%s: Herausforderndes Gebr\195\188ll",
+
+	portal_cast = "%s \195\182ffnet ein Portal nach %s!",
+	-- portal_bar is the spellname
+
+	["Fear Ward"] = "Furchtzauberschutz",
+	["Toggle Fear Ward display."] = "Aktiviert oder Deaktiviert die Anzeige von Furchtzauberschutz.",
+	["Shield Wall"] = "Schildwall",
+	["Toggle Shield Wall display."] = "Aktiviert oder Deaktiviert die Anzeige von Schildwall.",
+	["Challenging Shout"] = "Herausforderungsruf",
+	["Toggle Challenging Shout display."] = "Aktiviert oder Deaktiviert die Anzeige von Herausforderungsruf.",
+	["Challenging Roar"] = "Herausforderndes Gebr\195\188ll",
+	["Toggle Challenging Roar display."] = "Aktiviert oder Deaktiviert die Anzeige von Herausforderndes Gebr\198\188ll.",
+	["Portal"] = "Portale",
+	["Toggle Portal reporting."] = "Aktiviert oder Deaktiviert die Anzeige von Portalen.",
+	["broadcast"] = "broadcasten",
+	["Broadcast"] = "Broadcast",
+	["Toggle broadcasting the messages to the raidwarning channel."] = "W\195\164hle, ob Warnungen \195\188ber RaidWarning gesendet werden sollen.",
+
+	["Gives timer bars and raid messages about common buffs and debuffs."] = "Zeigt Zeitleisten und Raidnachrichten für kritische Spr\195\188che.",
+} end )
+
 ------------------------------
 --      Module              --
 ------------------------------
