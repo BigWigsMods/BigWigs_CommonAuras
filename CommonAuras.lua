@@ -228,9 +228,12 @@ function BigWigsCommonAuras:BigWigs_RecvSync( sync, rest, nick )
 		self:SetCandyBarOnClick("BigWigsBar "..string.format(L["used_bar"], nick, spell), function(name, button, extra) TargetByName(extra, true) end, nick )
 		lastTank = nick
 	elseif self.db.profile.portal and sync == "BWCAP" and rest then
+		rest = BS:HasTranslation(rest) and BS:GetTranslation(rest) or rest
 		local _, _, zone = string.find(rest, L["portal_regexp"])
-		self:TriggerEvent("BigWigs_Message", string.format(L["portal_cast"], nick, zone), "Blue", not self.db.profile.broadcast, false)
-		self:TriggerEvent("BigWigs_StartBar", self, rest, 60, BS:GetSpellIcon(rest), "Blue")
+		if zone then
+			self:TriggerEvent("BigWigs_Message", string.format(L["portal_cast"], nick, zone), "Blue", not self.db.profile.broadcast, false)
+			self:TriggerEvent("BigWigs_StartBar", self, rest, 60, BS:GetSpellIcon(rest), "Blue")
+		end
 	end
 end
 
@@ -260,7 +263,8 @@ end
 
 function BigWigsCommonAuras:SpellStatus_SpellCastCastingFinish(sId, sName, sRank, sFullName, sCastTime)
 	if not string.find(sName, L["Portal"]) then return end
-	self:ScheduleEvent("bwcaspellcast", self.SpellCast, 0.3, self, sName)
+	local name = BS:HasReverseTranslation(aName) and BS:GetReverseTranslation(aName) or aName
+	self:ScheduleEvent("bwcaspellcast", self.SpellCast, 0.3, self, name)
 end
 
 function BigWigsCommonAuras:SpellStatus_SpellCastFailure(sId, sName, sRank, sFullName, isActiveSpell, UIEM_Message, CMSFLP_SpellName, CMSFLP_Message)
