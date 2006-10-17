@@ -13,6 +13,7 @@
 
 local name = "Common Auras"
 local L = AceLibrary("AceLocale-2.0"):new("BigWigs"..name)
+local BS = AceLibrary("Babble-Spell-2.0")
 
 local spellStatus = nil
 local lastTank = nil
@@ -22,8 +23,6 @@ local shieldWallDuration = nil
 local spellTarget = nil
 local spellCasting = nil
 
-local portalIcons = {}
-
 ------------------------------
 --      Localization        --
 ------------------------------
@@ -32,28 +31,15 @@ L:RegisterTranslations("enUS", function() return {
 	fw_cast = "%s fearwarded %s.",
 	fw_bar = "%s: FW Cooldown",
 
-	sw_cast = "%s used Shield Wall.",
-	sw_bar = "%s: Shield Wall",
-
-	cs_cast = "%s used challenging shout!",
-	cs_bar = "%s: Challenging Shout",
-
-	cr_cast = "%s used challenging roar!",
-	cr_bar = "%s: Challenging Roar",
+	used_cast = "%s used %s.",
+	used_bar = "%s: %s",
 
 	portal_cast = "%s opened a portal to %s!",
+	portal_regexp = ".*: (.*)",
 	-- portal_bar is the spellname
 
-	["Fear Ward"] = true,
-	["Toggle Fear Ward display."] = true,
-	["Shield Wall"] = true,
-	["Toggle Shield Wall display."] = true,
-	["Challenging Shout"] = true,
-	["Toggle Challenging Shout display."] = true,
-	["Challenging Roar"] = true,
-	["Toggle Challenging Roar display."] = true,
+	["Toggle %s display."] = true,
 	["Portal"] = true,
-	["Toggle Portal reporting."] = true,
 	["broadcast"] = true,
 	["Broadcast"] = true,
 	["Toggle broadcasting the messages to the raidwarning channel."] = true,
@@ -61,47 +47,42 @@ L:RegisterTranslations("enUS", function() return {
 	["Gives timer bars and raid messages about common buffs and debuffs."] = true,
 	["Common Auras"] = true,
 	["commonauras"] = true,
-
-	["Portal: Ironforge"] = true,
-	["Portal: Stormwind"] = true,
-	["Portal: Darnassus"] = true,
-	["Portal: Orgrimmar"] = true,
-	["Portal: Thunder Bluff"] = true,
-	["Portal: Undercity"] = true,
-
 } end )
 
 L:RegisterTranslations("deDE", function() return {
 	fw_cast = "%s sch\195\188tzt %s vor Furcht.",
 	fw_bar = "%s: FS Cooldown",
 
-	sw_cast = "%s benutzt Schildwall.",
-	sw_bar = "%s: Schildwall",
-
-	cs_cast = "%s benutzt Herausforderungsruf!",
-	cs_bar = "%s: Herausforderungsruf",
-
-	cr_cast = "%s benutzt Herausforderndes Gebr\195\188ll!",
-	cr_bar = "%s: Herausforderndes Gebr\195\188ll",
+	used_cast = "%s benutzt %s.",
 
 	portal_cast = "%s \195\182ffnet ein Portal nach %s!",
 	-- portal_bar is the spellname
 
-	["Fear Ward"] = "Furchtzauberschutz",
-	["Toggle Fear Ward display."] = "Aktiviert oder Deaktiviert die Anzeige von Furchtzauberschutz.",
-	["Shield Wall"] = "Schildwall",
-	["Toggle Shield Wall display."] = "Aktiviert oder Deaktiviert die Anzeige von Schildwall.",
-	["Challenging Shout"] = "Herausforderungsruf",
-	["Toggle Challenging Shout display."] = "Aktiviert oder Deaktiviert die Anzeige von Herausforderungsruf.",
-	["Challenging Roar"] = "Herausforderndes Gebr\195\188ll",
-	["Toggle Challenging Roar display."] = "Aktiviert oder Deaktiviert die Anzeige von Herausforderndes Gebr\198\188ll.",
+	["Toggle %s display."] = "Aktiviert oder Deaktiviert die Anzeige von %s.",
 	["Portal"] = "Portale",
-	["Toggle Portal reporting."] = "Aktiviert oder Deaktiviert die Anzeige von Portalen.",
 	["broadcast"] = "broadcasten",
 	["Broadcast"] = "Broadcast",
 	["Toggle broadcasting the messages to the raidwarning channel."] = "W\195\164hle, ob Warnungen \195\188ber RaidWarning gesendet werden sollen.",
 
 	["Gives timer bars and raid messages about common buffs and debuffs."] = "Zeigt Zeitleisten und Raidnachrichten für kritische Spr\195\188che.",
+} end )
+
+L:RegisterTranslations("frFR", function() return {
+	fw_cast = "%s prot\195\169g\195\169 par FearWard %s.",
+	fw_bar = "%s: FW Cooldown",
+
+	used_cast = "%s a utilis\195\169 %s.",
+
+	portal_cast = "%s ouvre un portail pour %s!",
+	-- portal_bar is the spellname
+
+	["Toggle %s display."] = "Activer l'affichage du %s.",
+
+	["broadcast"] = "Annonce",
+	["Broadcast"] = "Annonce",
+	["Toggle broadcasting the messages to the raidwarning channel."] = "Active les annonces de raid.",
+
+	["Gives timer bars and raid messages about common buffs and debuffs."] = "Donne timers et annonces de raid pour les buffs et debuffs classiques.",
 } end )
 
 ------------------------------
@@ -127,36 +108,36 @@ BigWigsCommonAuras.consoleOptions = {
 	args   = {
 		["fearward"] = {
 			type = "toggle",
-			name = L["Fear Ward"],
-			desc = L["Toggle Fear Ward display."],
+			name = BS["Fear Ward"],
+			desc = string.format(L["Toggle %s display."], BS["Fear Ward"]),
 			get = function() return BigWigsCommonAuras.db.profile.fearward end,
 			set = function(v) BigWigsCommonAuras.db.profile.fearward = v end,
 		},
 		["shieldwall"] = {
 			type = "toggle",
-			name = L["Shield Wall"],
-			desc = L["Toggle Shield Wall display."],
+			name = BS["Shield Wall"],
+			desc = string.format(L["Toggle %s display."], BS["Shield Wall"]),
 			get = function() return BigWigsCommonAuras.db.profile.shieldwall end,
 			set = function(v) BigWigsCommonAuras.db.profile.shieldwall = v end,
 		},
 		["challengingshout"] = {
 			type = "toggle",
-			name = L["Challenging Shout"],
-			desc = L["Toggle Challenging Shout display."],
+			name = BS["Challenging Shout"],
+			desc = string.format(L["Toggle %s display."], BS["Challenging Shout"]),
 			get = function() return BigWigsCommonAuras.db.profile.challengingshout end,
 			set = function(v) BigWigsCommonAuras.db.profile.challengingshout = v end,
 		},
 		["challengingroar"] = {
 			type = "toggle",
-			name = L["Challenging Roar"],
-			desc = L["Toggle Challenging Roar display."],
+			name = BS["Challenging Roar"],
+			desc = string.format(L["Toggle %s display."], BS["Challenging Roar"]),
 			get = function() return BigWigsCommonAuras.db.profile.challengingroar end,
 			set = function(v) BigWigsCommonAuras.db.profile.challengingroar = v end,
 		},
 		["portal"] = {
 			type = "toggle",
 			name = L["Portal"],
-			desc = L["Toggle Portal reporting."],
+			desc = string.format(L["Toggle %s display."], L["Portal"]),
 			get = function() return BigWigsCommonAuras.db.profile.portal end,
 			set = function(v) BigWigsCommonAuras.db.profile.portal = v end,
 		},
@@ -206,13 +187,6 @@ function BigWigsCommonAuras:OnEnable()
 		self:RegisterEvent("SpellStatus_SpellCastFailure")
 	end
 
-	portalIcons[L["Portal: Ironforge"]] = "Spell_Arcane_PortalIronForge"
-	portalIcons[L["Portal: Stormwind"]] = "Spell_Arcane_PortalStormWind"
-	portalIcons[L["Portal: Darnassus"]] = "Spell_Arcane_PortalDarnassus"
-	portalIcons[L["Portal: Orgrimmar"]] = "Spell_Arcane_PortalOrgrimmar"
-	portalIcons[L["Portal: Thunder Bluff"]] = "Spell_Arcane_PortalThunderBluff"
-	portalIcons[L["Portal: Undercity"]] = "Spell_Arcane_PortalUnderCity"
-
 	self:RegisterEvent("BigWigs_RecvSync")
 
 	-- XXX Lets have a low throttle because you'll get 2 syncs from yourself, so
@@ -232,33 +206,36 @@ function BigWigsCommonAuras:BigWigs_RecvSync( sync, rest, nick )
 	if not nick then nick = UnitName("player") end
 	if self.db.profile.fearward and sync == "BWCAFW" and rest then
 		self:TriggerEvent("BigWigs_Message", string.format(L["fw_cast"], nick, rest), "Green", not self.db.profile.broadcast, false)
-		self:TriggerEvent("BigWigs_StartBar", self, string.format(L["fw_bar"], nick), 30, "Interface\\Icons\\Spell_Holy_Excorcism", "Green")
+		self:TriggerEvent("BigWigs_StartBar", self, string.format(L["fw_bar"], nick), 30, BS:GetSpellIcon("Fear Ward"), "Green")
 	elseif self.db.profile.shieldwall and sync == "BWCASW" then
 		local swTime = tonumber(rest)
 		if not swTime then swTime = 10 end -- If the tank uses an old BWCA, just assume 10 seconds.
-		self:TriggerEvent("BigWigs_Message", string.format(L["sw_cast"], nick), "Yellow", not self.db.profile.broadcast, false)
-		self:TriggerEvent("BigWigs_StartBar", self, string.format(L["sw_bar"], nick), swTime, "Interface\\Icons\\Ability_Warrior_ShieldWall", "Yellow")
-		self:SetCandyBarOnClick("BigWigsBar "..string.format(L["sw_bar"], nick), function(name, button, extra) TargetByName(extra, true) end, nick )
+		local spell = BS["Shield Wall"]
+		self:TriggerEvent("BigWigs_Message", string.format(L["used_cast"], nick,  spell), "Yellow", not self.db.profile.broadcast, false)
+		self:TriggerEvent("BigWigs_StartBar", self, string.format(L["used_bar"], nick, spell), swTime, BS:GetSpellIcon(spell), "Yellow")
+		self:SetCandyBarOnClick("BigWigsBar "..string.format(L["used_bar"], nick, spell), function(name, button, extra) TargetByName(extra, true) end, nick )
 		lastTank = nick
 	elseif self.db.profile.challengingshout and sync == "BWCACS" then
-		self:TriggerEvent("BigWigs_Message", string.format(L["cs_cast"], nick), "Orange", not self.db.profile.broadcast, false)
-		self:TriggerEvent("BigWigs_StartBar", self, string.format(L["cs_bar"], nick), 6, "Interface\\Icons\\Ability_BullRush", "Orange")
-		self:SetCandyBarOnClick("BigWigsBar "..string.format(L["cs_bar"], nick), function(name, button, extra) TargetByName(extra, true) end, nick )
+		local spell = BS["Challenging Shout"]
+		self:TriggerEvent("BigWigs_Message", string.format(L["used_cast"], nick, spell), "Orange", not self.db.profile.broadcast, false)
+		self:TriggerEvent("BigWigs_StartBar", self, string.format(L["used_bar"], nick, spell), 6, BS:GetSpellIcon(spell), "Orange")
+		self:SetCandyBarOnClick("BigWigsBar "..string.format(L["used_bar"], nick, spell), function(name, button, extra) TargetByName(extra, true) end, nick )
 		lastTank = nick
 	elseif self.db.profile.challengingroar and sync == "BWCACR" then
-		self:TriggerEvent("BigWigs_Message", string.format(L["cr_cast"], nick), "Orange", not self.db.profile.broadcast, false)
-		self:TriggerEvent("BigWigs_StartBar", self, string.format(L["cr_bar"], nick), 6, "Interface\\Icons\\Ability_Druid_ChallangingRoar", "Orange")
-		self:SetCandyBarOnClick("BigWigsBar "..string.format(L["cr_bar"], nick), function(name, button, extra) TargetByName(extra, true) end, nick )
+		local spell = BS["Challenging Roar"]
+		self:TriggerEvent("BigWigs_Message", string.format(L["used_cast"], nick, spell), "Orange", not self.db.profile.broadcast, false)
+		self:TriggerEvent("BigWigs_StartBar", self, string.format(L["used_bar"], nick, spell), 6, BS:GetSpellIcon(spell), "Orange")
+		self:SetCandyBarOnClick("BigWigsBar "..string.format(L["used_bar"], nick, spell), function(name, button, extra) TargetByName(extra, true) end, nick )
 		lastTank = nick
 	elseif self.db.profile.portal and sync == "BWCAP" and rest then
-		local _, _, zone = string.find(rest, ".*: (.*)")
+		local _, _, zone = string.find(rest, L["portal_regexp"])
 		self:TriggerEvent("BigWigs_Message", string.format(L["portal_cast"], nick, zone), "Blue", not self.db.profile.broadcast, false)
-		self:TriggerEvent("BigWigs_StartBar", self, rest, 60, "Interface\\Icons\\"..portalIcons[rest], "Blue")
+		self:TriggerEvent("BigWigs_StartBar", self, rest, 60, BS:GetSpellIcon(rest), "Blue")
 	end
 end
 
 function BigWigsCommonAuras:SpellStatus_SpellCastInstant(sId, sName, sRank, sFullName, sCastTime)
-	if sName == L["Fear Ward"] then
+	if sName == BS["Fear Ward"] then
 		local targetName = nil
 		if spellTarget then
 			targetName = spellTarget
@@ -272,11 +249,11 @@ function BigWigsCommonAuras:SpellStatus_SpellCastInstant(sId, sName, sRank, sFul
 			end
 		end
 		self:TriggerEvent("BigWigs_SendSync", "BWCAFW "..targetName)
-	elseif sName == L["Shield Wall"] then
+	elseif sName == BS["Shield Wall"] then
 		self:TriggerEvent("BigWigs_SendSync", "BWCASW "..tostring(shieldWallDuration))
-	elseif sName == L["Challenging Shout"] then
+	elseif sName == BS["Challenging Shout"] then
 		self:TriggerEvent("BigWigs_SendSync", "BWCACS")
-	elseif sName == L["Challenging Roar"] then
+	elseif sName == BS["Challenging Roar"] then
 		self:TriggerEvent("BigWigs_SendSync", "BWCACR")
 	end
 end
