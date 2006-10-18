@@ -77,7 +77,7 @@ L:RegisterTranslations("frFR", function() return {
 	-- portal_bar is the spellname
 
 	["Toggle %s display."] = "Activer l'affichage du %s.",
-
+	["Portal"] = "Portail",
 	["broadcast"] = "Annonce",
 	["Broadcast"] = "Annonce",
 	["Toggle broadcasting the messages to the raidwarning channel."] = "Active les annonces de raid.",
