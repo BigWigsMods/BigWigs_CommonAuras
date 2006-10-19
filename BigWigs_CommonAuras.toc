@@ -22,3 +22,4 @@ libs\SpellStatus-1.0\SpellStatus-1.0.lua
 
 CommonAuras.lua
 
+
