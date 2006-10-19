@@ -12,8 +12,8 @@
 ------------------------------
 
 local name = "Common Auras"
-local L = AceLibrary("AceLocale-2.0"):new("BigWigs"..name)
-local BS = AceLibrary("Babble-Spell-2.0")
+local L = AceLibrary("AceLocale-2.2"):new("BigWigs"..name)
+local BS = AceLibrary("Babble-Spell-2.2")
 
 local spellStatus = nil
 local lastTank = nil
@@ -100,7 +100,7 @@ BigWigsCommonAuras.defaultDB = {
 	broadcast = false,
 }
 
-BigWigsCommonAuras.consoleCmd = "commonauras"
+BigWigsCommonAuras.consoleCmd = L["commonauras"]
 BigWigsCommonAuras.consoleOptions = {
 	type = "group",
 	name = L["Common Auras"],

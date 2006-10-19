@@ -14,7 +14,7 @@
 ## X-Embeds: Deformat, GratuityLib, SpellCacheLib, SpellStatusLib
 ## SavedVariables: BigWigsCommonAurasDB
 
-libs\Babble-Spell-2.0\Babble-Spell-2.0.lua
+libs\Babble-Spell-2.2\Babble-Spell-2.2.lua
 libs\Deformat-2.0\Deformat-2.0.lua
 libs\Gratuity-2.0\Gratuity-2.0.lua
 libs\SpellCache-1.0\SpellCache-1.0.lua
