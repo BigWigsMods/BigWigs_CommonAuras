@@ -263,7 +263,7 @@ end
 
 function BigWigsCommonAuras:SpellStatus_SpellCastCastingFinish(sId, sName, sRank, sFullName, sCastTime)
 	if not string.find(sName, L["Portal"]) then return end
-	local name = BS:HasReverseTranslation(aName) and BS:GetReverseTranslation(aName) or aName
+	local name = BS:HasReverseTranslation(sName) and BS:GetReverseTranslation(sName) or sName
 	self:ScheduleEvent("bwcaspellcast", self.SpellCast, 0.3, self, name)
 end
 
