@@ -89,7 +89,7 @@ L:RegisterTranslations("frFR", function() return {
 --      Module              --
 ------------------------------
 
-BigWigsCommonAuras = BigWigs:NewModule(name, "AceHook-2.0")
+BigWigsCommonAuras = BigWigs:NewModule(name, "AceHook-2.1")
 BigWigsCommonAuras.synctoken = myname
 BigWigsCommonAuras.defaultDB = {
 	fearward = true,
