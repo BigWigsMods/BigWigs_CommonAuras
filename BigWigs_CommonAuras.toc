@@ -10,8 +10,8 @@
 ## X-BigWigsModule: BigWigsCommonAuras
 ## Version: 1
 ## Dependencies: BigWigs
-## OptionalDeps: Ace2, SpellStatusLib, SpellCacheLib, GratuityLib, Deformat, BabbleLib
-## X-Embeds: Deformat, GratuityLib, SpellCacheLib, SpellStatusLib
+## OptionalDeps: Ace2, SpellStatusLib, SpellCacheLib, GratuityLib, Deformat, Babble-2.2
+## X-Embeds: Deformat, GratuityLib, SpellCacheLib, SpellStatusLib, Babble-2.2
 ## SavedVariables: BigWigsCommonAurasDB
 
 libs\Babble-Spell-2.2\Babble-Spell-2.2.lua
