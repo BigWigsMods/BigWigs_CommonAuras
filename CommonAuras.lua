@@ -1,4 +1,4 @@
---[[
+﻿--[[
 --
 -- BigWigs Strategy Module - Common Auras
 --
@@ -49,6 +49,27 @@ L:RegisterTranslations("enUS", function() return {
 	["commonauras"] = true,
 } end )
 
+L:RegisterTranslations("koKR", function() return {
+	fw_cast = "%s|1이;가; %s에게 공포의 수호물을 시전합니다.",
+	fw_bar = "%s: FW 재사용 대기시간",
+
+	used_cast = "%s|1이;가; %s|1을;를; 사용했습니다.",
+	used_bar = "%s: %s",
+
+	portal_cast = "%s|1이;가; %s|1으로;로; 가는 차원문을 엽니다!",
+	portal_regexp = ".*: (.*)",
+	-- portal_bar is the spellname
+
+	["Toggle %s display."] = "%s 표시를 전환합니다.",
+	["Portal"] = "차원문",
+	
+	["Broadcast"] = "알림",
+	["Toggle broadcasting the messages to the raidwarning channel."] = "공격대 경보 채널에 메세지 알림을 전환합니다.",
+
+	["Gives timer bars and raid messages about common buffs and debuffs."] = "공통 버프와 디버프에 대한 공격대 메세지와 타이머 바를 제공합니다.",
+	["Common Auras"] = "공통 버프",
+} end )
+
 L:RegisterTranslations("deDE", function() return {
 	fw_cast = "%s sch\195\188tzt %s vor Furcht.",
 	fw_bar = "%s: FS Cooldown",
@@ -64,7 +85,7 @@ L:RegisterTranslations("deDE", function() return {
 	["Broadcast"] = "Broadcast",
 	["Toggle broadcasting the messages to the raidwarning channel."] = "W\195\164hle, ob Warnungen \195\188ber RaidWarning gesendet werden sollen.",
 
-	["Gives timer bars and raid messages about common buffs and debuffs."] = "Zeigt Zeitleisten und Raidnachrichten f�r kritische Spr\195\188che.",
+	["Gives timer bars and raid messages about common buffs and debuffs."] = "Zeigt Zeitleisten und Raidnachrichten f? kritische Spr\195\188che.",
 } end )
 
 L:RegisterTranslations("frFR", function() return {
