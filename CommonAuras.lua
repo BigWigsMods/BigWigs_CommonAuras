@@ -50,13 +50,13 @@ L:RegisterTranslations("enUS", function() return {
 } end )
 
 L:RegisterTranslations("koKR", function() return {
-	fw_cast = "%s|1이;가; %s에게 공포의 수호물을 시전합니다.",
+	fw_cast = "%s님이 %s에게 공포의 수호물을 시전합니다.", --"%s|1이;가; %s에게 공포의 수호물을 시전합니다.",
 	fw_bar = "%s: FW 재사용 대기시간",
 
-	used_cast = "%s|1이;가; %s|1을;를; 사용했습니다.",
+	used_cast = "%s님이 %s 사용했습니다.", --"%s|1이;가; %s|1을;를; 사용했습니다.",
 	used_bar = "%s: %s",
 
-	portal_cast = "%s|1이;가; %s|1으로;로; 가는 차원문을 엽니다!",
+	portal_cast = "%s님이 %s 차원문을 엽니다!", --"%s|1이;가; %s|1으로;로; 가는 차원문을 엽니다!",
 	portal_regexp = ".*: (.*)",
 	-- portal_bar is the spellname
 
