@@ -172,6 +172,7 @@ BigWigsCommonAuras.consoleOptions = {
 	}
 }
 BigWigsCommonAuras.revision = tonumber(string.sub("$Revision$", 12, -3))
+BigWigsCommonAuras.external = true
 
 ------------------------------
 --      Initialization      --
