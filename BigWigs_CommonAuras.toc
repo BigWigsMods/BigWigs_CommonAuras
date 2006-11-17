@@ -7,7 +7,6 @@
 ## X-Build: $Revision$
 ## X-ReleaseDate: $Date$
 ## X-Category: Raid
-## X-BigWigsModule: BigWigsCommonAuras
 ## Version: 1
 ## Dependencies: BigWigs
 ## OptionalDeps: Ace2, SpellStatusLib, SpellCacheLib, GratuityLib, Deformat, Babble-2.2
