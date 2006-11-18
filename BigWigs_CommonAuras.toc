@@ -12,6 +12,7 @@
 ## OptionalDeps: Ace2, SpellStatusLib, SpellCacheLib, GratuityLib, Deformat, Babble-2.2
 ## X-Embeds: Deformat, GratuityLib, SpellCacheLib, SpellStatusLib, Babble-2.2
 ## SavedVariables: BigWigsCommonAurasDB
+## LoadOnDemand: 1
 
 ## X-BigWigs-LoadWithCore: 1
 
