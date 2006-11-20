@@ -89,21 +89,21 @@ L:RegisterTranslations("deDE", function() return {
 } end )
 
 L:RegisterTranslations("frFR", function() return {
-	fw_cast = "%s prot\195\169g\195\169 par FearWard %s.",
-	fw_bar = "%s: FW Cooldown",
+	fw_cast = "%s a prot\195\169g\195\169 contre la peur %s.",
+	fw_bar = "%s: Gardien de peur",
 
 	used_cast = "%s a utilis\195\169 %s.",
 
-	portal_cast = "%s ouvre un portail pour %s!",
+	portal_cast = "%s a ouvert un portail pour %s !",
 	-- portal_bar is the spellname
 
-	["Toggle %s display."] = "Activer l'affichage du %s.",
+	["Toggle %s display."] = "Activer l'affichage de %s.",
 	["Portal"] = "Portail",
 	["broadcast"] = "Annonce",
 	["Broadcast"] = "Annonce",
-	["Toggle broadcasting the messages to the raidwarning channel."] = "Active les annonces de raid.",
+	["Toggle broadcasting the messages to the raidwarning channel."] = "Active les annonces au canal d'avertissement raid.",
 
-	["Gives timer bars and raid messages about common buffs and debuffs."] = "Donne timers et annonces de raid pour les buffs et debuffs classiques.",
+	["Gives timer bars and raid messages about common buffs and debuffs."] = "Affiche des compteurs et des annonces de raid pour les buffs et debuffs g\195\169n\195\169riques.",
 } end )
 
 ------------------------------
