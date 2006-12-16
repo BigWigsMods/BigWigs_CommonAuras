@@ -218,25 +218,25 @@ function BigWigsCommonAuras:BigWigs_RecvSync( sync, rest, nick )
 	if not nick then nick = UnitName("player") end
 	if sync == "BWCAFW" and rest and self.db.profile.fearward then
 		self:TriggerEvent("BigWigs_Message", string.format(L["fw_cast"], nick, rest), "Green", not self.db.profile.broadcast, false)
-		self:TriggerEvent("BigWigs_StartBar", self, string.format(L["fw_bar"], nick), 30, BS:GetSpellIcon("Fear Ward"), "Green")
+		self:TriggerEvent("BigWigs_StartBar", self, string.format(L["fw_bar"], nick), 30, BS:GetSpellIcon("Fear Ward"), true, "Green")
 	elseif sync == "BWCASW" and self.db.profile.shieldwall then
 		local swTime = tonumber(rest)
 		if not swTime then swTime = 10 end -- If the tank uses an old BWCA, just assume 10 seconds.
 		local spell = BS["Shield Wall"]
 		self:TriggerEvent("BigWigs_Message", string.format(L["used_cast"], nick,  spell), "Yellow", not self.db.profile.broadcast, false)
-		self:TriggerEvent("BigWigs_StartBar", self, string.format(L["used_bar"], nick, spell), swTime, BS:GetSpellIcon(spell), "Yellow")
+		self:TriggerEvent("BigWigs_StartBar", self, string.format(L["used_bar"], nick, spell), swTime, BS:GetSpellIcon(spell), true, "Yellow")
 		self:SetCandyBarOnClick("BigWigsBar "..string.format(L["used_bar"], nick, spell), function(name, button, extra) TargetByName(extra, true) end, nick )
 		lastTank = nick
 	elseif sync == "BWCACS" and self.db.profile.challengingshout then
 		local spell = BS["Challenging Shout"]
 		self:TriggerEvent("BigWigs_Message", string.format(L["used_cast"], nick, spell), "Orange", not self.db.profile.broadcast, false)
-		self:TriggerEvent("BigWigs_StartBar", self, string.format(L["used_bar"], nick, spell), 6, BS:GetSpellIcon(spell), "Orange")
+		self:TriggerEvent("BigWigs_StartBar", self, string.format(L["used_bar"], nick, spell), 6, BS:GetSpellIcon(spell), true, "Orange")
 		self:SetCandyBarOnClick("BigWigsBar "..string.format(L["used_bar"], nick, spell), function(name, button, extra) TargetByName(extra, true) end, nick )
 		lastTank = nick
 	elseif sync == "BWCACR" and self.db.profile.challengingroar then
 		local spell = BS["Challenging Roar"]
 		self:TriggerEvent("BigWigs_Message", string.format(L["used_cast"], nick, spell), "Orange", not self.db.profile.broadcast, false)
-		self:TriggerEvent("BigWigs_StartBar", self, string.format(L["used_bar"], nick, spell), 6, BS:GetSpellIcon(spell), "Orange")
+		self:TriggerEvent("BigWigs_StartBar", self, string.format(L["used_bar"], nick, spell), 6, BS:GetSpellIcon(spell), true, "Orange")
 		self:SetCandyBarOnClick("BigWigsBar "..string.format(L["used_bar"], nick, spell), function(name, button, extra) TargetByName(extra, true) end, nick )
 		lastTank = nick
 	elseif sync == "BWCAP" and rest and self.db.profile.portal then
@@ -244,7 +244,7 @@ function BigWigsCommonAuras:BigWigs_RecvSync( sync, rest, nick )
 		local _, _, zone = string.find(rest, L["portal_regexp"])
 		if zone then
 			self:TriggerEvent("BigWigs_Message", string.format(L["portal_cast"], nick, zone), "Blue", not self.db.profile.broadcast, false)
-			self:TriggerEvent("BigWigs_StartBar", self, rest, 60, BS:GetSpellIcon(rest), "Blue")
+			self:TriggerEvent("BigWigs_StartBar", self, rest, 60, BS:GetSpellIcon(rest), true, "Blue")
 		end
 	end
 end
