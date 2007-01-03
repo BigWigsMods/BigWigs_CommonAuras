@@ -15,7 +15,6 @@ local name = "Common Auras"
 local L = AceLibrary("AceLocale-2.2"):new("BigWigs"..name)
 local BS = AceLibrary("Babble-Spell-2.2")
 
-local lastTank = nil
 local shieldWallDuration = nil
 
 -- Use for detecting instant cast target (Fear Ward)
@@ -225,20 +224,14 @@ function BigWigsCommonAuras:BigWigs_RecvSync( sync, rest, nick )
 		local spell = BS["Shield Wall"]
 		self:TriggerEvent("BigWigs_Message", string.format(L["used_cast"], nick,  spell), "Yellow", not self.db.profile.broadcast, false)
 		self:TriggerEvent("BigWigs_StartBar", self, string.format(L["used_bar"], nick, spell), swTime, BS:GetSpellIcon(spell), true, "Yellow")
-		self:SetCandyBarOnClick("BigWigsBar "..string.format(L["used_bar"], nick, spell), function(name, button, extra) TargetByName(extra, true) end, nick )
-		lastTank = nick
 	elseif sync == "BWCACS" and self.db.profile.challengingshout then
 		local spell = BS["Challenging Shout"]
 		self:TriggerEvent("BigWigs_Message", string.format(L["used_cast"], nick, spell), "Orange", not self.db.profile.broadcast, false)
 		self:TriggerEvent("BigWigs_StartBar", self, string.format(L["used_bar"], nick, spell), 6, BS:GetSpellIcon(spell), true, "Orange")
-		self:SetCandyBarOnClick("BigWigsBar "..string.format(L["used_bar"], nick, spell), function(name, button, extra) TargetByName(extra, true) end, nick )
-		lastTank = nick
 	elseif sync == "BWCACR" and self.db.profile.challengingroar then
 		local spell = BS["Challenging Roar"]
 		self:TriggerEvent("BigWigs_Message", string.format(L["used_cast"], nick, spell), "Orange", not self.db.profile.broadcast, false)
 		self:TriggerEvent("BigWigs_StartBar", self, string.format(L["used_bar"], nick, spell), 6, BS:GetSpellIcon(spell), true, "Orange")
-		self:SetCandyBarOnClick("BigWigsBar "..string.format(L["used_bar"], nick, spell), function(name, button, extra) TargetByName(extra, true) end, nick )
-		lastTank = nick
 	elseif sync == "BWCAP" and rest and self.db.profile.portal then
 		rest = BS:HasTranslation(rest) and BS:GetTranslation(rest) or rest
 		local _, _, zone = string.find(rest, L["portal_regexp"])
@@ -270,14 +263,5 @@ function BigWigsCommonAuras:UNIT_SPELLCAST_SUCCEEDED(sPlayer, sName, sRank)
 		local name = BS:HasReverseTranslation(sName) and BS:GetReverseTranslation(sName) or sName
 		self:TriggerEvent("BigWigs_SendSync", "BWCAP "..name)
 	end
-end
-
-------------------------------
---      Macro               --
-------------------------------
-
-function BWCATargetLastTank()
-	if not lastTank then return end
-	TargetByName(lastTank, true)
 end
 

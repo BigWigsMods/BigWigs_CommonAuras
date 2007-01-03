@@ -19,3 +19,4 @@
 libs\Babble-Spell-2.2\Babble-Spell-2.2.lua
 
 CommonAuras.lua
+
