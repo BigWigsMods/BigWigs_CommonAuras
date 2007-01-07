@@ -180,14 +180,15 @@ function BigWigsCommonAuras:OnEnable()
 	local _, race = UnitRace("player")
 
 	if class == "WARRIOR" then
-		local _, _, _, _, currentRank ,_ , _, _ = GetTalentInfo( 3 , 13 )
-		if currentRank == 2 then
-			shieldWallDuration = 15
-		elseif currentRank == 1 then
-			shieldWallDuration = 13
-		else -- Default to 10.
-			shieldWallDuration = 10
+		local _, _, _, _, rank = GetTalentInfo( 3 , 13 )
+		shieldWallDuration = 10
+		if rank == 2 then
+			shieldWallDuration = shieldWallDuration + 5
+		elseif rank == 1 then
+			shieldWallDuration = shieldWallDuration + 3
 		end
+		_, _, _, _, rank = GetTalentInfo( 1 , 18 )
+		shieldWallDuration = shieldWallDuration + (rank * 2)
 	end
 
 	if class == "WARRIOR" or class == "MAGE" or (class == "PRIEST" and (race == "Dwarf" or race == "Draenei")) then
