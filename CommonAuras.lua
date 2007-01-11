@@ -176,18 +176,18 @@ BigWigsCommonAuras.external = true
 ------------------------------
 
 function BigWigsCommonAuras:OnEnable()
-	local _, class = UnitClass("player")
-	local _, race = UnitRace("player")
+	local class = select(2, UnitClass("player"))
+	local race = select(2, UnitRace("player"))
 
 	if class == "WARRIOR" then
-		local _, _, _, _, rank = GetTalentInfo( 3 , 13 )
+		local rank = select(5, GetTalentInfo(3 , 13))
 		shieldWallDuration = 10
 		if rank == 2 then
 			shieldWallDuration = shieldWallDuration + 5
 		elseif rank == 1 then
 			shieldWallDuration = shieldWallDuration + 3
 		end
-		_, _, _, _, rank = GetTalentInfo( 1 , 18 )
+		rank = select(5, GetTalentInfo(1 , 18))
 		shieldWallDuration = shieldWallDuration + (rank * 2)
 	end
 
@@ -235,7 +235,7 @@ function BigWigsCommonAuras:BigWigs_RecvSync( sync, rest, nick )
 		self:TriggerEvent("BigWigs_StartBar", self, string.format(L["used_bar"], nick, spell), 6, BS:GetSpellIcon(spell), true, "Orange")
 	elseif sync == "BWCAP" and rest and self.db.profile.portal then
 		rest = BS:HasTranslation(rest) and BS:GetTranslation(rest) or rest
-		local _, _, zone = string.find(rest, L["portal_regexp"])
+		local zone = select(3, rest:find(L["portal_regexp"]))
 		if zone then
 			self:TriggerEvent("BigWigs_Message", string.format(L["portal_cast"], nick, zone), "Blue", not self.db.profile.broadcast, false)
 			self:TriggerEvent("BigWigs_StartBar", self, rest, 60, BS:GetSpellIcon(rest), true, "Blue")
@@ -244,6 +244,7 @@ function BigWigsCommonAuras:BigWigs_RecvSync( sync, rest, nick )
 end
 
 function BigWigsCommonAuras:UNIT_SPELLCAST_SENT(sPlayer, sSpell, sRank, sTarget)
+	if sTarget == "" then sTarget = nil end
 	if sPlayer and sPlayer == "player" and sSpell and sTarget and sSpell == BS["Fear Ward"] then
 		spellTarget = sTarget
 	end
@@ -260,7 +261,7 @@ function BigWigsCommonAuras:UNIT_SPELLCAST_SUCCEEDED(sPlayer, sName, sRank)
 		self:TriggerEvent("BigWigs_SendSync", "BWCACS")
 	elseif sName == BS["Challenging Roar"] then
 		self:TriggerEvent("BigWigs_SendSync", "BWCACR")
-	elseif string.find(sName, L["Portal"]) then
+	elseif sName:find(L["Portal"]) then
 		local name = BS:HasReverseTranslation(sName) and BS:GetReverseTranslation(sName) or sName
 		self:TriggerEvent("BigWigs_SendSync", "BWCAP "..name)
 	end
