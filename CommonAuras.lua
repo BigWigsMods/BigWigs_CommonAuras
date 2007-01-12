@@ -223,8 +223,8 @@ function BigWigsCommonAuras:BigWigs_RecvSync( sync, rest, nick )
 		local swTime = tonumber(rest)
 		if not swTime then swTime = 10 end -- If the tank uses an old BWCA, just assume 10 seconds.
 		local spell = BS["Shield Wall"]
-		self:TriggerEvent("BigWigs_Message", string.format(L["used_cast"], nick,  spell), "Yellow", not self.db.profile.broadcast, false)
-		self:TriggerEvent("BigWigs_StartBar", self, string.format(L["used_bar"], nick, spell), swTime, BS:GetSpellIcon(spell), true, "Yellow")
+		self:TriggerEvent("BigWigs_Message", string.format(L["used_cast"], nick,  spell), "Blue", not self.db.profile.broadcast, false)
+		self:TriggerEvent("BigWigs_StartBar", self, string.format(L["used_bar"], nick, spell), swTime, BS:GetSpellIcon(spell), true, "Blue")
 	elseif sync == "BWCACS" and self.db.profile.challengingshout then
 		local spell = BS["Challenging Shout"]
 		self:TriggerEvent("BigWigs_Message", string.format(L["used_cast"], nick, spell), "Orange", not self.db.profile.broadcast, false)
