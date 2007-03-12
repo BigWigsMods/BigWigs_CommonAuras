@@ -107,9 +107,9 @@ L:RegisterTranslations("frFR", function() return {
 --      Module              --
 ------------------------------
 
-BigWigsCommonAuras = BigWigs:NewModule(name)
-BigWigsCommonAuras.synctoken = name
-BigWigsCommonAuras.defaultDB = {
+local mod = BigWigs:NewModule(name)
+mod.synctoken = name
+mod.defaultDB = {
 	fearward = true,
 	shieldwall = true,
 	challengingshout = true,
@@ -118,64 +118,55 @@ BigWigsCommonAuras.defaultDB = {
 	broadcast = false,
 }
 
-BigWigsCommonAuras.consoleCmd = L["commonauras"]
-BigWigsCommonAuras.consoleOptions = {
+mod.consoleCmd = L["commonauras"]
+mod.consoleOptions = {
 	type = "group",
 	name = L["Common Auras"],
 	desc = L["Gives timer bars and raid messages about common buffs and debuffs."],
-	args   = {
+	pass = true,
+	get = function(key) return mod.db.profile[key] end,
+	set = function(key, value) mod.db.profile[key] = value end,
+	args = {
 		["fearward"] = {
 			type = "toggle",
 			name = BS["Fear Ward"],
 			desc = string.format(L["Toggle %s display."], BS["Fear Ward"]),
-			get = function() return BigWigsCommonAuras.db.profile.fearward end,
-			set = function(v) BigWigsCommonAuras.db.profile.fearward = v end,
 		},
 		["shieldwall"] = {
 			type = "toggle",
 			name = BS["Shield Wall"],
 			desc = string.format(L["Toggle %s display."], BS["Shield Wall"]),
-			get = function() return BigWigsCommonAuras.db.profile.shieldwall end,
-			set = function(v) BigWigsCommonAuras.db.profile.shieldwall = v end,
 		},
 		["challengingshout"] = {
 			type = "toggle",
 			name = BS["Challenging Shout"],
 			desc = string.format(L["Toggle %s display."], BS["Challenging Shout"]),
-			get = function() return BigWigsCommonAuras.db.profile.challengingshout end,
-			set = function(v) BigWigsCommonAuras.db.profile.challengingshout = v end,
 		},
 		["challengingroar"] = {
 			type = "toggle",
 			name = BS["Challenging Roar"],
 			desc = string.format(L["Toggle %s display."], BS["Challenging Roar"]),
-			get = function() return BigWigsCommonAuras.db.profile.challengingroar end,
-			set = function(v) BigWigsCommonAuras.db.profile.challengingroar = v end,
 		},
 		["portal"] = {
 			type = "toggle",
 			name = L["Portal"],
 			desc = string.format(L["Toggle %s display."], L["Portal"]),
-			get = function() return BigWigsCommonAuras.db.profile.portal end,
-			set = function(v) BigWigsCommonAuras.db.profile.portal = v end,
 		},
 		["broadcast"] = {
 			type = "toggle",
 			name = L["Broadcast"],
 			desc = L["Toggle broadcasting the messages to the raidwarning channel."],
-			get = function() return BigWigsCommonAuras.db.profile.broadcast end,
-			set = function(v) BigWigsCommonAuras.db.profile.broadcast = v end,
 		},
 	}
 }
-BigWigsCommonAuras.revision = tonumber(string.sub("$Revision$", 12, -3))
-BigWigsCommonAuras.external = true
+mod.revision = tonumber(string.sub("$Revision$", 12, -3))
+mod.external = true
 
 ------------------------------
 --      Initialization      --
 ------------------------------
 
-function BigWigsCommonAuras:OnEnable()
+function mod:OnEnable()
 	local class = select(2, UnitClass("player"))
 	local race = select(2, UnitRace("player"))
 
@@ -214,7 +205,7 @@ end
 --      Events              --
 ------------------------------
 
-function BigWigsCommonAuras:BigWigs_RecvSync( sync, rest, nick )
+function mod:BigWigs_RecvSync( sync, rest, nick )
 	if not nick then nick = UnitName("player") end
 	if sync == "BWCAFW" and rest and self.db.profile.fearward then
 		self:TriggerEvent("BigWigs_Message", string.format(L["fw_cast"], nick, rest), "Green", not self.db.profile.broadcast, false)
@@ -243,14 +234,14 @@ function BigWigsCommonAuras:BigWigs_RecvSync( sync, rest, nick )
 	end
 end
 
-function BigWigsCommonAuras:UNIT_SPELLCAST_SENT(sPlayer, sSpell, sRank, sTarget)
+function mod:UNIT_SPELLCAST_SENT(sPlayer, sSpell, sRank, sTarget)
 	if sTarget == "" then sTarget = nil end
 	if sPlayer and sPlayer == "player" and sSpell and sTarget and sSpell == BS["Fear Ward"] then
 		spellTarget = sTarget
 	end
 end
 
-function BigWigsCommonAuras:UNIT_SPELLCAST_SUCCEEDED(sPlayer, sName, sRank)
+function mod:UNIT_SPELLCAST_SUCCEEDED(sPlayer, sName, sRank)
 	if sName == BS["Fear Ward"] then
 		local targetName = spellTarget or UnitName("player")
 		self:TriggerEvent("BigWigs_SendSync", "BWCAFW "..targetName)
