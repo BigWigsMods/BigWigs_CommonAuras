@@ -131,37 +131,37 @@ mod.consoleOptions = {
 	get = function(key) return mod.db.profile[key] end,
 	set = function(key, value) mod.db.profile[key] = value end,
 	args = {
-		["fearward"] = {
+		fearward = {
 			type = "toggle",
 			name = BS["Fear Ward"],
-			desc = string.format(L["Toggle %s display."], BS["Fear Ward"]),
+			desc = L["Toggle %s display."]:format(BS["Fear Ward"]),
 		},
-		["shieldwall"] = {
+		shieldwall = {
 			type = "toggle",
 			name = BS["Shield Wall"],
-			desc = string.format(L["Toggle %s display."], BS["Shield Wall"]),
+			desc = L["Toggle %s display."]:format(BS["Shield Wall"]),
 		},
-		["challengingshout"] = {
+		challengingshout = {
 			type = "toggle",
 			name = BS["Challenging Shout"],
-			desc = string.format(L["Toggle %s display."], BS["Challenging Shout"]),
+			desc = L["Toggle %s display."]:format(BS["Challenging Shout"]),
 		},
-		["challengingroar"] = {
+		challengingroar = {
 			type = "toggle",
 			name = BS["Challenging Roar"],
-			desc = string.format(L["Toggle %s display."], BS["Challenging Roar"]),
+			desc = L["Toggle %s display."]:format(BS["Challenging Roar"]),
 		},
-		["portal"] = {
+		portal = {
 			type = "toggle",
 			name = L["Portal"],
-			desc = string.format(L["Toggle %s display."], L["Portal"]),
+			desc = L["Toggle %s display."]:format(L["Portal"]),
 		},
-		["misdirection"] = {
+		misdirection = {
 			type = "toggle",
 			name = BS["Misdirection"],
 			desc = L["Toggle %s display."]:format(BS["Misdirection"]),
 		},
-		["broadcast"] = {
+		broadcast = {
 			type = "toggle",
 			name = L["Broadcast"],
 			desc = L["Toggle broadcasting the messages to the raidwarning channel."],
@@ -218,32 +218,32 @@ end
 function mod:BigWigs_RecvSync( sync, rest, nick )
 	if not nick then nick = UnitName("player") end
 	if sync == "BWCAFW" and rest and self.db.profile.fearward then
-		self:TriggerEvent("BigWigs_Message", string.format(L["fw_cast"], nick, rest), "Green", not self.db.profile.broadcast, false)
-		self:TriggerEvent("BigWigs_StartBar", self, string.format(L["fw_bar"], nick), 30, BS:GetSpellIcon("Fear Ward"), true, "Green")
+		self:Message(L["fw_cast"]:format(nick, rest), "Green", not self.db.profile.broadcast, false)
+		self:Bar(L["fw_bar"]:format(nick), 30, BS:GetShortSpellIcon("Fear Ward"), true, "Green")
 	elseif sync == "BWCASW" and self.db.profile.shieldwall then
 		local swTime = tonumber(rest)
 		if not swTime then swTime = 10 end -- If the tank uses an old BWCA, just assume 10 seconds.
 		local spell = BS["Shield Wall"]
-		self:TriggerEvent("BigWigs_Message", string.format(L["used_cast"], nick,  spell), "Blue", not self.db.profile.broadcast, false)
-		self:TriggerEvent("BigWigs_StartBar", self, string.format(L["used_bar"], nick, spell), swTime, BS:GetSpellIcon(spell), true, "Blue")
+		self:Message(L["used_cast"]:format(nick,  spell), "Blue", not self.db.profile.broadcast, false)
+		self:Bar(L["used_bar"]:format(nick, spell), swTime, BS:GetShortSpellIcon(spell), true, "Blue")
 	elseif sync == "BWCACS" and self.db.profile.challengingshout then
 		local spell = BS["Challenging Shout"]
-		self:TriggerEvent("BigWigs_Message", string.format(L["used_cast"], nick, spell), "Orange", not self.db.profile.broadcast, false)
-		self:TriggerEvent("BigWigs_StartBar", self, string.format(L["used_bar"], nick, spell), 6, BS:GetSpellIcon(spell), true, "Orange")
+		self:Message(L["used_cast"]:format(nick, spell), "Orange", not self.db.profile.broadcast, false)
+		self:Bar(L["used_bar"]:format(nick, spell), 6, BS:GetShortSpellIcon(spell), true, "Orange")
 	elseif sync == "BWCACR" and self.db.profile.challengingroar then
 		local spell = BS["Challenging Roar"]
-		self:TriggerEvent("BigWigs_Message", string.format(L["used_cast"], nick, spell), "Orange", not self.db.profile.broadcast, false)
-		self:TriggerEvent("BigWigs_StartBar", self, string.format(L["used_bar"], nick, spell), 6, BS:GetSpellIcon(spell), true, "Orange")
+		self:Message(L["used_cast"]:format(nick, spell), "Orange", not self.db.profile.broadcast, false)
+		self:Bar(L["used_bar"]:format(nick, spell), 6, BS:GetShortSpellIcon(spell), true, "Orange")
 	elseif sync == "BWCAP" and rest and self.db.profile.portal then
 		rest = BS:HasTranslation(rest) and BS:GetTranslation(rest) or rest
 		local zone = select(3, rest:find(L["portal_regexp"]))
 		if zone then
-			self:TriggerEvent("BigWigs_Message", string.format(L["portal_cast"], nick, zone), "Blue", not self.db.profile.broadcast, false)
-			self:TriggerEvent("BigWigs_StartBar", self, rest, 60, BS:GetSpellIcon(rest), true, "Blue")
+			self:Message(L["portal_cast"]:format(nick, zone), "Blue", not self.db.profile.broadcast, false)
+			self:Bar(rest, 60, BS:GetShortSpellIcon(rest), true, "Blue")
 		end
 	elseif sync == "BWMD" and rest and self.db.profile.misdirection then
-		self:TriggerEvent("BigWigs_Message", L["md_cast"]:format(nick, rest), "Yellow", not self.db.profile.broadcast, false)
-		self:TriggerEvent("BigWigs_StartBar", self, L["md_bar"]:format(nick), 120, BS:GetSpellIcon("Misdirection"), true, "Yellow")
+		self:Message(L["md_cast"]:format(nick, rest), "Yellow", not self.db.profile.broadcast, false)
+		self:Bar(L["md_bar"]:format(nick), 120, BS:GetShortSpellIcon("Misdirection"), true, "Yellow")
 	end
 end
 
@@ -257,20 +257,20 @@ end
 function mod:UNIT_SPELLCAST_SUCCEEDED(sPlayer, sName, sRank)
 	if sName == BS["Fear Ward"] then
 		local targetName = spellTarget or UnitName("player")
-		self:TriggerEvent("BigWigs_SendSync", "BWCAFW "..targetName)
+		self:Sync("BWCAFW "..targetName)
 		spellTarget = nil
 	elseif sName == BS["Shield Wall"] then
-		self:TriggerEvent("BigWigs_SendSync", "BWCASW "..tostring(shieldWallDuration))
+		self:Sync("BWCASW "..tostring(shieldWallDuration))
 	elseif sName == BS["Challenging Shout"] then
-		self:TriggerEvent("BigWigs_SendSync", "BWCACS")
+		self:Sync("BWCACS")
 	elseif sName == BS["Challenging Roar"] then
-		self:TriggerEvent("BigWigs_SendSync", "BWCACR")
+		self:Sync("BWCACR")
 	elseif sName:find(L["Portal"]) then
 		local name = BS:HasReverseTranslation(sName) and BS:GetReverseTranslation(sName) or sName
-		self:TriggerEvent("BigWigs_SendSync", "BWCAP "..name)
+		self:Sync("BWCAP "..name)
 	elseif sName == BS["Misdirection"] then
 		local targetName = spellTarget or UnitName("player")
-		self:TriggerEvent("BigWigs_SendSync", "BWMD "..targetName)
+		self:Sync("BWMD "..targetName)
 		spellTarget = nil
 	end
 end
