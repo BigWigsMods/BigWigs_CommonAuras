@@ -28,6 +28,7 @@ L:RegisterTranslations("enUS", function() return {
 	fw_cast = "%s fearwarded %s.",
 	fw_bar = "%s: FW Cooldown",
 
+	md_cast = "%s: MD on %s",
 	md_bar = "%s: MD Cooldown",
 
 	used_cast = "%s used %s.",
@@ -191,7 +192,7 @@ function mod:OnEnable()
 	end
 
 	if class == "HUNTER" or class == "WARRIOR" or class == "MAGE" or (class == "PRIEST" and (race == "Dwarf" or race == "Draenei")) then
-		if class == "PRIEST" then
+		if class == "PRIEST" or class == "HUNTER" then
 			self:RegisterEvent("UNIT_SPELLCAST_SENT")
 			spellTarget = nil
 		end
@@ -240,16 +241,15 @@ function mod:BigWigs_RecvSync( sync, rest, nick )
 			self:TriggerEvent("BigWigs_Message", string.format(L["portal_cast"], nick, zone), "Blue", not self.db.profile.broadcast, false)
 			self:TriggerEvent("BigWigs_StartBar", self, rest, 60, BS:GetSpellIcon(rest), true, "Blue")
 		end
-	elseif sync == "BWMD" and self.db.profile.misdirection then
-		local spell = BS["Misdirection"]
-		self:TriggerEvent("BigWigs_Message", L["used_cast"]:format(nick, spell), "Yellow", not self.db.profile.broadcast, false)
-		self:TriggerEvent("BigWigs_StartBar", self, L["md_bar"]:format(nick), 120, BS:GetSpellIcon(spell), true, "Yellow")
+	elseif sync == "BWMD" and rest and self.db.profile.misdirection then
+		self:TriggerEvent("BigWigs_Message", L["md_cast"]:format(nick, rest), "Yellow", not self.db.profile.broadcast, false)
+		self:TriggerEvent("BigWigs_StartBar", self, L["md_bar"]:format(nick), 120, BS:GetSpellIcon("Misdirection"), true, "Yellow")
 	end
 end
 
 function mod:UNIT_SPELLCAST_SENT(sPlayer, sSpell, sRank, sTarget)
 	if sTarget == "" then sTarget = nil end
-	if sPlayer and sPlayer == "player" and sSpell and sTarget and sSpell == BS["Fear Ward"] then
+	if sPlayer and sPlayer == "player" and sSpell and sTarget and (sSpell == BS["Fear Ward"] or sSpell == BS["Misdirection"]) then
 		spellTarget = sTarget
 	end
 end
@@ -269,7 +269,9 @@ function mod:UNIT_SPELLCAST_SUCCEEDED(sPlayer, sName, sRank)
 		local name = BS:HasReverseTranslation(sName) and BS:GetReverseTranslation(sName) or sName
 		self:TriggerEvent("BigWigs_SendSync", "BWCAP "..name)
 	elseif sName == BS["Misdirection"] then
-		self:TriggerEvent("BigWigs_SendSync", "BWMD")
+		local targetName = spellTarget or UnitName("player")
+		self:TriggerEvent("BigWigs_SendSync", "BWMD "..targetName)
+		spellTarget = nil
 	end
 end
 
