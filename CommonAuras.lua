@@ -28,6 +28,8 @@ L:RegisterTranslations("enUS", function() return {
 	fw_cast = "%s fearwarded %s.",
 	fw_bar = "%s: FW Cooldown",
 
+	md_bar = "%s: MD Cooldown",
+
 	used_cast = "%s used %s.",
 	used_bar = "%s: %s",
 
@@ -115,6 +117,7 @@ mod.defaultDB = {
 	challengingshout = true,
 	challengingroar = true,
 	portal = true,
+	misdirection = true,
 	broadcast = false,
 }
 
@@ -152,6 +155,11 @@ mod.consoleOptions = {
 			name = L["Portal"],
 			desc = string.format(L["Toggle %s display."], L["Portal"]),
 		},
+		["misdirection"] = {
+			type = "toggle",
+			name = BS["Misdirection"],
+			desc = L["Toggle %s display."]:format(BS["Misdirection"]),
+		},
 		["broadcast"] = {
 			type = "toggle",
 			name = L["Broadcast"],
@@ -159,7 +167,7 @@ mod.consoleOptions = {
 		},
 	}
 }
-mod.revision = tonumber(string.sub("$Revision$", 12, -3))
+mod.revision = tonumber(("$Revision$"):sub(12, -3))
 mod.external = true
 
 ------------------------------
@@ -182,7 +190,7 @@ function mod:OnEnable()
 		shieldWallDuration = shieldWallDuration + (rank * 2)
 	end
 
-	if class == "WARRIOR" or class == "MAGE" or (class == "PRIEST" and (race == "Dwarf" or race == "Draenei")) then
+	if class == "HUNTER" or class == "WARRIOR" or class == "MAGE" or (class == "PRIEST" and (race == "Dwarf" or race == "Draenei")) then
 		if class == "PRIEST" then
 			self:RegisterEvent("UNIT_SPELLCAST_SENT")
 			spellTarget = nil
@@ -199,6 +207,7 @@ function mod:OnEnable()
 	self:TriggerEvent("BigWigs_ThrottleSync", "BWCACS", .4) -- Challenging Shout
 	self:TriggerEvent("BigWigs_ThrottleSync", "BWCACR", .4) -- Challenging Roar
 	self:TriggerEvent("BigWigs_ThrottleSync", "BWCAP", .4) -- Portal
+	self:TriggerEvent("BigWigs_ThrottleSync", "BWMD", .4) -- Misdirection
 end
 
 ------------------------------
@@ -231,6 +240,10 @@ function mod:BigWigs_RecvSync( sync, rest, nick )
 			self:TriggerEvent("BigWigs_Message", string.format(L["portal_cast"], nick, zone), "Blue", not self.db.profile.broadcast, false)
 			self:TriggerEvent("BigWigs_StartBar", self, rest, 60, BS:GetSpellIcon(rest), true, "Blue")
 		end
+	elseif sync == "BWMD" and self.db.profile.misdirection then
+		local spell = BS["Misdirection"]
+		self:TriggerEvent("BigWigs_Message", L["used_cast"]:format(nick, spell), "Yellow", not self.db.profile.broadcast, false)
+		self:TriggerEvent("BigWigs_StartBar", self, L["md_bar"]:format(nick), 120, BS:GetSpellIcon(spell), true, "Yellow")
 	end
 end
 
@@ -255,6 +268,8 @@ function mod:UNIT_SPELLCAST_SUCCEEDED(sPlayer, sName, sRank)
 	elseif sName:find(L["Portal"]) then
 		local name = BS:HasReverseTranslation(sName) and BS:GetReverseTranslation(sName) or sName
 		self:TriggerEvent("BigWigs_SendSync", "BWCAP "..name)
+	elseif sName == BS["Misdirection"] then
+		self:TriggerEvent("BigWigs_SendSync", "BWMD")
 	end
 end
 
