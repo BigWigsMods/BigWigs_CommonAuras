@@ -51,7 +51,10 @@ L:RegisterTranslations("enUS", function() return {
 
 L:RegisterTranslations("koKR", function() return {
 	fw_cast = "%s님이 %s에게 공포의 수호물을 시전합니다.", --"%s|1이;가; %s에게 공포의 수호물을 시전합니다.",
-	fw_bar = "%s: FW 재사용 대기시간",
+	fw_bar = "%s: 공수 재사용 대기시간",
+
+	md_cast = "%s: %s님에게 눈속임",
+	md_bar = "%s: 눈속임 재사용 대기시간",
 
 	used_cast = "%s님이 %s 사용했습니다.", --"%s|1이;가; %s|1을;를; 사용했습니다.",
 	used_bar = "%s: %s",
