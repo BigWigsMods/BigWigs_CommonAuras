@@ -1,6 +1,8 @@
 ﻿## Interface: 20100
 ## Title: Big Wigs |cffff0000+|r|cffffffffCommon Auras|r
 ## Notes: Notifies the raid about common buffs and debuffs.
+## Title-zhCN: Big Wigs |cffff0000+|r|cffffffff普通光环|r
+## Notes-zhCN: 显示团队通用的buff与debuff.
 ## Author: Rabbit
 ## X-Website: http://www.wowace.com
 ## X-eMail: rabbit.magtheridon@gmail.com

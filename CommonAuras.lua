@@ -49,6 +49,34 @@ L:RegisterTranslations("enUS", function() return {
 	["commonauras"] = true,
 } end )
 
+--Chinese Translate by 月色狼影@CWDG
+--CWDG site: http://Cwowaddon.com
+L:RegisterTranslations("zhCN", function() return {
+	fw_cast = "%s防护恐惧结界%s",
+	fw_bar = "%s: 防护恐惧结界冷却",
+	
+	md_cast = "%s: MD on %s",
+	md_bar = "%s: MD Cooldown",
+
+	used_cast = " 对%s使用%s",
+	used_bar = "%s: %s",
+
+	portal_cast = "%s施放一传送门到%s",
+	portal_regexp = ".*: (.*)",
+	-- portal_bar is the spellname
+
+	["Toggle %s display."] = "选择%s显示",
+	["Portal"] = "传送门",
+	["broadcast"] = "广播",
+	["Broadcast"] = "广播",
+	["Toggle broadcasting the messages to the raidwarning channel."] = "显示使用团队警告(RW)频道广播的消息。",
+
+	["Gives timer bars and raid messages about common buffs and debuffs."] = "对通常的Buff和Debuff使用计时条并且发送团队信息。",
+	["Common Auras"] = "普通光环",
+	["commonauras"] = "普通光环",
+} end )
+
+
 L:RegisterTranslations("koKR", function() return {
 	fw_cast = "%s님이 %s에게 공포의 수호물을 시전합니다.", --"%s|1이;가; %s에게 공포의 수호물을 시전합니다.",
 	fw_bar = "%s: 공수 재사용 대기시간",
