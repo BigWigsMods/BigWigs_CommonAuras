@@ -18,7 +18,7 @@
 
 ## X-BigWigs-LoadWithCore: 1
 
-libs\Babble-Spell-2.2\Babble-Spell-2.2.lua
+embeds.xml
 
 CommonAuras.lua
 
