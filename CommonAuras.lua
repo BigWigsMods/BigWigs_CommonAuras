@@ -224,7 +224,6 @@ function mod:OnEnable()
 		shieldWallDuration = shieldWallDuration + (rank * 2)
 	end
 
-	BigWigs:Print(is23)
 	if class == "HUNTER" or class == "WARRIOR" or class == "MAGE" or (class == "PRIEST" and (is23 or (race == "Dwarf" or race == "Draenei"))) then
 		if class == "PRIEST" or class == "HUNTER" then
 			self:RegisterEvent("UNIT_SPELLCAST_SENT")
