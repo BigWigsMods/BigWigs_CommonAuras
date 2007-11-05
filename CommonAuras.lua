@@ -56,8 +56,8 @@ L:RegisterTranslations("zhCN", function() return {
 	fw_cast = "%s防护恐惧结界%s",
 	fw_bar = "%s: 防护恐惧结界冷却",
 	
-	md_cast = "%s: MD on %s",
-	md_bar = "%s: MD Cooldown",
+	md_cast = "%s: MD 于 %s",
+	md_bar = "%s: MD 冷却",
 
 	used_cast = " 对%s使用%s",
 	used_bar = "%s: %s",
