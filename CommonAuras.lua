@@ -19,7 +19,6 @@ local shieldWallDuration = nil
 
 -- Use for detecting instant cast target (Fear Ward)
 local spellTarget = nil
-local is23 = type(RaidNotice_AddMessage) == "function" and true or nil
 
 ------------------------------
 --      Localization        --
@@ -224,7 +223,7 @@ function mod:OnEnable()
 		shieldWallDuration = shieldWallDuration + (rank * 2)
 	end
 
-	if class == "HUNTER" or class == "WARRIOR" or class == "MAGE" or (class == "PRIEST" and (is23 or (race == "Dwarf" or race == "Draenei"))) then
+	if class == "HUNTER" or class == "WARRIOR" or class == "MAGE" or class == "PRIEST" then
 		if class == "PRIEST" or class == "HUNTER" then
 			self:RegisterEvent("UNIT_SPELLCAST_SENT")
 			spellTarget = nil
@@ -252,7 +251,7 @@ function mod:BigWigs_RecvSync( sync, rest, nick )
 	if not nick then nick = UnitName("player") end
 	if sync == "BWCAFW" and rest and self.db.profile.fearward then
 		self:Message(L["fw_cast"]:format(nick, rest), "Green", not self.db.profile.broadcast, false)
-		self:Bar(L["fw_bar"]:format(nick), is23 and 180 or 30, BS:GetShortSpellIcon("Fear Ward"), true, "Green")
+		self:Bar(L["fw_bar"]:format(nick), 180, BS:GetShortSpellIcon("Fear Ward"), true, "Green")
 	elseif sync == "BWCASW" and self.db.profile.shieldwall then
 		local swTime = tonumber(rest)
 		if not swTime then swTime = 10 end -- If the tank uses an old BWCA, just assume 10 seconds.
