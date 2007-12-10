@@ -120,21 +120,28 @@ L:RegisterTranslations("deDE", function() return {
 } end )
 
 L:RegisterTranslations("frFR", function() return {
-	fw_cast = "%s a prot\195\169g\195\169 contre la peur %s.",
-	fw_bar = "%s: Gardien de peur",
+	fw_cast = "%s a protégé contre la peur %s.",
+	fw_bar = "%s : Cooldown Gardien",
 
-	used_cast = "%s a utilis\195\169 %s.",
+	md_cast = "%s : Redirection sur %s.",
+	md_bar = "%s : Cooldown Redirection",
+
+	used_cast = "%s a utilisé %s.",
+	used_bar = "%s : %s",
 
 	portal_cast = "%s a ouvert un portail pour %s !",
+	portal_regexp = ".* : (.*)",
 	-- portal_bar is the spellname
 
-	["Toggle %s display."] = "Activer l'affichage de %s.",
+	["Toggle %s display."] = "Préviens ou non quand la capacité %s est utilisée.",
 	["Portal"] = "Portail",
-	["broadcast"] = "Annonce",
-	["Broadcast"] = "Annonce",
-	["Toggle broadcasting the messages to the raidwarning channel."] = "Active les annonces au canal d'avertissement raid.",
+	--["broadcast"] = true,
+	["Broadcast"] = "Diffuser",
+	["Toggle broadcasting the messages to the raidwarning channel."] = "Diffuse ou non les messages sur le canal Avertissement raid.",
 
-	["Gives timer bars and raid messages about common buffs and debuffs."] = "Affiche des compteurs et des annonces de raid pour les buffs et debuffs g\195\169n\195\169riques.",
+	["Gives timer bars and raid messages about common buffs and debuffs."] = "Affiche des barres temporelles et des messages raid concernant les buffs & débuffs courants.",
+	["Common Auras"] = "Auras courantes",
+	--["commonauras"] = true,
 } end )
 
 ------------------------------
