@@ -13,7 +13,7 @@
 
 local name = "Common Auras"
 local L = AceLibrary("AceLocale-2.2"):new("BigWigs"..name)
-local BS = AceLibrary("Babble-Spell-2.2")
+local BS = LibStub("LibBabble-Spell-3.0"):GetLookupTable()
 
 local shieldWallDuration = nil
 

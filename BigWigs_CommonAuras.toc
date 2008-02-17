@@ -13,8 +13,8 @@
 ## X-Category: Raid
 ## Version: 1
 ## Dependencies: BigWigs
-## OptionalDeps: Ace2, Babble-2.2
-## X-Embeds: Babble-2.2
+## OptionalDeps: Ace2, LibBabble-Spell-3.0
+## X-Embeds: LibBabble-Spell-3.0
 ## SavedVariables: BigWigsCommonAurasDB
 ## LoadOnDemand: 1
 
