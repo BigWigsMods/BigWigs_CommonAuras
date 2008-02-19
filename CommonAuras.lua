@@ -14,7 +14,7 @@
 local name = "Common Auras"
 local L = AceLibrary("AceLocale-2.2"):new("BigWigs"..name)
 local icons = LibStub("LibBabble-Spell-3.0")
-local BS = icons:GetLookupTable()
+local BS = icons:GetUnstrictLookupTable()
 
 local shieldWallDuration = nil
 
@@ -275,7 +275,7 @@ function mod:BigWigs_RecvSync( sync, rest, nick )
 		self:Message(L["used_cast"]:format(nick, spell), "Orange", not self.db.profile.broadcast, false)
 		self:Bar(L["used_bar"]:format(nick, spell), 6, icons:GetShortSpellIcon(spell), true, "Orange")
 	elseif sync == "BWCAP" and rest and self.db.profile.portal then
-		rest = BS:HasTranslation(rest) and BS:GetTranslation(rest) or rest
+		rest = BS[rest] or rest
 		local zone = select(3, rest:find(L["portal_regexp"]))
 		if zone then
 			self:Message(L["portal_cast"]:format(nick, zone), "Blue", not self.db.profile.broadcast, false)
