@@ -255,35 +255,40 @@ end
 --      Events              --
 ------------------------------
 
-function mod:BigWigs_RecvSync( sync, rest, nick )
+local green = {r = 0, g = 1, b = 0}
+local blue = {r = 0, g = 0, b = 1}
+local orange = {r = 1, g = 0.75, b = 0.14}
+local yellow = {r = 1, g = 1, b = 0}
+
+function mod:BigWigs_RecvSync(sync, rest, nick)
 	if not nick then nick = UnitName("player") end
 	if sync == "BWCAFW" and rest and self.db.profile.fearward then
-		self:Message(L["fw_cast"]:format(nick, rest), "Green", not self.db.profile.broadcast, false)
-		self:Bar(L["fw_bar"]:format(nick), 180, icons:GetShortSpellIcon("Fear Ward"), true, "Green")
+		self:Message(L["fw_cast"]:format(nick, rest), green, not self.db.profile.broadcast, false)
+		self:Bar(L["fw_bar"]:format(nick), 180, icons:GetShortSpellIcon("Fear Ward"), true, 0, 1, 0)
 	elseif sync == "BWCASW" and self.db.profile.shieldwall then
 		local swTime = tonumber(rest)
 		if not swTime then swTime = 10 end -- If the tank uses an old BWCA, just assume 10 seconds.
 		local spell = BS["Shield Wall"]
-		self:Message(L["used_cast"]:format(nick,  spell), "Blue", not self.db.profile.broadcast, false)
-		self:Bar(L["used_bar"]:format(nick, spell), swTime, icons:GetShortSpellIcon(spell), true, "Blue")
+		self:Message(L["used_cast"]:format(nick,  spell), blue, not self.db.profile.broadcast, false)
+		self:Bar(L["used_bar"]:format(nick, spell), swTime, icons:GetShortSpellIcon(spell), true, 0, 0, 1)
 	elseif sync == "BWCACS" and self.db.profile.challengingshout then
 		local spell = BS["Challenging Shout"]
-		self:Message(L["used_cast"]:format(nick, spell), "Orange", not self.db.profile.broadcast, false)
-		self:Bar(L["used_bar"]:format(nick, spell), 6, icons:GetShortSpellIcon(spell), true, "Orange")
+		self:Message(L["used_cast"]:format(nick, spell), orange, not self.db.profile.broadcast, false)
+		self:Bar(L["used_bar"]:format(nick, spell), 6, icons:GetShortSpellIcon(spell), true, 1, 0.75, 0.14)
 	elseif sync == "BWCACR" and self.db.profile.challengingroar then
 		local spell = BS["Challenging Roar"]
-		self:Message(L["used_cast"]:format(nick, spell), "Orange", not self.db.profile.broadcast, false)
-		self:Bar(L["used_bar"]:format(nick, spell), 6, icons:GetShortSpellIcon(spell), true, "Orange")
+		self:Message(L["used_cast"]:format(nick, spell), orange, not self.db.profile.broadcast, false)
+		self:Bar(L["used_bar"]:format(nick, spell), 6, icons:GetShortSpellIcon(spell), true, 1, 0.75, 0.14)
 	elseif sync == "BWCAP" and rest and self.db.profile.portal then
 		rest = BS[rest] or rest
 		local zone = select(3, rest:find(L["portal_regexp"]))
 		if zone then
-			self:Message(L["portal_cast"]:format(nick, zone), "Blue", not self.db.profile.broadcast, false)
-			self:Bar(rest, 60, icons:GetShortSpellIcon(rest), true, "Blue")
+			self:Message(L["portal_cast"]:format(nick, zone), blue, not self.db.profile.broadcast, false)
+			self:Bar(rest, 60, icons:GetShortSpellIcon(rest), true, 0, 0, 1)
 		end
 	elseif sync == "BWMD" and rest and self.db.profile.misdirection then
-		self:Message(L["md_cast"]:format(nick, rest), "Yellow", not self.db.profile.broadcast, false)
-		self:Bar(L["md_bar"]:format(nick), 120, icons:GetShortSpellIcon("Misdirection"), true, "Yellow")
+		self:Message(L["md_cast"]:format(nick, rest), yellow, not self.db.profile.broadcast, false)
+		self:Bar(L["md_bar"]:format(nick), 120, icons:GetShortSpellIcon("Misdirection"), true, 1, 1, 0)
 	end
 end
 
