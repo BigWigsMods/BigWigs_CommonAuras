@@ -13,13 +13,17 @@
 
 local name = "Common Auras"
 local L = AceLibrary("AceLocale-2.2"):new("BigWigs"..name)
-local icons = LibStub("LibBabble-Spell-3.0")
-local BS = icons:GetUnstrictLookupTable()
 
 local shieldWallDuration = nil
 
 -- Use for detecting instant cast target (Fear Ward)
 local spellTarget = nil
+
+local fear_ward = GetSpellInfo(6346)
+local shield_wall = GetSpellInfo(871)
+local challenging_shout = GetSpellInfo(1161)
+local challenging_roar = GetSpellInfo(5209)
+local misdirection = GetSpellInfo(34477)
 
 ------------------------------
 --      Localization        --
@@ -50,8 +54,6 @@ L:RegisterTranslations("enUS", function() return {
 	["commonauras"] = true,
 } end )
 
---Chinese Translate by 月色狼影@CWDG
---CWDG site: http://Cwowaddon.com
 L:RegisterTranslations("zhCN", function() return {
 	fw_cast = "%s防护恐惧结界%s",
 	fw_bar = "%s: 防护恐惧结界冷却",
@@ -172,23 +174,23 @@ mod.consoleOptions = {
 	args = {
 		fearward = {
 			type = "toggle",
-			name = BS["Fear Ward"],
-			desc = L["Toggle %s display."]:format(BS["Fear Ward"]),
+			name = fear_ward,
+			desc = L["Toggle %s display."]:format(fear_ward),
 		},
 		shieldwall = {
 			type = "toggle",
-			name = BS["Shield Wall"],
-			desc = L["Toggle %s display."]:format(BS["Shield Wall"]),
+			name = shield_wall,
+			desc = L["Toggle %s display."]:format(shield_wall),
 		},
 		challengingshout = {
 			type = "toggle",
-			name = BS["Challenging Shout"],
-			desc = L["Toggle %s display."]:format(BS["Challenging Shout"]),
+			name = challenging_shout,
+			desc = L["Toggle %s display."]:format(challenging_shout),
 		},
 		challengingroar = {
 			type = "toggle",
-			name = BS["Challenging Roar"],
-			desc = L["Toggle %s display."]:format(BS["Challenging Roar"]),
+			name = challenging_roar,
+			desc = L["Toggle %s display."]:format(challenging_roar),
 		},
 		portal = {
 			type = "toggle",
@@ -197,8 +199,8 @@ mod.consoleOptions = {
 		},
 		misdirection = {
 			type = "toggle",
-			name = BS["Misdirection"],
-			desc = L["Toggle %s display."]:format(BS["Misdirection"]),
+			name = misdirection,
+			desc = L["Toggle %s display."]:format(misdirection),
 		},
 		broadcast = {
 			type = "toggle",
@@ -231,7 +233,7 @@ function mod:OnEnable()
 		shieldWallDuration = shieldWallDuration + (rank * 2)
 	end
 
-	if class == "HUNTER" or class == "WARRIOR" or class == "MAGE" or class == "PRIEST" then
+	if class == "HUNTER" or class == "WARRIOR" or class == "PRIEST" then
 		if class == "PRIEST" or class == "HUNTER" then
 			self:RegisterEvent("UNIT_SPELLCAST_SENT")
 			spellTarget = nil
@@ -240,15 +242,11 @@ function mod:OnEnable()
 	end
 
 	self:RegisterEvent("BigWigs_RecvSync")
+	self:Throttle(0.4, "BWCAFW", "BWCASW", "BWCACS", "BWCACR", "BWCAP", "BWMD")
 
-	-- XXX Lets have a low throttle because you'll get 2 syncs from yourself, so
-	-- it results in 2 messages.
-	self:TriggerEvent("BigWigs_ThrottleSync", "BWCAFW", .4) -- Fear Ward
-	self:TriggerEvent("BigWigs_ThrottleSync", "BWCASW", .4) -- Shield Wall
-	self:TriggerEvent("BigWigs_ThrottleSync", "BWCACS", .4) -- Challenging Shout
-	self:TriggerEvent("BigWigs_ThrottleSync", "BWCACR", .4) -- Challenging Roar
-	self:TriggerEvent("BigWigs_ThrottleSync", "BWCAP", .4) -- Portal
-	self:TriggerEvent("BigWigs_ThrottleSync", "BWMD", .4) -- Misdirection
+	if class == "MAGE" then
+		self:AddCombatListener("SPELL_CAST_START", "Portals", 11419, 32266, 11416, 11417, 33691, 35717, 32267, 10059, 11420, 11425)
+	end
 end
 
 ------------------------------
@@ -260,60 +258,64 @@ local blue = {r = 0, g = 0, b = 1}
 local orange = {r = 1, g = 0.75, b = 0.14}
 local yellow = {r = 1, g = 1, b = 0}
 
+function mod:Portals(player, spellID)
+	if UnitIsUnit(player, "player") then
+		self:Sync("BWCAP "..spellID)
+	end
+end
+
 function mod:BigWigs_RecvSync(sync, rest, nick)
 	if not nick then nick = UnitName("player") end
 	if sync == "BWCAFW" and rest and self.db.profile.fearward then
 		self:Message(L["fw_cast"]:format(nick, rest), green, not self.db.profile.broadcast, false)
-		self:Bar(L["fw_bar"]:format(nick), 180, icons:GetShortSpellIcon("Fear Ward"), true, 0, 1, 0)
+		self:Bar(L["fw_bar"]:format(nick), 180, 6346, true, 0, 1, 0)
 	elseif sync == "BWCASW" and self.db.profile.shieldwall then
 		local swTime = tonumber(rest)
 		if not swTime then swTime = 10 end -- If the tank uses an old BWCA, just assume 10 seconds.
-		local spell = BS["Shield Wall"]
+		local spell = shield_wall
 		self:Message(L["used_cast"]:format(nick,  spell), blue, not self.db.profile.broadcast, false)
-		self:Bar(L["used_bar"]:format(nick, spell), swTime, icons:GetShortSpellIcon(spell), true, 0, 0, 1)
+		self:Bar(L["used_bar"]:format(nick, spell), swTime, 871, true, 0, 0, 1)
 	elseif sync == "BWCACS" and self.db.profile.challengingshout then
-		local spell = BS["Challenging Shout"]
+		local spell = challenging_shout
 		self:Message(L["used_cast"]:format(nick, spell), orange, not self.db.profile.broadcast, false)
-		self:Bar(L["used_bar"]:format(nick, spell), 6, icons:GetShortSpellIcon(spell), true, 1, 0.75, 0.14)
+		self:Bar(L["used_bar"]:format(nick, spell), 6, 1161, true, 1, 0.75, 0.14)
 	elseif sync == "BWCACR" and self.db.profile.challengingroar then
-		local spell = BS["Challenging Roar"]
+		local spell = challenging_roar
 		self:Message(L["used_cast"]:format(nick, spell), orange, not self.db.profile.broadcast, false)
-		self:Bar(L["used_bar"]:format(nick, spell), 6, icons:GetShortSpellIcon(spell), true, 1, 0.75, 0.14)
+		self:Bar(L["used_bar"]:format(nick, spell), 6, 5209, true, 1, 0.75, 0.14)
 	elseif sync == "BWCAP" and rest and self.db.profile.portal then
-		rest = BS[rest] or rest
-		local zone = select(3, rest:find(L["portal_regexp"]))
+		rest = tonumber(rest)
+		local dest = GetSpellInfo(rest)
+		local zone = select(3, dest:find(L["portal_regexp"]))
 		if zone then
 			self:Message(L["portal_cast"]:format(nick, zone), blue, not self.db.profile.broadcast, false)
-			self:Bar(rest, 60, icons:GetShortSpellIcon(rest), true, 0, 0, 1)
+			self:Bar(rest, 60, rest, true, 0, 0, 1)
 		end
 	elseif sync == "BWMD" and rest and self.db.profile.misdirection then
 		self:Message(L["md_cast"]:format(nick, rest), yellow, not self.db.profile.broadcast, false)
-		self:Bar(L["md_bar"]:format(nick), 120, icons:GetShortSpellIcon("Misdirection"), true, 1, 1, 0)
+		self:Bar(L["md_bar"]:format(nick), 120, 34477, true, 1, 1, 0)
 	end
 end
 
 function mod:UNIT_SPELLCAST_SENT(sPlayer, sSpell, sRank, sTarget)
 	if sTarget == "" then sTarget = nil end
-	if sPlayer and sPlayer == "player" and sSpell and sTarget and (sSpell == BS["Fear Ward"] or sSpell == BS["Misdirection"]) then
+	if sPlayer and sPlayer == "player" and sSpell and sTarget and (sSpell == fear_ward or sSpell == misdirection) then
 		spellTarget = sTarget
 	end
 end
 
 function mod:UNIT_SPELLCAST_SUCCEEDED(sPlayer, sName, sRank)
-	if sName == BS["Fear Ward"] then
+	if sName == fear_ward then
 		local targetName = spellTarget or UnitName("player")
 		self:Sync("BWCAFW "..targetName)
 		spellTarget = nil
-	elseif sName == BS["Shield Wall"] then
+	elseif sName == shield_wall then
 		self:Sync("BWCASW "..tostring(shieldWallDuration))
-	elseif sName == BS["Challenging Shout"] then
+	elseif sName == challenging_shout then
 		self:Sync("BWCACS")
-	elseif sName == BS["Challenging Roar"] then
+	elseif sName == challenging_roar then
 		self:Sync("BWCACR")
-	elseif sName:find(L["Portal"]) then
-		local name = BS:HasReverseTranslation(sName) and BS:GetReverseTranslation(sName) or sName
-		self:Sync("BWCAP "..name)
-	elseif sName == BS["Misdirection"] then
+	elseif sName == misdirection then
 		local targetName = spellTarget or UnitName("player")
 		self:Sync("BWMD "..targetName)
 		spellTarget = nil

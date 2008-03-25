@@ -1,4 +1,4 @@
-﻿## Interface: 20300
+﻿## Interface: 20400
 ## Title: Big Wigs |cffff0000+|r|cffffffffCommon Auras|r
 ## Notes: Notifies the raid about common buffs and debuffs.
 ## Title-zhCN: Big Wigs |cffff0000+|r|cffffffff普通光环|r
@@ -11,13 +11,10 @@
 ## X-Category: Raid
 ## Version: 1
 ## Dependencies: BigWigs
-## OptionalDeps: Ace2, LibBabble-Spell-3.0
-## X-Embeds: LibBabble-Spell-3.0
+## OptionalDeps: Ace2
 ## LoadOnDemand: 1
 
 ## X-BigWigs-LoadWithCore: 1
-
-embeds.xml
 
 CommonAuras.lua
 
