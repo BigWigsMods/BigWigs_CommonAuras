@@ -224,7 +224,7 @@ function mod:OnEnable()
 	self:AddCombatListener("SPELL_CAST_SUCCESS", "Roar", 5209) --Challenging Roar
 	self:AddCombatListener("SPELL_CAST_SUCCESS", "FearWard", 6346) --Fear Ward
 	self:AddCombatListener("SPELL_CAST_SUCCESS", "Misdirection", 34477) --Misdirection
-	self:AddCombatListener("SPELL_CAST_SUCCESS", "Portals", 11419, 32266, 11416, 11417, 33691, 35717, 32267, 10059, 11420, 11425) --Portals
+	self:AddCombatListener("SPELL_CAST_START", "Portals", 11419, 32266, 11416, 11417, 33691, 35717, 32267, 10059, 11420, 11425) --Portals
 
 	if class == "WARRIOR" then
 		local rank = select(5, GetTalentInfo(3 , 13))
