@@ -219,7 +219,12 @@ mod.external = true
 
 function mod:OnEnable()
 	local class = select(2, UnitClass("player"))
-	local race = select(2, UnitRace("player"))
+
+	self:AddCombatListener("SPELL_CAST_SUCCESS", "Shout", 1161) --Challenging Shout
+	self:AddCombatListener("SPELL_CAST_SUCCESS", "Roar", 5209) --Challenging Roar
+	self:AddCombatListener("SPELL_CAST_SUCCESS", "FearWard", 6346) --Fear Ward
+	self:AddCombatListener("SPELL_CAST_SUCCESS", "Misdirection", 34477) --Misdirection
+	self:AddCombatListener("SPELL_CAST_SUCCESS", "Portals", 11419, 32266, 11416, 11417, 33691, 35717, 32267, 10059, 11420, 11425) --Portals
 
 	if class == "WARRIOR" then
 		local rank = select(5, GetTalentInfo(3 , 13))
@@ -231,22 +236,11 @@ function mod:OnEnable()
 		end
 		rank = select(5, GetTalentInfo(1 , 18))
 		shieldWallDuration = shieldWallDuration + (rank * 2)
-	end
-
-	if class == "HUNTER" or class == "WARRIOR" or class == "PRIEST" then
-		if class == "PRIEST" or class == "HUNTER" then
-			self:RegisterEvent("UNIT_SPELLCAST_SENT")
-			spellTarget = nil
-		end
 		self:RegisterEvent("UNIT_SPELLCAST_SUCCEEDED")
 	end
 
 	self:RegisterEvent("BigWigs_RecvSync")
-	self:Throttle(0.4, "BWCAFW", "BWCASW", "BWCACS", "BWCACR", "BWCAP", "BWMD")
-
-	if class == "MAGE" then
-		self:AddCombatListener("SPELL_CAST_START", "Portals", 11419, 32266, 11416, 11417, 33691, 35717, 32267, 10059, 11420, 11425)
-	end
+	self:Throttle(0.4, "BWCASW")
 end
 
 ------------------------------
@@ -258,67 +252,58 @@ local blue = {r = 0, g = 0, b = 1}
 local orange = {r = 1, g = 0.75, b = 0.14}
 local yellow = {r = 1, g = 1, b = 0}
 
-function mod:Portals(_, spellID, source)
-	if UnitIsUnit(source, "player") then
-		self:Sync("BWCAP "..spellID)
+function mod:Shout(_, spellID, nick, _, spellName)
+	if (UnitInRaid(nick) or UnitInParty(nick)) and self.db.profile.challengingshout then
+		self:Message(L["used_cast"]:format(nick, spellName), orange, not self.db.profile.broadcast, nil, nil, spellID)
+		self:Bar(L["used_bar"]:format(nick, spellName), 6, spellID, true, 1, 0.75, 0.14)
 	end
 end
 
-function mod:BigWigs_RecvSync(sync, rest, nick)
-	if not nick then nick = UnitName("player") end
-	if sync == "BWCAFW" and rest and self.db.profile.fearward then
-		self:Message(L["fw_cast"]:format(nick, rest), green, not self.db.profile.broadcast, false)
-		self:Bar(L["fw_bar"]:format(nick), 180, 6346, true, 0, 1, 0)
-	elseif sync == "BWCASW" and self.db.profile.shieldwall then
-		local swTime = tonumber(rest)
-		if not swTime then swTime = 10 end -- If the tank uses an old BWCA, just assume 10 seconds.
-		local spell = shield_wall
-		self:Message(L["used_cast"]:format(nick,  spell), blue, not self.db.profile.broadcast, false)
-		self:Bar(L["used_bar"]:format(nick, spell), swTime, 871, true, 0, 0, 1)
-	elseif sync == "BWCACS" and self.db.profile.challengingshout then
-		local spell = challenging_shout
-		self:Message(L["used_cast"]:format(nick, spell), orange, not self.db.profile.broadcast, false)
-		self:Bar(L["used_bar"]:format(nick, spell), 6, 1161, true, 1, 0.75, 0.14)
-	elseif sync == "BWCACR" and self.db.profile.challengingroar then
-		local spell = challenging_roar
-		self:Message(L["used_cast"]:format(nick, spell), orange, not self.db.profile.broadcast, false)
-		self:Bar(L["used_bar"]:format(nick, spell), 6, 5209, true, 1, 0.75, 0.14)
-	elseif sync == "BWCAP" and rest and self.db.profile.portal then
-		rest = tonumber(rest)
-		local dest = GetSpellInfo(rest)
+function mod:Roar(_, spellID, nick, _, spellName)
+	if (UnitInRaid(nick) or UnitInParty(nick)) and self.db.profile.challengingroar then
+		self:Message(L["used_cast"]:format(nick, spellName), orange, not self.db.profile.broadcast, nil, nil, spellID)
+		self:Bar(L["used_bar"]:format(nick, spellName), 6, spellID, true, 1, 0.75, 0.14)
+	end
+end
+
+function mod:FearWard(target, spellID, nick, _, spellName)
+	if (UnitInRaid(nick) or UnitInParty(nick)) and self.db.profile.fearward then
+		self:Message(L["fw_cast"]:format(nick, target), green, not self.db.profile.broadcast, nil, nil, spellID)
+		self:Bar(L["fw_bar"]:format(nick), 180, spellID, true, 0, 1, 0)
+	end
+end
+
+function mod:Misdirection(target, spellID, nick, _, spellName)
+	if (UnitInRaid(nick) or UnitInParty(nick)) and self.db.profile.misdirection then
+		self:Message(L["md_cast"]:format(nick, target), yellow, not self.db.profile.broadcast, nil, nil, spellID)
+		self:Bar(L["md_bar"]:format(nick), 120, spellID, true, 1, 1, 0)
+	end
+end
+
+function mod:Portals(_, spellID, source)
+	if (UnitInRaid(nick) or UnitInParty(nick)) and self.db.profile.portal then
+		local dest = GetSpellInfo(spellID)
 		local zone = select(3, dest:find(L["portal_regexp"]))
 		if zone then
 			self:Message(L["portal_cast"]:format(nick, zone), blue, not self.db.profile.broadcast, false)
 			self:Bar(rest, 60, rest, true, 0, 0, 1)
 		end
-	elseif sync == "BWMD" and rest and self.db.profile.misdirection then
-		self:Message(L["md_cast"]:format(nick, rest), yellow, not self.db.profile.broadcast, false)
-		self:Bar(L["md_bar"]:format(nick), 120, 34477, true, 1, 1, 0)
 	end
 end
 
-function mod:UNIT_SPELLCAST_SENT(sPlayer, sSpell, sRank, sTarget)
-	if sTarget == "" then sTarget = nil end
-	if sPlayer and sPlayer == "player" and sSpell and sTarget and (sSpell == fear_ward or sSpell == misdirection) then
-		spellTarget = sTarget
+function mod:BigWigs_RecvSync(sync, rest, nick)
+	if sync == "BWCASW" and self.db.profile.shieldwall then
+		local swTime = tonumber(rest)
+		if not swTime then swTime = 10 end -- If the tank uses an old BWCA, just assume 10 seconds.
+		local spell = shield_wall
+		self:Message(L["used_cast"]:format(nick,  spell), blue, not self.db.profile.broadcast, false)
+		self:Bar(L["used_bar"]:format(nick, spell), swTime, 871, true, 0, 0, 1)
 	end
 end
 
 function mod:UNIT_SPELLCAST_SUCCEEDED(sPlayer, sName, sRank)
-	if sName == fear_ward then
-		local targetName = spellTarget or UnitName("player")
-		self:Sync("BWCAFW "..targetName)
-		spellTarget = nil
-	elseif sName == shield_wall then
-		self:Sync("BWCASW "..tostring(shieldWallDuration))
-	elseif sName == challenging_shout then
-		self:Sync("BWCACS")
-	elseif sName == challenging_roar then
-		self:Sync("BWCACR")
-	elseif sName == misdirection then
-		local targetName = spellTarget or UnitName("player")
-		self:Sync("BWMD "..targetName)
-		spellTarget = nil
+	if UnitIsUnit(sPlayer, "player") and sName == shield_wall then
+		self:Sync("BWCASW "..shieldWallDuration)
 	end
 end
 
