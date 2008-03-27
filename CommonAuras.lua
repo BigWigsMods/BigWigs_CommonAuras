@@ -258,8 +258,8 @@ local blue = {r = 0, g = 0, b = 1}
 local orange = {r = 1, g = 0.75, b = 0.14}
 local yellow = {r = 1, g = 1, b = 0}
 
-function mod:Portals(player, spellID)
-	if UnitIsUnit(player, "player") then
+function mod:Portals(_, spellID, source)
+	if UnitIsUnit(source, "player") then
 		self:Sync("BWCAP "..spellID)
 	end
 end
