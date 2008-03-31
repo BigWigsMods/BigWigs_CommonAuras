@@ -16,9 +16,6 @@ local L = AceLibrary("AceLocale-2.2"):new("BigWigs"..name)
 
 local shieldWallDuration = nil
 
--- Use for detecting instant cast target (Fear Ward)
-local spellTarget = nil
-
 local fear_ward = GetSpellInfo(6346)
 local shield_wall = GetSpellInfo(871)
 local challenging_shout = GetSpellInfo(1161)
@@ -39,25 +36,21 @@ L:RegisterTranslations("enUS", function() return {
 	used_cast = "%s used %s.",
 	used_bar = "%s: %s",
 
-	portal_cast = "%s opened a portal to %s!",
-	portal_regexp = ".*: (.*)",
-	-- portal_bar is the spellname
+	portal_cast = "%s opened a %s!", --Player opened a Portal: Destination
 
 	["Toggle %s display."] = true,
 	["Portal"] = true,
-	["broadcast"] = true,
 	["Broadcast"] = true,
 	["Toggle broadcasting the messages to the raidwarning channel."] = true,
 
 	["Gives timer bars and raid messages about common buffs and debuffs."] = true,
 	["Common Auras"] = true,
-	["commonauras"] = true,
 } end )
 
 L:RegisterTranslations("zhCN", function() return {
 	fw_cast = "%s防护恐惧结界%s",
 	fw_bar = "%s: 防护恐惧结界冷却",
-	
+
 	md_cast = "%s: MD 于 %s",
 	md_bar = "%s: MD 冷却",
 
@@ -65,38 +58,32 @@ L:RegisterTranslations("zhCN", function() return {
 	used_bar = "%s: %s",
 
 	portal_cast = "%s施放一传送门到%s",
-	portal_regexp = ".*: (.*)",
-	-- portal_bar is the spellname
 
 	["Toggle %s display."] = "选择%s显示",
 	["Portal"] = "传送门",
-	["broadcast"] = "广播",
 	["Broadcast"] = "广播",
 	["Toggle broadcasting the messages to the raidwarning channel."] = "显示使用团队警告(RW)频道广播的消息。",
 
 	["Gives timer bars and raid messages about common buffs and debuffs."] = "对通常的Buff和Debuff使用计时条并且发送团队信息。",
 	["Common Auras"] = "普通光环",
-	["commonauras"] = "普通光环",
 } end )
 
 
 L:RegisterTranslations("koKR", function() return {
-	fw_cast = "%s님이 %s에게 공포의 수호물을 시전합니다.", --"%s|1이;가; %s에게 공포의 수호물을 시전합니다.",
+	fw_cast = "%s님이 %s에게 공포의 수호물을 시전합니다.",
 	fw_bar = "%s: 공수 재사용 대기시간",
 
 	md_cast = "%s: %s님에게 눈속임",
 	md_bar = "%s: 눈속임 재사용 대기시간",
 
-	used_cast = "%s님이 %s 사용했습니다.", --"%s|1이;가; %s|1을;를; 사용했습니다.",
+	used_cast = "%s님이 %s 사용했습니다.",
 	used_bar = "%s: %s",
 
-	portal_cast = "%s님이 %s 차원문을 엽니다!", --"%s|1이;가; %s|1으로;로; 가는 차원문을 엽니다!",
-	portal_regexp = ".*: (.*)",
-	-- portal_bar is the spellname
+	portal_cast = "%s님이 %s 차원문을 엽니다!",
 
 	["Toggle %s display."] = "%s 표시를 전환합니다.",
 	["Portal"] = "차원문",
-	
+
 	["Broadcast"] = "알림",
 	["Toggle broadcasting the messages to the raidwarning channel."] = "공격대 경보 채널에 메세지 알림을 전환합니다.",
 
@@ -108,18 +95,21 @@ L:RegisterTranslations("deDE", function() return {
 	fw_cast = "%s sch\195\188tzt %s vor Furcht.",
 	fw_bar = "%s: FS Cooldown",
 
+	--md_cast = "%s: MD on %s",
+	--md_bar = "%s: MD Cooldown",
+
 	used_cast = "%s benutzt %s.",
+	--used_bar = "%s: %s",
 
 	portal_cast = "%s \195\182ffnet ein Portal nach %s!",
-	-- portal_bar is the spellname
 
 	["Toggle %s display."] = "Aktiviert oder Deaktiviert die Anzeige von %s.",
 	["Portal"] = "Portale",
-	["broadcast"] = "broadcasten",
 	["Broadcast"] = "Broadcast",
 	["Toggle broadcasting the messages to the raidwarning channel."] = "W\195\164hle, ob Warnungen \195\188ber RaidWarning gesendet werden sollen.",
 
 	["Gives timer bars and raid messages about common buffs and debuffs."] = "Zeigt Zeitleisten und Raidnachrichten f? kritische Spr\195\188che.",
+	--["Common Auras"] = "",
 } end )
 
 L:RegisterTranslations("frFR", function() return {
@@ -133,18 +123,14 @@ L:RegisterTranslations("frFR", function() return {
 	used_bar = "%s : %s",
 
 	portal_cast = "%s a ouvert un portail pour %s !",
-	portal_regexp = ".* : (.*)",
-	-- portal_bar is the spellname
 
 	["Toggle %s display."] = "Préviens ou non quand la capacité %s est utilisée.",
 	["Portal"] = "Portail",
-	--["broadcast"] = true,
 	["Broadcast"] = "Diffuser",
 	["Toggle broadcasting the messages to the raidwarning channel."] = "Diffuse ou non les messages sur le canal Avertissement raid.",
 
 	["Gives timer bars and raid messages about common buffs and debuffs."] = "Affiche des barres temporelles et des messages raid concernant les buffs & débuffs courants.",
 	["Common Auras"] = "Auras courantes",
-	--["commonauras"] = true,
 } end )
 
 ------------------------------
@@ -163,7 +149,7 @@ mod.defaultDB = {
 	broadcast = false,
 }
 
-mod.consoleCmd = L["commonauras"]
+mod.consoleCmd = "commonauras"
 mod.consoleOptions = {
 	type = "group",
 	name = L["Common Auras"],
@@ -224,7 +210,7 @@ function mod:OnEnable()
 	self:AddCombatListener("SPELL_CAST_SUCCESS", "Roar", 5209) --Challenging Roar
 	self:AddCombatListener("SPELL_CAST_SUCCESS", "FearWard", 6346) --Fear Ward
 	self:AddCombatListener("SPELL_CAST_SUCCESS", "Misdirection", 34477) --Misdirection
-	self:AddCombatListener("SPELL_CAST_START", "Portals", 11419, 32266, 11416, 11417, 33691, 35717, 32267, 10059, 11420, 11425) --Portals
+	self:AddCombatListener("SPELL_CAST_SUCCESS", "Portals", 11419, 32266, 11416, 11417, 33691, 35717, 32267, 10059, 11420, 11418) --Portals
 
 	if class == "WARRIOR" then
 		local rank = select(5, GetTalentInfo(3 , 13))
@@ -280,14 +266,10 @@ function mod:Misdirection(target, spellID, nick, _, spellName)
 	end
 end
 
-function mod:Portals(_, spellID, source)
+function mod:Portals(_, spellID, nick, _, spellName)
 	if (UnitInRaid(nick) or UnitInParty(nick)) and self.db.profile.portal then
-		local dest = GetSpellInfo(spellID)
-		local zone = select(3, dest:find(L["portal_regexp"]))
-		if zone then
-			self:Message(L["portal_cast"]:format(nick, zone), blue, not self.db.profile.broadcast, false)
-			self:Bar(rest, 60, rest, true, 0, 0, 1)
-		end
+		self:Message(L["portal_cast"]:format(nick, spellName), blue, not self.db.profile.broadcast, nil, nil, spellID)
+		self:Bar(spellName.." ("..nick..")", 60, spellID, true, 0, 0, 1)
 	end
 end
 
