@@ -14,8 +14,6 @@
 local name = "Common Auras"
 local L = AceLibrary("AceLocale-2.2"):new("BigWigs"..name)
 
-local shieldWallDuration = nil
-
 local fear_ward = GetSpellInfo(6346)
 local shield_wall = GetSpellInfo(871)
 local challenging_shout = GetSpellInfo(1161)
@@ -220,30 +218,14 @@ mod.external = true
 ------------------------------
 
 function mod:OnEnable()
-	local class = select(2, UnitClass("player"))
-
 	self:AddCombatListener("SPELL_CAST_SUCCESS", "Shout", 1161) --Challenging Shout
 	self:AddCombatListener("SPELL_CAST_SUCCESS", "Roar", 5209) --Challenging Roar
 	self:AddCombatListener("SPELL_CAST_SUCCESS", "FearWard", 6346) --Fear Ward
 	self:AddCombatListener("SPELL_CAST_SUCCESS", "Misdirection", 34477) --Misdirection
 	self:AddCombatListener("SPELL_CAST_SUCCESS", "Repair", 22700, 44389) --Field Repair Bot 74A, Field Repair Bot 110G
 	self:AddCombatListener("SPELL_CAST_SUCCESS", "Portals", 11419, 32266, 11416, 11417, 33691, 35717, 32267, 10059, 11420, 11418) --Portals
-
-	if class == "WARRIOR" then
-		local rank = select(5, GetTalentInfo(3 , 13))
-		shieldWallDuration = 10
-		if rank == 2 then
-			shieldWallDuration = shieldWallDuration + 5
-		elseif rank == 1 then
-			shieldWallDuration = shieldWallDuration + 3
-		end
-		rank = select(5, GetTalentInfo(1 , 18))
-		shieldWallDuration = shieldWallDuration + (rank * 2)
-		self:RegisterEvent("UNIT_SPELLCAST_SUCCEEDED")
-	end
-
-	self:RegisterEvent("BigWigs_RecvSync")
-	self:Throttle(0.4, "BWCASW")
+	self:AddCombatListener("SPELL_CAST_SUCCESS", "ShieldWall", 871) --Shield Wall
+	self:AddCombatListener("SPELL_AURA_REMOVED", "ShieldWallFade", 871) --Shield Wall Fades
 end
 
 ------------------------------
@@ -297,19 +279,16 @@ function mod:Portals(_, spellID, nick, _, spellName)
 	end
 end
 
-function mod:BigWigs_RecvSync(sync, rest, nick)
-	if sync == "BWCASW" and self.db.profile.shieldwall then
-		local swTime = tonumber(rest)
-		if not swTime then swTime = 10 end -- If the tank uses an old BWCA, just assume 10 seconds.
-		local spell = shield_wall
-		self:Message(L["used_cast"]:format(nick,  spell), blue, not self.db.profile.broadcast, false)
-		self:Bar(L["used_bar"]:format(nick, spell), swTime, 871, true, 0, 0, 1)
+function mod:ShieldWall(_, spellID, nick, _, spellName)
+	if (UnitInRaid(nick) or UnitInParty(nick)) and self.db.profile.shieldwall then
+		self:Message(L["used_cast"]:format(nick, spellName), blue, not self.db.profile.broadcast, nil, nil, spellID)
+		self:Bar(L["used_bar"]:format(nick, spellName), 15, spellID, true, 0, 0, 1)
 	end
 end
 
-function mod:UNIT_SPELLCAST_SUCCEEDED(sPlayer, sName, sRank)
-	if UnitIsUnit(sPlayer, "player") and sName == shield_wall then
-		self:Sync("BWCASW "..shieldWallDuration)
+function mod:ShieldWallFade(player, _, _, _, spellName)
+	if (UnitInRaid(nick) or UnitInParty(nick)) and self.db.profile.shieldwall then
+		self:TriggerEvent("BigWigs_StopBar", self, L["used_bar"]:format(player, spellName))
 	end
 end
 
