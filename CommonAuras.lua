@@ -19,6 +19,8 @@ local shield_wall = GetSpellInfo(871)
 local challenging_shout = GetSpellInfo(1161)
 local challenging_roar = GetSpellInfo(5209)
 local misdirection = GetSpellInfo(34477)
+local rebirth = GetSpellInfo(20484)
+local innervate = GetSpellInfo(29166)
 
 ------------------------------
 --      Localization        --
@@ -30,6 +32,9 @@ L:RegisterTranslations("enUS", function() return {
 
 	md_cast = "%s: MD on %s",
 	md_bar = "%s: MD Cooldown",
+
+	usedon_cast = "%s: %s on %s",
+	usedon_bar = "%s: %s Cooldown",
 
 	used_cast = "%s used %s.",
 	used_bar = "%s: %s",
@@ -53,6 +58,9 @@ L:RegisterTranslations("zhCN", function() return {
 
 	md_cast = "%s: MD 于 %s",
 	md_bar = "%s: MD 冷却",
+
+	--usedon_cast = "%s: %s on %s",
+	--usedon_bar = "%s: %s Cooldown",
 
 	used_cast = " 对%s使用%s",
 	used_bar = "%s: %s",
@@ -78,6 +86,9 @@ L:RegisterTranslations("koKR", function() return {
 	md_cast = "%s: %s님에게 눈속임",
 	md_bar = "%s: 눈속임 재사용 대기시간",
 
+	--usedon_cast = "%s: %s on %s",
+	--usedon_bar = "%s: %s Cooldown",
+
 	used_cast = "%s님이 %s 사용했습니다.",
 	used_bar = "%s: %s",
 
@@ -102,6 +113,9 @@ L:RegisterTranslations("deDE", function() return {
 	--md_cast = "%s: MD on %s",
 	--md_bar = "%s: MD Cooldown",
 
+	--usedon_cast = "%s: %s on %s",
+	--usedon_bar = "%s: %s Cooldown",
+
 	used_cast = "%s benutzt %s.",
 	--used_bar = "%s: %s",
 
@@ -124,6 +138,9 @@ L:RegisterTranslations("frFR", function() return {
 
 	md_cast = "%s : Redirection sur %s.",
 	md_bar = "%s : Cooldown Redirection",
+
+	--usedon_cast = "%s: %s on %s",
+	--usedon_bar = "%s: %s Cooldown",
 
 	used_cast = "%s a utilisé %s.",
 	used_bar = "%s : %s",
@@ -155,6 +172,8 @@ mod.defaultDB = {
 	portal = true,
 	misdirection = true,
 	repair = true,
+	innervate = true,
+	rebirth = true,
 	broadcast = false,
 }
 
@@ -202,6 +221,16 @@ mod.consoleOptions = {
 			name = L["Repair Bot"],
 			desc = L["Toggle %s display."]:format(L["Repair Bot"]),
 		},
+		innervate = {
+			type = "toggle",
+			name = innervate,
+			desc = L["Toggle %s display."]:format(innervate),
+		},
+		rebirth = {
+			type = "toggle",
+			name = rebirth,
+			desc = L["Toggle %s display."]:format(rebirth),
+		},
 		broadcast = {
 			type = "toggle",
 			name = L["Broadcast"],
@@ -223,9 +252,11 @@ function mod:OnEnable()
 	self:AddCombatListener("SPELL_CAST_SUCCESS", "FearWard", 6346) --Fear Ward
 	self:AddCombatListener("SPELL_CAST_SUCCESS", "Misdirection", 34477) --Misdirection
 	self:AddCombatListener("SPELL_CAST_SUCCESS", "Repair", 22700, 44389) --Field Repair Bot 74A, Field Repair Bot 110G
-	self:AddCombatListener("SPELL_CAST_SUCCESS", "Portals", 11419, 32266, 11416, 11417, 33691, 35717, 32267, 10059, 11420, 11418) --Portals
+	self:AddCombatListener("SPELL_CAST_SUCCESS", "Portals", 11419, 32266, 11416, 11417, 33691, 35717, 32267, 10059, 11420, 11418) --Portals, BROKEN UNTIL BLIZZ FIX IT
 	self:AddCombatListener("SPELL_CAST_SUCCESS", "ShieldWall", 871) --Shield Wall
 	self:AddCombatListener("SPELL_AURA_REMOVED", "ShieldWallFade", 871) --Shield Wall Fades
+	self:AddCombatListener("SPELL_CAST_SUCCESS", "Rebirth", 20484, 20739, 20742, 20747, 20748, 26994) --Rebirth ranks 1-6, BROKEN UNTIL BLIZZ FIX IT
+	self:AddCombatListener("SPELL_CAST_SUCCESS", "Innervate", 29166) --Innervate
 end
 
 ------------------------------
@@ -289,6 +320,20 @@ end
 function mod:ShieldWallFade(player, _, _, _, spellName)
 	if (UnitInRaid(nick) or UnitInParty(nick)) and self.db.profile.shieldwall then
 		self:TriggerEvent("BigWigs_StopBar", self, L["used_bar"]:format(player, spellName))
+	end
+end
+
+function mod:Rebirth(target, spellID, nick, _, spellName)
+	if (UnitInRaid(nick) or UnitInParty(nick)) and self.db.profile.rebirth then
+		self:Message(L["usedon_cast"]:format(nick, spellName, target), orange, not self.db.profile.broadcast, nil, nil, spellID)
+		self:Bar(L["usedon_bar"]:format(nick, spellName), 1200, spellID, true, 1, 0.75, 0.14)
+	end
+end
+
+function mod:Innervate(target, spellID, nick, _, spellName)
+	if (UnitInRaid(nick) or UnitInParty(nick)) and self.db.profile.innervate then
+		self:Message(L["usedon_cast"]:format(nick, spellName, target), green, not self.db.profile.broadcast, nil, nil, spellID)
+		self:Bar(L["usedon_bar"]:format(nick, spellName), 360, spellID, true, 0, 1, 0)
 	end
 end
 
