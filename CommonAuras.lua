@@ -38,6 +38,8 @@ L:RegisterTranslations("enUS", function() return {
 
 	portal_cast = "%s opened a %s!", --Player opened a Portal: Destination
 
+	["Repair Bot"] = true,
+
 	["Toggle %s display."] = true,
 	["Portal"] = true,
 	["Broadcast"] = true,
@@ -58,6 +60,8 @@ L:RegisterTranslations("zhCN", function() return {
 	used_bar = "%s: %s",
 
 	portal_cast = "%s施放一传送门到%s",
+
+	--["Repair Bot"] = "",
 
 	["Toggle %s display."] = "选择%s显示",
 	["Portal"] = "传送门",
@@ -81,6 +85,8 @@ L:RegisterTranslations("koKR", function() return {
 
 	portal_cast = "%s님이 %s 차원문을 엽니다!",
 
+	--["Repair Bot"] = "",
+
 	["Toggle %s display."] = "%s 표시를 전환합니다.",
 	["Portal"] = "차원문",
 
@@ -103,6 +109,8 @@ L:RegisterTranslations("deDE", function() return {
 
 	portal_cast = "%s \195\182ffnet ein Portal nach %s!",
 
+	--["Repair Bot"] = "",
+
 	["Toggle %s display."] = "Aktiviert oder Deaktiviert die Anzeige von %s.",
 	["Portal"] = "Portale",
 	["Broadcast"] = "Broadcast",
@@ -123,6 +131,8 @@ L:RegisterTranslations("frFR", function() return {
 	used_bar = "%s : %s",
 
 	portal_cast = "%s a ouvert un portail pour %s !",
+
+	--["Repair Bot"] = "",
 
 	["Toggle %s display."] = "Préviens ou non quand la capacité %s est utilisée.",
 	["Portal"] = "Portail",
@@ -146,6 +156,7 @@ mod.defaultDB = {
 	challengingroar = true,
 	portal = true,
 	misdirection = true,
+	repair = true,
 	broadcast = false,
 }
 
@@ -188,6 +199,11 @@ mod.consoleOptions = {
 			name = misdirection,
 			desc = L["Toggle %s display."]:format(misdirection),
 		},
+		repair = {
+			type = "toggle",
+			name = L["Repair Bot"],
+			desc = L["Toggle %s display."]:format(L["Repair Bot"]),
+		},
 		broadcast = {
 			type = "toggle",
 			name = L["Broadcast"],
@@ -210,6 +226,7 @@ function mod:OnEnable()
 	self:AddCombatListener("SPELL_CAST_SUCCESS", "Roar", 5209) --Challenging Roar
 	self:AddCombatListener("SPELL_CAST_SUCCESS", "FearWard", 6346) --Fear Ward
 	self:AddCombatListener("SPELL_CAST_SUCCESS", "Misdirection", 34477) --Misdirection
+	self:AddCombatListener("SPELL_CAST_SUCCESS", "Repair", 22700, 44389) --Field Repair Bot 74A, Field Repair Bot 110G
 	self:AddCombatListener("SPELL_CAST_SUCCESS", "Portals", 11419, 32266, 11416, 11417, 33691, 35717, 32267, 10059, 11420, 11418) --Portals
 
 	if class == "WARRIOR" then
@@ -263,6 +280,13 @@ function mod:Misdirection(target, spellID, nick, _, spellName)
 	if (UnitInRaid(nick) or UnitInParty(nick)) and self.db.profile.misdirection then
 		self:Message(L["md_cast"]:format(nick, target), yellow, not self.db.profile.broadcast, nil, nil, spellID)
 		self:Bar(L["md_bar"]:format(nick), 120, spellID, true, 1, 1, 0)
+	end
+end
+
+function mod:Repair(_, spellID, nick, _, spellName)
+	if (UnitInRaid(nick) or UnitInParty(nick)) and self.db.profile.repair then
+		self:Message(L["used_cast"]:format(nick, spellName), blue, not self.db.profile.broadcast, nil, nil, spellID)
+		self:Bar(L["used_bar"]:format(nick, spellName), 600, spellID, true, 0, 0, 1)
 	end
 end
 
