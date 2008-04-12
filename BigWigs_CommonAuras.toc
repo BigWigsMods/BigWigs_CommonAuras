@@ -2,7 +2,7 @@
 ## Title: Big Wigs |cffff0000+|r|cffffffffCommon Auras|r
 ## Notes: Notifies the raid about common buffs and debuffs.
 ## Title-zhCN: Big Wigs |cffff0000+|r|cffffffff普通光环|r
-## Notes-zhCN: 显示团队通用的buff与debuff.
+## Notes-zhCN: 显示团队通用的增益效果与负面影响。
 ## Title-frFR: Big Wigs |cffff0000+|r|cffffffffAuras courantes|r
 ## Notes-frFR: Préviens le raid lors de l'utilisation de certains buffs & débuffs courants.
 ## Author: Rabbit

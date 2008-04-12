@@ -53,28 +53,28 @@ L:RegisterTranslations("enUS", function() return {
 } end )
 
 L:RegisterTranslations("zhCN", function() return {
-	fw_cast = "%s防护恐惧结界%s",
-	fw_bar = "%s: 防护恐惧结界冷却",
+	fw_cast = "%s：防护恐惧结界于%s",
+	fw_bar = "<%s：防护恐惧结界 冷却>",
 
-	md_cast = "%s: MD 于 %s",
-	md_bar = "%s: MD 冷却",
+	md_cast = "%s：误导于%s",
+	md_bar = "<%s: 误导 冷却>",
 
-	--usedon_cast = "%s: %s on %s",
-	--usedon_bar = "%s: %s Cooldown",
+	usedon_cast = "%s：%s于%s",
+	usedon_bar = "<%s：%s 冷却>",
 
-	used_cast = " 对%s使用%s",
-	used_bar = "%s: %s",
+	used_cast = " %s使用：%s。",
+	used_bar = "<%s：%s>",
 
-	portal_cast = "%s施放一传送门到%s",
+	portal_cast = "%s施放了一道%s！",
 
-	--["Repair Bot"] = "",
+	["Repair Bot"] = "修理机器人",
 
-	["Toggle %s display."] = "选择%s显示",
+	["Toggle %s display."] = "选择%s显示。",
 	["Portal"] = "传送门",
 	["Broadcast"] = "广播",
-	["Toggle broadcasting the messages to the raidwarning channel."] = "显示使用团队警告(RW)频道广播的消息。",
+	["Toggle broadcasting the messages to the raidwarning channel."] = "显示使用团队警告（RW）频道广播的消息。",
 
-	["Gives timer bars and raid messages about common buffs and debuffs."] = "对通常的Buff和Debuff使用计时条并且发送团队信息。",
+	["Gives timer bars and raid messages about common buffs and debuffs."] = "对通常的增益效果和负面影响使用计时条并且发送团队信息。",
 	["Common Auras"] = "普通光环",
 } end )
 
