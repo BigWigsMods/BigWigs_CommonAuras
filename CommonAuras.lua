@@ -226,11 +226,6 @@ mod.consoleOptions = {
 			name = innervate,
 			desc = L["Toggle %s display."]:format(innervate),
 		},
-		rebirth = {
-			type = "toggle",
-			name = rebirth,
-			desc = L["Toggle %s display."]:format(rebirth),
-		},
 		broadcast = {
 			type = "toggle",
 			name = L["Broadcast"],
@@ -254,8 +249,6 @@ function mod:OnEnable()
 	self:AddCombatListener("SPELL_CAST_SUCCESS", "Repair", 22700, 44389) --Field Repair Bot 74A, Field Repair Bot 110G
 	self:AddCombatListener("SPELL_CAST_SUCCESS", "Portals", 11419, 32266, 11416, 11417, 33691, 35717, 32267, 10059, 11420, 11418) --Portals, BROKEN UNTIL BLIZZ FIX IT
 	self:AddCombatListener("SPELL_CAST_SUCCESS", "ShieldWall", 871) --Shield Wall
-	self:AddCombatListener("SPELL_AURA_REMOVED", "ShieldWallFade", 871) --Shield Wall Fades
-	self:AddCombatListener("SPELL_CAST_SUCCESS", "Rebirth", 20484, 20739, 20742, 20747, 20748, 26994) --Rebirth ranks 1-6, BROKEN UNTIL BLIZZ FIX IT
 	self:AddCombatListener("SPELL_CAST_SUCCESS", "Innervate", 29166) --Innervate
 end
 
@@ -313,20 +306,7 @@ end
 function mod:ShieldWall(_, spellID, nick, _, spellName)
 	if (UnitInRaid(nick) or UnitInParty(nick)) and self.db.profile.shieldwall then
 		self:Message(L["used_cast"]:format(nick, spellName), blue, not self.db.profile.broadcast, nil, nil, spellID)
-		self:Bar(L["used_bar"]:format(nick, spellName), 15, spellID, true, 0, 0, 1)
-	end
-end
-
-function mod:ShieldWallFade(player, _, _, _, spellName)
-	if (UnitInRaid(nick) or UnitInParty(nick)) and self.db.profile.shieldwall then
-		self:TriggerEvent("BigWigs_StopBar", self, L["used_bar"]:format(player, spellName))
-	end
-end
-
-function mod:Rebirth(target, spellID, nick, _, spellName)
-	if (UnitInRaid(nick) or UnitInParty(nick)) and self.db.profile.rebirth then
-		self:Message(L["usedon_cast"]:format(nick, spellName, target), orange, not self.db.profile.broadcast, nil, nil, spellID)
-		self:Bar(L["usedon_bar"]:format(nick, spellName), 1200, spellID, true, 1, 0.75, 0.14)
+		self:Bar(L["used_bar"]:format(nick, spellName), 10, spellID, true, 0, 0, 1)
 	end
 end
 
