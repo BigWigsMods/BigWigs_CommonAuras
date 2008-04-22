@@ -277,7 +277,7 @@ local orange = {r = 1, g = 0.75, b = 0.14}
 local yellow = {r = 1, g = 1, b = 0}
 local red = {r = 1, g = 0, b = 0}
 
-function mod:Bloodlust(_, spellId, nick, _, spellName)
+function mod:Bloodlust(_, spellID, nick, _, spellName)
 	if (UnitInRaid(nick) or UnitInParty(nick)) and self.db.profile.blhero then
 		self:Message(L["used_cast"]:format(nick, spellName), red, not self.db.profile.broadcast, nil, nil, spellID)
 		self:Bar(L["used_bar"]:format(nick, spellName), 600, spellID, true, 1, 0, 0)
