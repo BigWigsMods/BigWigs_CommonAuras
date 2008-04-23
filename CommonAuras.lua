@@ -80,21 +80,21 @@ L:RegisterTranslations("zhCN", function() return {
 
 
 L:RegisterTranslations("koKR", function() return {
-	fw_cast = "%s님이 %s에게 공포의 수호물을 시전합니다.",
-	fw_bar = "%s: 공수 재사용 대기시간",
+	fw_cast = "%s|1이;가; %s에게 공포의 수호물",
+	fw_bar = "%s: 공수 대기시간",
 
-	md_cast = "%s: %s님에게 눈속임",
-	md_bar = "%s: 눈속임 재사용 대기시간",
+	md_cast = "%s: %s에게 눈속임",
+	md_bar = "%s: 눈속임 대기시간",
 
-	--usedon_cast = "%s: %s on %s",
-	--usedon_bar = "%s: %s Cooldown",
+	usedon_cast = "%s: %s|1이;가; %s",
+	usedon_bar = "%s: %s 대기시간",
 
-	used_cast = "%s님이 %s 사용했습니다.",
+	used_cast = "%s|1이;가; %s 사용",
 	used_bar = "%s: %s",
 
-	portal_cast = "%s님이 %s 차원문을 엽니다!",
+	portal_cast = "%s|1이;가; %s 차원문을 엽니다!",
 
-	--["Repair Bot"] = "",
+	["Repair Bot"] = "수리 로봇",
 
 	["Toggle %s display."] = "%s 표시를 전환합니다.",
 	["Portal"] = "차원문",
