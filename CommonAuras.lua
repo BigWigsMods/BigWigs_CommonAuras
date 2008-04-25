@@ -134,20 +134,20 @@ L:RegisterTranslations("deDE", function() return {
 
 L:RegisterTranslations("frFR", function() return {
 	fw_cast = "%s a protégé contre la peur %s.",
-	fw_bar = "%s : Cooldown Gardien",
+	fw_bar = "%s : Recharge Gardien",
 
-	md_cast = "%s : Redirection sur %s.",
-	md_bar = "%s : Cooldown Redirection",
+	md_cast = "%s : Redirection sur %s.",
+	md_bar = "%s : Recharge Redirection",
 
-	--usedon_cast = "%s: %s on %s",
-	--usedon_bar = "%s: %s Cooldown",
+	usedon_cast = "%s : %s sur %s",
+	usedon_bar = "%s : Recharge %s",
 
 	used_cast = "%s a utilisé %s.",
-	used_bar = "%s : %s",
+	used_bar = "%s : %s",
 
-	portal_cast = "%s a ouvert un portail pour %s !",
+	portal_cast = "%s a ouvert un portail pour %s !",
 
-	--["Repair Bot"] = "",
+	["Repair Bot"] = "Robot réparateur",
 
 	["Toggle %s display."] = "Préviens ou non quand la capacité %s est utilisée.",
 	["Portal"] = "Portail",
