@@ -21,6 +21,7 @@ local challenging_roar = GetSpellInfo(5209)
 local misdirection = GetSpellInfo(34477)
 local rebirth = GetSpellInfo(20484)
 local innervate = GetSpellInfo(29166)
+local bl_hero = UnitFactionGroup("player") == "Alliance" and GetSpellInfo(32182) or GetSpellInfo(2825)
 
 ------------------------------
 --      Localization        --
@@ -226,6 +227,11 @@ mod.consoleOptions = {
 			name = innervate,
 			desc = L["Toggle %s display."]:format(innervate),
 		},
+		blhero = {
+			type = "toggle",
+			name = bl_hero,
+			desc = L["Toggle %s display."]:format(bl_hero),
+		},
 		broadcast = {
 			type = "toggle",
 			name = L["Broadcast"],
@@ -251,25 +257,11 @@ function mod:OnEnable()
 	self:AddCombatListener("SPELL_CAST_SUCCESS", "ShieldWall", 871) --Shield Wall
 	self:AddCombatListener("SPELL_CAST_SUCCESS", "Innervate", 29166) --Innervate
 	self:AddCombatListener("SPELL_CAST_SUCCESS", "Bloodlust", 2825, 32182) -- Bloodlust and Heroism
-
-	self:RegisterEvent("PLAYER_ENTERING_WORLD")
 end
 
 ------------------------------
 --      Events              --
 ------------------------------
-
-function mod:PLAYER_ENTERING_WORLD()
-	self:UnregisterEvent("PLAYER_ENTERING_WORLD")
-
-	local f = UnitFactionGroup("player")
-	local n = f == "Alliance" and GetSpellInfo(32182) or GetSpellInfo(2825)
-	mod.consoleOptions.args.blhero = {
-		type = "toggle",
-		name = n,
-		desc = L["Toggle %s display."]:format(n),
-	}
-end
 
 local green = {r = 0, g = 1, b = 0}
 local blue = {r = 0, g = 0, b = 1}
