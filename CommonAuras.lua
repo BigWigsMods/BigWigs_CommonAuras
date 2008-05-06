@@ -81,19 +81,19 @@ L:RegisterTranslations("zhCN", function() return {
 
 
 L:RegisterTranslations("koKR", function() return {
-	fw_cast = "%s|1이;가; %s에게 공포의 수호물",
+	fw_cast = "%s: %s에게 공포의 수호물",
 	fw_bar = "%s: 공수 대기시간",
 
 	md_cast = "%s: %s에게 눈속임",
 	md_bar = "%s: 눈속임 대기시간",
 
-	usedon_cast = "%s: %s|1이;가; %s",
+	usedon_cast = "%s: %s에게 %s",
 	usedon_bar = "%s: %s 대기시간",
 
-	used_cast = "%s|1이;가; %s 사용",
+	used_cast = "%s: %s 사용",
 	used_bar = "%s: %s",
 
-	portal_cast = "%s|1이;가; %s 차원문을 엽니다!",
+	portal_cast = "%s: %s 차원문!",
 
 	["Repair Bot"] = "수리 로봇",
 
@@ -327,7 +327,7 @@ end
 
 function mod:Innervate(target, spellID, nick, _, spellName)
 	if (UnitInRaid(nick) or UnitInParty(nick)) and self.db.profile.innervate then
-		self:Message(L["usedon_cast"]:format(nick, spellName, target), green, not self.db.profile.broadcast, nil, nil, spellID)
+		self:Message(L["usedon_cast"]:format(nick, target, spellName), green, not self.db.profile.broadcast, nil, nil, spellID)
 		self:Bar(L["usedon_bar"]:format(nick, spellName), 360, spellID, true, 0, 1, 0)
 	end
 end
