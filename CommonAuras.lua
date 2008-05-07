@@ -87,7 +87,7 @@ L:RegisterTranslations("koKR", function() return {
 	md_cast = "%s: %s에게 눈속임",
 	md_bar = "%s: 눈속임 대기시간",
 
-	usedon_cast = "%s: %s에게 %s",
+	usedon_cast = "%1$s: %3$s에게 %2$s",
 	usedon_bar = "%s: %s 대기시간",
 
 	used_cast = "%s: %s 사용",
