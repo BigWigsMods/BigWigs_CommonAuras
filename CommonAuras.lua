@@ -108,28 +108,28 @@ L:RegisterTranslations("koKR", function() return {
 } end )
 
 L:RegisterTranslations("deDE", function() return {
-	fw_cast = "%s sch\195\188tzt %s vor Furcht.",
-	fw_bar = "%s: FS Cooldown",
+	fw_cast = "%s: Furchtschutz auf %s",
+	fw_bar = "%s: Furchtschutz (CD)",
 
-	--md_cast = "%s: MD on %s",
-	--md_bar = "%s: MD Cooldown",
+	md_cast = "%s: Irref\195\188hrung auf %s",
+	md_bar = "%s: Irref\195\188hrung (CD)",
 
-	--usedon_cast = "%s: %s on %s",
-	--usedon_bar = "%s: %s Cooldown",
+	usedon_cast = "%s: %s auf %s",
+	usedon_bar = "%s: %s (CD) ",
 
-	used_cast = "%s benutzt %s.",
-	--used_bar = "%s: %s",
+	used_cast = "%s benutzt %s",
+	used_bar = "%s: %s aktiv!",
 
 	portal_cast = "%s \195\182ffnet ein Portal nach %s!",
 
-	--["Repair Bot"] = "",
+	["Repair Bot"] = "Feldreparaturbot",
 
-	["Toggle %s display."] = "Aktiviert oder Deaktiviert die Anzeige von %s.",
+	["Toggle %s display."] = "Wählt ob %s angezeigt wird.",
 	["Portal"] = "Portale",
-	["Broadcast"] = "Broadcast",
-	["Toggle broadcasting the messages to the raidwarning channel."] = "W\195\164hle, ob Warnungen \195\188ber RaidWarning gesendet werden sollen.",
+	["Broadcast"] = "Verbreiten",
+	["Toggle broadcasting the messages to the raidwarning channel."] = "W\195\164hlt ob die Nachrichten \195\188ber Schlachtzugswarnung an alle gesendet werden.",
 
-	["Gives timer bars and raid messages about common buffs and debuffs."] = "Zeigt Zeitleisten und Raidnachrichten f? kritische Spr\195\188che.",
+	["Gives timer bars and raid messages about common buffs and debuffs."] = "Zeigt Timer und Raidnachrichten f\195\188r allgemein bekannte Buffs und Debuffs.",
 	--["Common Auras"] = "",
 } end )
 
