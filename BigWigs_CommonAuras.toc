@@ -1,4 +1,4 @@
-﻿## Interface: 20400
+﻿## Interface: 30000
 ## Title: Big Wigs |cffff0000+|r|cffffffffCommon Auras|r
 ## Notes: Notifies the raid about common buffs and debuffs.
 ## Title-zhCN: Big Wigs |cffff0000+|r|cffffffff普通光环|r
