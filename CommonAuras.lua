@@ -30,9 +30,6 @@ L:RegisterTranslations("enUS", function() return {
 	fw_cast = "%s fearwarded %s.",
 	fw_bar = "%s: FW Cooldown",
 
-	md_cast = "%s: MD on %s",
-	md_bar = "%s: MD Cooldown",
-
 	usedon_cast = "%s: %s on %s",
 	usedon_bar = "%s: %s Cooldown",
 
@@ -55,9 +52,6 @@ L:RegisterTranslations("enUS", function() return {
 L:RegisterTranslations("zhCN", function() return {
 	fw_cast = "%s：防护恐惧结界于%s",
 	fw_bar = "<%s：防护恐惧结界 冷却>",
-
-	md_cast = "%s：误导于%s",
-	md_bar = "<%s: 误导 冷却>",
 
 	usedon_cast = "%s：%s于%s",
 	usedon_bar = "<%s：%s 冷却>",
@@ -83,9 +77,6 @@ L:RegisterTranslations("koKR", function() return {
 	fw_cast = "%s: %s에게 공포의 수호물",
 	fw_bar = "%s: 공수 대기시간",
 
-	md_cast = "%s: %s에게 눈속임",
-	md_bar = "%s: 눈속임 대기시간",
-
 	usedon_cast = "%1$s: %3$s에게 %2$s",
 	usedon_bar = "%s: %s 대기시간",
 
@@ -110,9 +101,6 @@ L:RegisterTranslations("deDE", function() return {
 	fw_cast = "%s: Furchtschutz auf %s",
 	fw_bar = "%s: Furchtschutz (CD)",
 
-	md_cast = "%s: Irref\195\188hrung auf %s",
-	md_bar = "%s: Irref\195\188hrung (CD)",
-
 	usedon_cast = "%s: %s auf %s",
 	usedon_bar = "%s: %s (CD) ",
 
@@ -135,9 +123,6 @@ L:RegisterTranslations("deDE", function() return {
 L:RegisterTranslations("frFR", function() return {
 	fw_cast = "%s a protégé contre la peur %s.",
 	fw_bar = "%s : Recharge Gardien",
-
-	md_cast = "%s : Redirection sur %s.",
-	md_bar = "%s : Recharge Redirection",
 
 	usedon_cast = "%s : %s sur %s",
 	usedon_bar = "%s : Recharge %s",
@@ -195,16 +180,6 @@ mod.consoleOptions = {
 			name = shield_wall,
 			desc = L["Toggle %s display."]:format(shield_wall),
 		},
-		challengingshout = {
-			type = "toggle",
-			name = challenging_shout,
-			desc = L["Toggle %s display."]:format(challenging_shout),
-		},
-		challengingroar = {
-			type = "toggle",
-			name = challenging_roar,
-			desc = L["Toggle %s display."]:format(challenging_roar),
-		},
 		portal = {
 			type = "toggle",
 			name = L["Portal"],
@@ -241,8 +216,6 @@ mod.external = true
 ------------------------------
 
 function mod:OnEnable()
-	self:AddCombatListener("SPELL_CAST_SUCCESS", "Shout", 1161) --Challenging Shout
-	self:AddCombatListener("SPELL_CAST_SUCCESS", "Roar", 5209) --Challenging Roar
 	self:AddCombatListener("SPELL_CAST_SUCCESS", "FearWard", 6346) --Fear Ward
 	self:AddCombatListener("SPELL_CAST_SUCCESS", "Repair", 22700, 44389) --Field Repair Bot 74A, Field Repair Bot 110G
 	self:AddCombatListener("SPELL_CAST_SUCCESS", "Portals", 11419, 32266, 11416, 11417, 33691, 35717, 32267, 10059, 11420, 11418) --Portals, BROKEN UNTIL BLIZZ FIX IT
@@ -265,20 +238,6 @@ function mod:Bloodlust(_, spellID, nick, _, spellName)
 	if (UnitInRaid(nick) or UnitInParty(nick)) and self.db.profile.blhero then
 		self:Message(L["used_cast"]:format(nick, spellName), red, not self.db.profile.broadcast, nil, nil, spellID)
 		self:Bar(L["used_bar"]:format(nick, spellName), 600, spellID, true, 1, 0, 0)
-	end
-end
-
-function mod:Shout(_, spellID, nick, _, spellName)
-	if (UnitInRaid(nick) or UnitInParty(nick)) and self.db.profile.challengingshout then
-		self:Message(L["used_cast"]:format(nick, spellName), orange, not self.db.profile.broadcast, nil, nil, spellID)
-		self:Bar(L["used_bar"]:format(nick, spellName), 6, spellID, true, 1, 0.75, 0.14)
-	end
-end
-
-function mod:Roar(_, spellID, nick, _, spellName)
-	if (UnitInRaid(nick) or UnitInParty(nick)) and self.db.profile.challengingroar then
-		self:Message(L["used_cast"]:format(nick, spellName), orange, not self.db.profile.broadcast, nil, nil, spellID)
-		self:Bar(L["used_bar"]:format(nick, spellName), 6, spellID, true, 1, 0.75, 0.14)
 	end
 end
 
@@ -306,7 +265,7 @@ end
 function mod:ShieldWall(_, spellID, nick, _, spellName)
 	if (UnitInRaid(nick) or UnitInParty(nick)) and self.db.profile.shieldwall then
 		self:Message(L["used_cast"]:format(nick, spellName), blue, not self.db.profile.broadcast, nil, nil, spellID)
-		self:Bar(L["used_bar"]:format(nick, spellName), 10, spellID, true, 0, 0, 1)
+		self:Bar(L["used_bar"]:format(nick, spellName), 12, spellID, true, 0, 0, 1)
 	end
 end
 
