@@ -18,7 +18,6 @@ local fear_ward = GetSpellInfo(6346)
 local shield_wall = GetSpellInfo(871)
 local challenging_shout = GetSpellInfo(1161)
 local challenging_roar = GetSpellInfo(5209)
-local misdirection = GetSpellInfo(34477)
 local rebirth = GetSpellInfo(20484)
 local innervate = GetSpellInfo(29166)
 local bl_hero = UnitFactionGroup("player") == "Alliance" and GetSpellInfo(32182) or GetSpellInfo(2825)
@@ -171,7 +170,6 @@ mod.defaultDB = {
 	challengingshout = true,
 	challengingroar = true,
 	portal = true,
-	misdirection = true,
 	repair = true,
 	innervate = true,
 	rebirth = true,
@@ -212,11 +210,6 @@ mod.consoleOptions = {
 			name = L["Portal"],
 			desc = L["Toggle %s display."]:format(L["Portal"]),
 		},
-		misdirection = {
-			type = "toggle",
-			name = misdirection,
-			desc = L["Toggle %s display."]:format(misdirection),
-		},
 		repair = {
 			type = "toggle",
 			name = L["Repair Bot"],
@@ -251,7 +244,6 @@ function mod:OnEnable()
 	self:AddCombatListener("SPELL_CAST_SUCCESS", "Shout", 1161) --Challenging Shout
 	self:AddCombatListener("SPELL_CAST_SUCCESS", "Roar", 5209) --Challenging Roar
 	self:AddCombatListener("SPELL_CAST_SUCCESS", "FearWard", 6346) --Fear Ward
-	self:AddCombatListener("SPELL_CAST_SUCCESS", "Misdirection", 34477) --Misdirection
 	self:AddCombatListener("SPELL_CAST_SUCCESS", "Repair", 22700, 44389) --Field Repair Bot 74A, Field Repair Bot 110G
 	self:AddCombatListener("SPELL_CAST_SUCCESS", "Portals", 11419, 32266, 11416, 11417, 33691, 35717, 32267, 10059, 11420, 11418) --Portals, BROKEN UNTIL BLIZZ FIX IT
 	self:AddCombatListener("SPELL_CAST_SUCCESS", "ShieldWall", 871) --Shield Wall
@@ -294,13 +286,6 @@ function mod:FearWard(target, spellID, nick, _, spellName)
 	if (UnitInRaid(nick) or UnitInParty(nick)) and self.db.profile.fearward then
 		self:Message(L["fw_cast"]:format(nick, target), green, not self.db.profile.broadcast, nil, nil, spellID)
 		self:Bar(L["fw_bar"]:format(nick), 180, spellID, true, 0, 1, 0)
-	end
-end
-
-function mod:Misdirection(target, spellID, nick, _, spellName)
-	if (UnitInRaid(nick) or UnitInParty(nick)) and self.db.profile.misdirection then
-		self:Message(L["md_cast"]:format(nick, target), yellow, not self.db.profile.broadcast, nil, nil, spellID)
-		self:Bar(L["md_bar"]:format(nick), 30, spellID, true, 1, 1, 0)
 	end
 end
 
