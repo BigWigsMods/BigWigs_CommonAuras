@@ -300,7 +300,7 @@ end
 function mod:Misdirection(target, spellID, nick, _, spellName)
 	if (UnitInRaid(nick) or UnitInParty(nick)) and self.db.profile.misdirection then
 		self:Message(L["md_cast"]:format(nick, target), yellow, not self.db.profile.broadcast, nil, nil, spellID)
-		self:Bar(L["md_bar"]:format(nick), 120, spellID, true, 1, 1, 0)
+		self:Bar(L["md_bar"]:format(nick), 30, spellID, true, 1, 1, 0)
 	end
 end
 
