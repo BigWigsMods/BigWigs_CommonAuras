@@ -49,6 +49,29 @@ L:RegisterTranslations("enUS", function() return {
 	["Common Auras"] = true,
 } end )
 
+L:RegisterTranslations("ruRU", function() return {
+	fw_cast = "%s подвержен страху %s.",
+	fw_bar = "%s: Восстановление антистраха",
+
+	usedon_cast = "%s: %s на %s",
+	usedon_bar = "%s: %s восстановление",
+
+	used_cast = "%s использовал %s.",
+	used_bar = "%s: %s",
+
+	portal_cast = "%s открыл %s!", --Player opened a Portal: Destination
+
+	["Repair Bot"] = "Ремонтный робот",
+
+	["Toggle %s display."] = "Переключить отображение %s.",
+	["Portal"] = "Портал",
+	["Broadcast"] = "Вещание",
+	["Toggle broadcasting the messages to the raidwarning channel."] = "Посылать сообщения в канал предупреждений рейда",
+
+	["Gives timer bars and raid messages about common buffs and debuffs."] = "Показывать таймеры и рейдовые сообщения об основных основных положительных и отрицательных эффектах.",
+	["Common Auras"] = "Основные ауры",
+} end )
+
 L:RegisterTranslations("zhCN", function() return {
 	fw_cast = "%s：防护恐惧结界于%s",
 	fw_bar = "<%s：防护恐惧结界 冷却>",
