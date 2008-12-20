@@ -50,7 +50,7 @@ L:RegisterTranslations("enUS", function() return {
 } end )
 
 L:RegisterTranslations("ruRU", function() return {
-	fw_cast = "%s подвержен страху %s.",
+	fw_cast = "%s защитил от страха %s(а).",
 	fw_bar = "%s: Восстановление антистраха",
 
 	usedon_cast = "%s: %s на %s",

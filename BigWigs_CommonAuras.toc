@@ -5,7 +5,7 @@
 ## Notes-zhCN: 显示团队通用的增益效果与负面影响。
 ## Title-frFR: Big Wigs |cffff0000+|r|cffffffffAuras courantes|r
 ## Notes-frFR: Préviens le raid lors de l'utilisation de certains buffs & débuffs courants.
-## Title: Big Wigs |cffff0000+|r|cffffffffОсновные ауры|r
+## Title-ruRU: Big Wigs |cffff0000+|r|cffffffffОсновные ауры|r
 ## Notes-ruRU: Предупреждает рейд об основных положительных и отрицательных эффектах.
 ## Author: Rabbit
 ## X-Website: http://www.wowace.com
