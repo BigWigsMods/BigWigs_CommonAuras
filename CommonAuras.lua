@@ -94,7 +94,6 @@ L:RegisterTranslations("zhCN", function() return {
 	["Common Auras"] = "普通光环",
 } end )
 
-
 L:RegisterTranslations("koKR", function() return {
 	fw_cast = "%s: %s에게 공포의 수호물",
 	fw_bar = "%s: 공수 대기시간",
@@ -129,16 +128,16 @@ L:RegisterTranslations("deDE", function() return {
 	used_cast = "%s benutzt %s",
 	used_bar = "%s: %s aktiv!",
 
-	portal_cast = "%s \195\182ffnet ein Portal nach %s!",
+	portal_cast = "%s öffnet ein %s!",
 
-	["Repair Bot"] = "Feldreparaturbot",
+	["Repair Bot"] = "Reparaturbots",
 
-	["Toggle %s display."] = "Wählt ob %s angezeigt wird.",
+	["Toggle %s display."] = "Zeigt %s an.",
 	["Portal"] = "Portale",
 	["Broadcast"] = "Verbreiten",
-	["Toggle broadcasting the messages to the raidwarning channel."] = "W\195\164hlt ob die Nachrichten \195\188ber Schlachtzugswarnung an alle gesendet werden.",
+	["Toggle broadcasting the messages to the raidwarning channel."] = "Nachrichten über Schlachtzugswarnung an alle senden.",
 
-	["Gives timer bars and raid messages about common buffs and debuffs."] = "Zeigt Timer und Raidnachrichten f\195\188r allgemein bekannte Buffs und Debuffs.",
+	["Gives timer bars and raid messages about common buffs and debuffs."] = "Zeigt Timer und Raidnachrichten für allgemein bekannte Buffs und Debuffs.",
 	--["Common Auras"] = "",
 } end )
 
