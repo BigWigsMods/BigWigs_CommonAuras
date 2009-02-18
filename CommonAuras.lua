@@ -1,4 +1,4 @@
-﻿--[[
+--[[
 --
 -- BigWigs Strategy Module - Common Auras
 --
