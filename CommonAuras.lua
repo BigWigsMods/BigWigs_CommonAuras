@@ -16,10 +16,9 @@ local L = AceLibrary("AceLocale-2.2"):new("BigWigs"..name)
 
 local fear_ward = GetSpellInfo(6346)
 local shield_wall = GetSpellInfo(871)
-local challenging_shout = GetSpellInfo(1161)
-local challenging_roar = GetSpellInfo(5209)
-local rebirth = GetSpellInfo(20484)
+local guardian_spirit = GetSpellInfo(47788)
 local innervate = GetSpellInfo(29166)
+local hand_of_sacrifice = GetSpellInfo(6940)
 local bl_hero = UnitFactionGroup("player") == "Alliance" and GetSpellInfo(32182) or GetSpellInfo(2825)
 
 ------------------------------
@@ -175,13 +174,12 @@ mod.synctoken = name
 mod.defaultDB = {
 	fearward = true,
 	shieldwall = true,
-	challengingshout = true,
-	challengingroar = true,
 	portal = true,
 	repair = true,
 	innervate = true,
-	rebirth = true,
 	blhero = true,
+	guardian = true,
+	sacrifice = true,
 	broadcast = false,
 }
 mod.consoleCmd = "commonauras"
@@ -202,6 +200,16 @@ mod.consoleOptions = {
 			type = "toggle",
 			name = shield_wall,
 			desc = L["Toggle %s display."]:format(shield_wall),
+		},
+		guardian = {
+			type = "toggle",
+			name = guardian_spirit,
+			desc = L["Toggle %s display."]:format(guardian_spirit),
+		},
+		sacrifice = {
+			type = "toggle",
+			name = hand_of_sacrifice,
+			desc = L["Toggle %s display."]:format(hand_of_sacrifice),
 		},
 		portal = {
 			type = "toggle",
@@ -240,11 +248,17 @@ mod.external = true
 
 function mod:OnEnable()
 	self:AddCombatListener("SPELL_CAST_SUCCESS", "FearWard", 6346) --Fear Ward
-	self:AddCombatListener("SPELL_CAST_SUCCESS", "Repair", 22700, 44389) --Field Repair Bot 74A, Field Repair Bot 110G
-	self:AddCombatListener("SPELL_CAST_SUCCESS", "Portals", 11419, 32266, 11416, 11417, 33691, 35717, 32267, 10059, 11420, 11418) --Portals, BROKEN UNTIL BLIZZ FIX IT
+	self:AddCombatListener("SPELL_CAST_SUCCESS", "Repair", 22700, 44389, 54711) --Field Repair Bot 74A, Field Repair Bot 110G, Scrapbot
+	self:AddCombatListener("SPELL_CREATE", "Portals", 11419, 32266,
+		11416, 11417, 33691, 35717, 32267, 10059, 11420, 11418, 49360, 49361, 53142
+	) --Portals, http://www.wowhead.com/?search=portal#abilities
 	self:AddCombatListener("SPELL_CAST_SUCCESS", "ShieldWall", 871) --Shield Wall
 	self:AddCombatListener("SPELL_CAST_SUCCESS", "Innervate", 29166) --Innervate
 	self:AddCombatListener("SPELL_CAST_SUCCESS", "Bloodlust", 2825, 32182) -- Bloodlust and Heroism
+	self:AddCombatListener("SPELL_CAST_SUCCESS", "Guardian", 47788) --Guardian Spirit
+	self:AddCombatListener("SPELL_AURA_REMOVED", "GuardianOff", 47788) --Guardian Spirit
+	self:AddCombatListener("SPELL_CAST_SUCCESS", "Sacrifice", 6940) --Hand of Sacrifice
+	--self:AddCombatListener("SPELL_CAST_SUCCESS", "Mammoth", 00000) --Reins of the Traveler's Tundra Mammoth --NO MOUNTING EVENTS :[
 end
 
 ------------------------------
@@ -264,6 +278,26 @@ function mod:Bloodlust(_, spellID, nick, _, spellName)
 	end
 end
 
+function mod:Guardian(target, spellID, nick, _, spellName)
+	if (UnitInRaid(nick) or UnitInParty(nick)) and self.db.profile.guardian then
+		self:Message(L["usedon_cast"]:format(nick, spellName, target), yellow, not self.db.profile.broadcast, nil, nil, spellID)
+		self:Bar(L["used_bar"]:format(target, spellName), 10, spellID, true, 1, 1, 0)
+	end
+end
+
+function mod:GuardianOff(target, spellID, nick, _, spellName) --Need to remove if fatal blow received and prevented
+	if (UnitInRaid(nick) or UnitInParty(nick)) and self.db.profile.guardian then
+		self:TriggerEvent("BigWigs_StopBar", self, L["used_bar"]:format(target, spellName))
+	end
+end
+
+function mod:Sacrifice(target, spellID, nick, _, spellName)
+	if (UnitInRaid(nick) or UnitInParty(nick)) and self.db.profile.sacrifice then
+		self:Message(L["usedon_cast"]:format(nick, spellName, target), orange, not self.db.profile.broadcast, nil, nil, spellID)
+		self:Bar(L["used_bar"]:format(target, spellName), 12, spellID, true, 1, 0.75, 0.14)
+	end
+end
+
 function mod:FearWard(target, spellID, nick, _, spellName)
 	if (UnitInRaid(nick) or UnitInParty(nick)) and self.db.profile.fearward then
 		self:Message(L["fw_cast"]:format(nick, target), green, not self.db.profile.broadcast, nil, nil, spellID)
@@ -274,10 +308,16 @@ end
 function mod:Repair(_, spellID, nick, _, spellName)
 	if (UnitInRaid(nick) or UnitInParty(nick)) and self.db.profile.repair then
 		self:Message(L["used_cast"]:format(nick, spellName), blue, not self.db.profile.broadcast, nil, nil, spellID)
-		self:Bar(L["used_bar"]:format(nick, spellName), 600, spellID, true, 0, 0, 1)
+		self:Bar(L["used_bar"]:format(nick, spellName), spellID == 54711 and 300 or 600, spellID, true, 0, 0, 1)
 	end
 end
-
+--[[
+function mod:Mammoth(_, spellID, nick, _, spellName)
+	if (UnitInRaid(nick) or UnitInParty(nick)) and self.db.profile.repair then
+		self:Message(L["used_cast"]:format(nick, spellName), blue, not self.db.profile.broadcast, nil, nil, spellID)
+	end
+end
+]]
 function mod:Portals(_, spellID, nick, _, spellName)
 	if (UnitInRaid(nick) or UnitInParty(nick)) and self.db.profile.portal then
 		self:Message(L["portal_cast"]:format(nick, spellName), blue, not self.db.profile.broadcast, nil, nil, spellID)

@@ -11,7 +11,7 @@
 ## X-Website: http://www.wowace.com
 ## X-eMail: rabbit.magtheridon@gmail.com
 ## X-Category: Raid
-## Version: 3.0
+## Version: 3.1.0
 ## Dependencies: BigWigs
 ## OptionalDeps: Ace2
 ## LoadOnDemand: 1
