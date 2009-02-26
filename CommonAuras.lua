@@ -123,10 +123,10 @@ L:RegisterTranslations("deDE", function() return {
 	fw_bar = "%s: Furchtschutz (CD)",
 
 	usedon_cast = "%s: %s auf %s",
-	usedon_bar = "%s: %s (CD) ",
+	usedon_bar = "%s: %s (CD)",
 
 	used_cast = "%s benutzt %s",
-	used_bar = "%s: %s aktiv!",
+	used_bar = "%s: %s",
 
 	portal_cast = "%s öffnet ein %s!",
 
