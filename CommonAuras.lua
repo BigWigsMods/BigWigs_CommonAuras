@@ -316,7 +316,7 @@ end
 function mod:DivineSacrifice(_, spellID, nick, _, spellName)
 	if (UnitInRaid(nick) or UnitInParty(nick)) and self.db.profile.divinesacrifice then
 		self:Message(L["used_cast"]:format(nick, spellName), blue, not self.db.profile.broadcast, nil, nil, spellID)
-		self:Bar(L["used_bar"]:format(nick, spellName), 12, spellID, true, 0, 0, 1)
+		self:Bar(L["used_bar"]:format(nick, spellName), 10, spellID, true, 0, 0, 1)
 	end
 end
 
