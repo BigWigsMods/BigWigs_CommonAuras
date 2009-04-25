@@ -19,6 +19,7 @@ local shield_wall = GetSpellInfo(871)
 local guardian_spirit = GetSpellInfo(47788)
 local innervate = GetSpellInfo(29166)
 local hand_of_sacrifice = GetSpellInfo(6940)
+local divine_sacrifice = GetSpellInfo(64205)
 local bl_hero = UnitFactionGroup("player") == "Alliance" and GetSpellInfo(32182) or GetSpellInfo(2825)
 
 ------------------------------
@@ -179,7 +180,8 @@ mod.defaultDB = {
 	blhero = true,
 	guardian = true,
 	sacrifice = true,
-	broadcast = false,
+	broadcast = true,
+	divinesacrifice = true
 }
 mod.consoleCmd = "commonauras"
 mod.consoleOptions = {
@@ -209,6 +211,11 @@ mod.consoleOptions = {
 			type = "toggle",
 			name = hand_of_sacrifice,
 			desc = L["Toggle %s display."]:format(hand_of_sacrifice),
+		},
+		divinesacrifice = {
+			type = "toggle",
+			name = divine_sacrifice,
+			desc = L["Toggle %s display."]:format(divine_sacrifice),
 		},
 		portal = {
 			type = "toggle",
@@ -257,6 +264,7 @@ function mod:OnEnable()
 	self:AddCombatListener("SPELL_CAST_SUCCESS", "Guardian", 47788) --Guardian Spirit
 	self:AddCombatListener("SPELL_AURA_REMOVED", "GuardianOff", 47788) --Guardian Spirit
 	self:AddCombatListener("SPELL_CAST_SUCCESS", "Sacrifice", 6940) --Hand of Sacrifice
+	self:AddCombatListener("SPELL_CAST_SUCCESS", "DivineSacrifice", 64205) --Divine Sacrifice
 	--self:AddCombatListener("SPELL_CAST_SUCCESS", "Mammoth", 00000) --Reins of the Traveler's Tundra Mammoth --NO MOUNTING EVENTS :[
 end
 
@@ -294,6 +302,13 @@ function mod:Sacrifice(target, spellID, nick, _, spellName)
 	if (UnitInRaid(nick) or UnitInParty(nick)) and self.db.profile.sacrifice then
 		self:Message(L["usedon_cast"]:format(nick, spellName, target), orange, not self.db.profile.broadcast, nil, nil, spellID)
 		self:Bar(L["used_bar"]:format(target, spellName), 12, spellID, true, 1, 0.75, 0.14)
+	end
+end
+
+function mod:DivineSacrifice(_, spellID, nick, _, spellName)
+	if (UnitInRaid(nick) or UnitInParty(nick)) and self.db.profile.divinesacrifice then
+		self:Message(L["used_cast"]:format(nick, spellName), blue, not self.db.profile.broadcast, nil, nil, spellID)
+		self:Bar(L["used_bar"]:format(nick, spellName), 12, spellID, true, 0, 0, 1)
 	end
 end
 
