@@ -96,6 +96,29 @@ L:RegisterTranslations("zhCN", function() return {
 	["Common Auras"] = "普通光环",
 } end )
 
+L:RegisterTranslations("zhTW", function() return {
+	fw_cast = "%s：防護恐懼結界於%s",
+	fw_bar = "<%s：防護恐懼結界 冷卻>",
+
+	usedon_cast = "%s：%s於%s",
+	usedon_bar = "<%s：%s 冷卻>",
+
+	used_cast = " %s使用：%s。",
+	used_bar = "<%s：%s>",
+
+	portal_cast = "%s施放了一道%s！",
+
+	["Repair Bot"] = "修理機器人",
+
+	["Toggle %s display."] = "選擇%s顯示。",
+	["Portal"] = "傳送門",
+	["Broadcast"] = "廣播",
+	["Toggle broadcasting the messages to the raidwarning channel."] = "使用團隊警告廣播訊息。",
+
+	["Gives timer bars and raid messages about common buffs and debuffs."] = "對通常的增益效果和負面影響使用計時條並且發送團隊訊息。",
+	["Common Auras"] = "共同光環",
+} end )
+
 L:RegisterTranslations("koKR", function() return {
 	fw_cast = "%s: %s에게 공포의 수호물",
 	fw_bar = "%s: 공수 대기시간",
