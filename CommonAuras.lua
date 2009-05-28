@@ -14,14 +14,15 @@
 local name = "Common Auras"
 local L = AceLibrary("AceLocale-2.2"):new("BigWigs"..name)
 
-local fear_ward = GetSpellInfo(6346)
-local shield_wall = GetSpellInfo(871)
-local guardian_spirit = GetSpellInfo(47788)
+local fearWard = GetSpellInfo(6346)
+local shieldWall = GetSpellInfo(871)
+local guardianSpirit = GetSpellInfo(47788)
 local innervate = GetSpellInfo(29166)
-local hand_of_sacrifice = GetSpellInfo(6940)
-local divine_sacrifice = GetSpellInfo(64205)
-local divine_protection = GetSpellInfo(498)
-local bl_hero = UnitFactionGroup("player") == "Alliance" and GetSpellInfo(32182) or GetSpellInfo(2825)
+local handOfSacrifice = GetSpellInfo(6940)
+local divineSacrifice = GetSpellInfo(64205)
+local divineProtection = GetSpellInfo(498)
+local painSuppression = GetSpellInfo(33206)
+local bloodlust = UnitFactionGroup("player") == "Alliance" and GetSpellInfo(32182) or GetSpellInfo(2825)
 
 ------------------------------
 --      Localization        --
@@ -43,8 +44,6 @@ L:RegisterTranslations("enUS", function() return {
 
 	["Toggle %s display."] = true,
 	["Portal"] = true,
-	["Broadcast"] = true,
-	["Toggle broadcasting the messages to the raidwarning channel."] = true,
 
 	["Gives timer bars and raid messages about common buffs and debuffs."] = true,
 	["Common Auras"] = true,
@@ -66,8 +65,6 @@ L:RegisterTranslations("ruRU", function() return {
 
 	["Toggle %s display."] = "Переключить отображение %s.",
 	["Portal"] = "Портал",
-	["Broadcast"] = "Вещание",
-	["Toggle broadcasting the messages to the raidwarning channel."] = "Посылать сообщения в канал предупреждений рейда",
 
 	["Gives timer bars and raid messages about common buffs and debuffs."] = "Показывать таймеры и рейдовые сообщения об основных основных положительных и отрицательных эффектах.",
 	["Common Auras"] = "Основные ауры",
@@ -89,8 +86,6 @@ L:RegisterTranslations("zhCN", function() return {
 
 	["Toggle %s display."] = "选择%s显示。",
 	["Portal"] = "传送门",
-	["Broadcast"] = "广播",
-	["Toggle broadcasting the messages to the raidwarning channel."] = "显示使用团队警告（RW）频道广播的消息。",
 
 	["Gives timer bars and raid messages about common buffs and debuffs."] = "对通常的增益效果和负面影响使用计时条并且发送团队信息。",
 	["Common Auras"] = "普通光环",
@@ -112,8 +107,6 @@ L:RegisterTranslations("zhTW", function() return {
 
 	["Toggle %s display."] = "選擇%s顯示。",
 	["Portal"] = "傳送門",
-	["Broadcast"] = "廣播",
-	["Toggle broadcasting the messages to the raidwarning channel."] = "使用團隊警告廣播訊息。",
 
 	["Gives timer bars and raid messages about common buffs and debuffs."] = "對通常的增益效果和負面影響使用計時條並且發送團隊訊息。",
 	["Common Auras"] = "共同光環",
@@ -136,9 +129,6 @@ L:RegisterTranslations("koKR", function() return {
 	["Toggle %s display."] = "%s 표시를 전환합니다.",
 	["Portal"] = "차원문",
 
-	["Broadcast"] = "알림",
-	["Toggle broadcasting the messages to the raidwarning channel."] = "공격대 경보 채널에 메세지 알림을 전환합니다.",
-
 	["Gives timer bars and raid messages about common buffs and debuffs."] = "공통 버프와 디버프에 대한 공격대 메세지와 타이머 바를 제공합니다.",
 	["Common Auras"] = "공통 버프",
 } end )
@@ -159,8 +149,6 @@ L:RegisterTranslations("deDE", function() return {
 
 	["Toggle %s display."] = "Zeigt %s an.",
 	["Portal"] = "Portale",
-	["Broadcast"] = "Verbreiten",
-	["Toggle broadcasting the messages to the raidwarning channel."] = "Nachrichten über Schlachtzugswarnung an alle senden.",
 
 	["Gives timer bars and raid messages about common buffs and debuffs."] = "Zeigt Timer und Raidnachrichten für allgemein bekannte Buffs und Debuffs.",
 	--["Common Auras"] = "",
@@ -182,8 +170,6 @@ L:RegisterTranslations("frFR", function() return {
 
 	["Toggle %s display."] = "Préviens ou non quand la capacité %s est utilisée.",
 	["Portal"] = "Portail",
-	["Broadcast"] = "Diffuser",
-	["Toggle broadcasting the messages to the raidwarning channel."] = "Diffuse ou non les messages sur le canal Avertissement raid.",
 
 	["Gives timer bars and raid messages about common buffs and debuffs."] = "Affiche des barres temporelles et des messages raid concernant les buffs & débuffs courants.",
 	["Common Auras"] = "Auras courantes",
@@ -194,6 +180,7 @@ L:RegisterTranslations("frFR", function() return {
 ------------------------------
 
 local mod = BigWigs:NewModule(name)
+local list = mod:NewTargetList()
 mod.synctoken = name
 mod.defaultDB = {
 	fearward = true,
@@ -204,9 +191,9 @@ mod.defaultDB = {
 	blhero = true,
 	guardian = true,
 	sacrifice = true,
-	broadcast = false,
 	divinesacrifice = true,
-	divineprotection = true
+	divineprotection = true,
+	painsuppression = true,
 }
 mod.consoleCmd = "commonauras"
 mod.consoleOptions = {
@@ -219,33 +206,33 @@ mod.consoleOptions = {
 	args = {
 		fearward = {
 			type = "toggle",
-			name = fear_ward,
-			desc = L["Toggle %s display."]:format(fear_ward),
+			name = fearWard,
+			desc = L["Toggle %s display."]:format(fearWard),
 		},
 		shieldwall = {
 			type = "toggle",
-			name = shield_wall,
-			desc = L["Toggle %s display."]:format(shield_wall),
+			name = shieldWall,
+			desc = L["Toggle %s display."]:format(shieldWall),
 		},
 		guardian = {
 			type = "toggle",
-			name = guardian_spirit,
-			desc = L["Toggle %s display."]:format(guardian_spirit),
+			name = guardianSpirit,
+			desc = L["Toggle %s display."]:format(guardianSpirit),
 		},
 		sacrifice = {
 			type = "toggle",
-			name = hand_of_sacrifice,
-			desc = L["Toggle %s display."]:format(hand_of_sacrifice),
+			name = handOfSacrifice,
+			desc = L["Toggle %s display."]:format(handOfSacrifice),
 		},
 		divinesacrifice = {
 			type = "toggle",
-			name = divine_sacrifice,
-			desc = L["Toggle %s display."]:format(divine_sacrifice),
+			name = divineSacrifice,
+			desc = L["Toggle %s display."]:format(divineSacrifice),
 		},
 		divineprotection = {
 			type = "toggle",
-			name = divine_protection,
-			desc = L["Toggle %s display."]:format(divine_protection),
+			name = divineProtection,
+			desc = L["Toggle %s display."]:format(divineProtection),
 		},
 		portal = {
 			type = "toggle",
@@ -264,14 +251,13 @@ mod.consoleOptions = {
 		},
 		blhero = {
 			type = "toggle",
-			name = bl_hero,
-			desc = L["Toggle %s display."]:format(bl_hero),
+			name = bloodlust,
+			desc = L["Toggle %s display."]:format(bloodlust),
 		},
-		broadcast = {
+		painsuppression = {
 			type = "toggle",
-			name = L["Broadcast"],
-			desc = L["Toggle broadcasting the messages to the raidwarning channel."],
-			order = -1,
+			name = painSuppression,
+			desc = L["Toggle %s display."]:format(painSuppression),
 		},
 	}
 }
@@ -296,7 +282,7 @@ function mod:OnEnable()
 	self:AddCombatListener("SPELL_CAST_SUCCESS", "Sacrifice", 6940) --Hand of Sacrifice
 	self:AddCombatListener("SPELL_CAST_SUCCESS", "DivineSacrifice", 64205) --Divine Sacrifice
 	self:AddCombatListener("SPELL_CAST_SUCCESS", "DivineProtection", 498) --Divine Protection
-	--self:AddCombatListener("SPELL_CAST_SUCCESS", "Mammoth", 00000) --Reins of the Traveler's Tundra Mammoth --NO MOUNTING EVENTS :[
+	self:AddCombatListener("SPELL_CAST_SUCCESS", "Suppression", 33206)
 end
 
 ------------------------------
@@ -309,17 +295,24 @@ local orange = {r = 1, g = 0.75, b = 0.14}
 local yellow = {r = 1, g = 1, b = 0}
 local red = {r = 1, g = 0, b = 0}
 
+function mod:Suppression(target, spellID, nick, _, spellName)
+	if (UnitInRaid(nick) or UnitInParty(nick)) and self.db.profile.painsuppression then
+		self:IfMessage(L["usedon_cast"]:format(nick, spellName, target), yellow, spellID)
+		self:Bar(L["used_bar"]:format(target, spellName), 10, spellID)
+	end
+end
+
 function mod:Bloodlust(_, spellID, nick, _, spellName)
 	if (UnitInRaid(nick) or UnitInParty(nick)) and self.db.profile.blhero then
-		self:Message(L["used_cast"]:format(nick, spellName), red, not self.db.profile.broadcast, nil, nil, spellID)
-		self:Bar(L["used_bar"]:format(nick, spellName), 300, spellID, true, 1, 0, 0)
+		self:TargetMessage(L["used_cast"], nick, red, spellID, nil, spellName)
+		self:Bar(L["used_bar"]:format(nick, spellName), 300, spellID)
 	end
 end
 
 function mod:Guardian(target, spellID, nick, _, spellName)
 	if (UnitInRaid(nick) or UnitInParty(nick)) and self.db.profile.guardian then
-		self:Message(L["usedon_cast"]:format(nick, spellName, target), yellow, not self.db.profile.broadcast, nil, nil, spellID)
-		self:Bar(L["used_bar"]:format(target, spellName), 10, spellID, true, 1, 1, 0)
+		self:IfMessage(L["usedon_cast"]:format(nick, spellName, target), yellow, spellID)
+		self:Bar(L["used_bar"]:format(target, spellName), 10, spellID)
 	end
 end
 
@@ -332,62 +325,56 @@ end
 function mod:Sacrifice(target, spellID, nick, _, spellName)
 	if (UnitInRaid(nick) or UnitInParty(nick)) and self.db.profile.sacrifice then
 		self:Message(L["usedon_cast"]:format(nick, spellName, target), orange, not self.db.profile.broadcast, nil, nil, spellID)
-		self:Bar(L["used_bar"]:format(target, spellName), 12, spellID, true, 1, 0.75, 0.14)
+		self:Bar(L["used_bar"]:format(target, spellName), 12, spellID)
 	end
 end
 
 function mod:DivineSacrifice(_, spellID, nick, _, spellName)
 	if (UnitInRaid(nick) or UnitInParty(nick)) and self.db.profile.divinesacrifice then
-		self:Message(L["used_cast"]:format(nick, spellName), blue, not self.db.profile.broadcast, nil, nil, spellID)
-		self:Bar(L["used_bar"]:format(nick, spellName), 10, spellID, true, 0, 0, 1)
+		self:TargetMessage(L["used_cast"], nick, blue, spellID, nil, spellName)
+		self:Bar(L["used_bar"]:format(nick, spellName), 10, spellID)
 	end
 end
 
 function mod:DivineProtection(_, spellID, nick, _, spellName)
 	if (UnitInRaid(nick) or UnitInParty(nick)) and self.db.profile.divineprotection then
-		self:Message(L["used_cast"]:format(nick, spellName), blue, not self.db.profile.broadcast, nil, nil, spellID)
-		self:Bar(L["used_bar"]:format(nick, spellName), 12, spellID, true, 0, 0, 1)
+		self:TargetMessage(L["used_cast"], nick, blue, spellID, nil, spellName)
+		self:Bar(L["used_bar"]:format(nick, spellName), 12, spellID)
 	end
 end
 
 function mod:FearWard(target, spellID, nick, _, spellName)
 	if (UnitInRaid(nick) or UnitInParty(nick)) and self.db.profile.fearward then
-		self:Message(L["fw_cast"]:format(nick, target), green, not self.db.profile.broadcast, nil, nil, spellID)
-		self:Bar(L["fw_bar"]:format(nick), 180, spellID, true, 0, 1, 0)
+		self:IfMessage(L["fw_cast"]:format(nick, target), green, spellID)
+		self:Bar(L["fw_bar"]:format(nick), 180, spellID)
 	end
 end
 
 function mod:Repair(_, spellID, nick, _, spellName)
 	if (UnitInRaid(nick) or UnitInParty(nick)) and self.db.profile.repair then
-		self:Message(L["used_cast"]:format(nick, spellName), blue, not self.db.profile.broadcast, nil, nil, spellID)
-		self:Bar(L["used_bar"]:format(nick, spellName), spellID == 54711 and 300 or 600, spellID, true, 0, 0, 1)
+		self:TargetMessage(L["used_cast"], nick, blue, spellID, nil, spellName)
+		self:Bar(L["used_bar"]:format(nick, spellName), spellID == 54711 and 300 or 600, spellID)
 	end
 end
---[[
-function mod:Mammoth(_, spellID, nick, _, spellName)
-	if (UnitInRaid(nick) or UnitInParty(nick)) and self.db.profile.repair then
-		self:Message(L["used_cast"]:format(nick, spellName), blue, not self.db.profile.broadcast, nil, nil, spellID)
-	end
-end
-]]
+
 function mod:Portals(_, spellID, nick, _, spellName)
 	if (UnitInRaid(nick) or UnitInParty(nick)) and self.db.profile.portal then
-		self:Message(L["portal_cast"]:format(nick, spellName), blue, not self.db.profile.broadcast, nil, nil, spellID)
-		self:Bar(spellName.." ("..nick..")", 60, spellID, true, 0, 0, 1)
+		self:TargetMessage(L["portal_cast"], nick, blue, spellID, nil, spellName)
+		self:Bar(spellName.." ("..nick..")", 60, spellID)
 	end
 end
 
 function mod:ShieldWall(_, spellID, nick, _, spellName)
 	if (UnitInRaid(nick) or UnitInParty(nick)) and self.db.profile.shieldwall then
-		self:Message(L["used_cast"]:format(nick, spellName), blue, not self.db.profile.broadcast, nil, nil, spellID)
-		self:Bar(L["used_bar"]:format(nick, spellName), 12, spellID, true, 0, 0, 1)
+		self:TargetMessage(L["used_cast"], nick, blue, spellID, nil, spellName)
+		self:Bar(L["used_bar"]:format(nick, spellName), 12, spellID)
 	end
 end
 
 function mod:Innervate(target, spellID, nick, _, spellName)
 	if (UnitInRaid(nick) or UnitInParty(nick)) and self.db.profile.innervate then
-		self:Message(L["usedon_cast"]:format(nick, spellName, target), green, not self.db.profile.broadcast, nil, nil, spellID)
-		self:Bar(L["usedon_bar"]:format(nick, spellName), 360, spellID, true, 0, 1, 0)
+		self:IfMessage(L["usedon_cast"]:format(nick, spellName, target), green, spellID)
+		self:Bar(L["usedon_bar"]:format(nick, spellName), 360, spellID)
 	end
 end
 
