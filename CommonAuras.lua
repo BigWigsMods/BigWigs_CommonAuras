@@ -374,7 +374,7 @@ end
 function mod:Innervate(target, spellID, nick, _, spellName)
 	if (UnitInRaid(nick) or UnitInParty(nick)) and self.db.profile.innervate then
 		self:IfMessage(L["usedon_cast"]:format(nick, spellName, target), green, spellID)
-		self:Bar(L["usedon_bar"]:format(nick, spellName), 360, spellID)
+		self:Bar(L["usedon_bar"]:format(nick, spellName), 180, spellID)
 	end
 end
 
