@@ -270,7 +270,7 @@ mod.external = true
 
 function mod:OnEnable()
 	self:AddCombatListener("SPELL_CAST_SUCCESS", "FearWard", 6346) --Fear Ward
-	self:AddCombatListener("SPELL_CAST_SUCCESS", "Repair", 22700, 44389, 54711) --Field Repair Bot 74A, Field Repair Bot 110G, Scrapbot
+	self:AddCombatListener("SPELL_CAST_SUCCESS", "Repair", 22700, 44389, 54711, 67826) --Field Repair Bot 74A, Field Repair Bot 110G, Scrapbot, Jeeves
 	self:AddCombatListener("SPELL_CREATE", "Portals", 11419, 32266,
 		11416, 11417, 33691, 35717, 32267, 10059, 11420, 11418, 49360, 49361, 53142
 	) --Portals, http://www.wowhead.com/?search=portal#abilities
