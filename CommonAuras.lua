@@ -59,7 +59,12 @@ L:RegisterTranslations("zhCN", function() return {
 	used_cast = " %s使用：%s。",
 	used_bar = "<%s：%s>",
 
+	portal = "传送门",
+	portal_desc = "打开或关闭显示法师传送门时提示。",
 	portal_cast = "%s施放了一道%s！",
+
+	repair = "修理机器人",
+	repair_desc = "打开或关闭显示修理机器人可用时提示。",
 
 	["Common Auras"] = "普通光环",
 } end )
@@ -74,7 +79,12 @@ L:RegisterTranslations("zhTW", function() return {
 	used_cast = " %s使用：%s。",
 	used_bar = "<%s：%s>",
 
+	portal = "傳送門",
+	portal_desc = "打開或關閉顯示法師傳送門時提示。",
 	portal_cast = "%s施放了一道%s！",
+
+	repair = "修理機器人",
+	repair_desc = "打開或關閉顯示修理機器人可用時提示。",
 
 	["Common Auras"] = "共同光環",
 } end )
