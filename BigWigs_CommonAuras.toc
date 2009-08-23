@@ -4,7 +4,7 @@
 ## Title-zhCN: Big Wigs |cffff0000+|r|cffffffff普通光环|r
 ## Notes-zhCN: 显示团队通用的增益效果与负面影响。
 ## Title-frFR: Big Wigs |cffff0000+|r|cffffffffAuras courantes|r
-## Notes-frFR: Préviens le raid lors de l'utilisation de certains buffs & débuffs courants.
+## Notes-frFR: Prévient le raid lors de l'utilisation de certains buffs & débuffs courants.
 ## Title-ruRU: Big Wigs |cffff0000+|r|cffffffffОсновные ауры|r
 ## Notes-ruRU: Предупреждает рейд об основных положительных и отрицательных эффектах.
 ## Author: Rabbit

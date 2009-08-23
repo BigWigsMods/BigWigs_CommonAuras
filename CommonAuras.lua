@@ -123,7 +123,7 @@ L:RegisterTranslations("deDE", function() return {
 } end )
 
 L:RegisterTranslations("frFR", function() return {
-	fw_cast = "%s a protégé contre la peur %s.",
+	fw_cast = "%s a protégé %s contre la peur .",
 	fw_bar = "%s : Recharge Gardien",
 
 	usedon_cast = "%s : %s sur %s",
@@ -132,7 +132,12 @@ L:RegisterTranslations("frFR", function() return {
 	used_cast = "%s a utilisé %s.",
 	used_bar = "%s : %s",
 
-	portal_cast = "%s a ouvert un portail pour %s !",
+	portal = "Portail",
+	portal_desc = "Prévient ou non quand un mage ouvre un portail.",
+	portal_cast = "%s a ouvert un %s !",
+
+	repair = "Robot réparateur",
+	repair_desc = "Prévient ou non quand un robot réparateur est déployé.",
 
 	["Common Auras"] = "Auras courantes",
 } end )
