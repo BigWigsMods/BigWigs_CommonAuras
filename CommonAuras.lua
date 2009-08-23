@@ -99,7 +99,12 @@ L:RegisterTranslations("koKR", function() return {
 	used_cast = "%s: %s 사용",
 	used_bar = "%s: %s",
 
+	portal = "차원문",
+	portal_desc = "마법사의 차원문 표시합니다.",
 	portal_cast = "%s: %s 차원문!",
+
+	repair = "수리 로봇",
+	repair_desc = "수리 로봇 사용시 표시합니다.",
 
 	["Common Auras"] = "공통 버프",
 } end )
