@@ -149,7 +149,7 @@ L:RegisterTranslations("frFR", function() return {
 local mod = BigWigs:New(L[name], "$Revision$")
 mod.synctoken = name
 mod.consoleCmd = "commonauras"
-mod.toggleoptions = { "portal", "repair", 6346, 871, 47788, 29166, 6940, 64205, 498, 33206, 32182, 2825 }
+mod.toggleOptions = { "portal", "repair", 6346, 871, 47788, 29166, 6940, 64205, 498, 33206, 32182, 2825 }
 mod.external = true
 
 ------------------------------
