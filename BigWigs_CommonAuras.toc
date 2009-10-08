@@ -13,10 +13,10 @@
 ## X-Category: Raid
 ## Version: 3.1.1
 ## Dependencies: BigWigs
-## OptionalDeps: Ace2
+
 ## LoadOnDemand: 1
 
-## X-BigWigs-LoadWithCore: 1
+## X-BigWigs-LoadOn-CoreLoaded: 1
 
 CommonAuras.lua
 
