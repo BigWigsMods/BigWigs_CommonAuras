@@ -163,9 +163,12 @@ mod.toggleOptions = { "portal", "repair", 6346, 871, 47788, 29166, 6940, 64205, 
 --      Initialization      --
 ------------------------------
 
-function mod:OnRegister()
-	self:RegisterMessage("BigWigs_CoreEnabled")
+-- XXX evil hacks once more
+local enabler = LibStub("AceEvent-3.0"):Embed({})
+function enabler:BigWigs_CoreEnabled()
+	mod:Enable()
 end
+enabler:RegisterMessage("BigWigs_CoreEnabled")
 
 function mod:OnBossEnable()
 	self:Log("SPELL_CAST_SUCCESS", "FearWard", 6346) --Fear Ward
@@ -182,10 +185,6 @@ function mod:OnBossEnable()
 	self:Log("SPELL_CAST_SUCCESS", "DivineSacrifice", 64205) --Divine Sacrifice
 	self:Log("SPELL_CAST_SUCCESS", "DivineProtection", 498) --Divine Protection
 	self:Log("SPELL_CAST_SUCCESS", "Suppression", 33206)
-end
-
-function mod:OnBossDisable()
-	self:RegisterMessage("BigWigs_CoreEnabled")
 end
 
 function mod:BigWigs_CoreEnabled()
