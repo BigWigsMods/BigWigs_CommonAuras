@@ -169,6 +169,7 @@ function enabler:BigWigs_CoreEnabled()
 	mod:Enable()
 end
 enabler:RegisterMessage("BigWigs_CoreEnabled")
+--- XXX end evil hacks
 
 function mod:OnBossEnable()
 	self:Log("SPELL_CAST_SUCCESS", "FearWard", 6346) --Fear Ward
@@ -185,10 +186,6 @@ function mod:OnBossEnable()
 	self:Log("SPELL_CAST_SUCCESS", "DivineSacrifice", 64205) --Divine Sacrifice
 	self:Log("SPELL_CAST_SUCCESS", "DivineProtection", 498) --Divine Protection
 	self:Log("SPELL_CAST_SUCCESS", "Suppression", 33206)
-end
-
-function mod:BigWigs_CoreEnabled()
-	self:Enable()
 end
 
 ------------------------------
