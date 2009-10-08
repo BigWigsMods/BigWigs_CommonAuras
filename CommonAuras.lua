@@ -214,7 +214,7 @@ function mod:Guardian(target, spellId, nick, _, spellName)
 end
 
 function mod:GuardianOff(target, spellId, nick, _, spellName) --Need to remove if fatal blow received and prevented
-	self:TriggerEvent("BigWigs_StopBar", self, L["used_bar"]:format(target, spellName))
+	self:SendMessage("BigWigs_StopBar", self, L["used_bar"]:format(target, spellName))
 end
 
 function mod:Sacrifice(target, spellId, nick, _, spellName)
