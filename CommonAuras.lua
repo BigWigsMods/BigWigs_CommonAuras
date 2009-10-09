@@ -116,14 +116,19 @@ L = LibStub("AceLocale-3.0"):NewLocale("Big Wigs: Common Auras", "deDE")
 if L then
 	L.fw_cast = "%s: Furchtschutz auf %s"
 	L.fw_bar = "%s: Furchtschutz (CD)"
-	
+
 	L.usedon_cast = "%s: %s auf %s"
 	L.usedon_bar = "%s: %s (CD)"
 
 	L.used_cast = "%s benutzt %s"
 	L.used_bar = "%s: %s"
 
+	L.portal = "Portale"
+	L.portal_desc = "Zeigt die Portale der Magier an."
 	L.portal_cast = "%s öffnet ein %s!"
+
+	L.repair = "Reparaturbots"
+	L.repair_desc = "Zeigt Reparaturbots an, sobald sie aufgestellt wurden."
 end
 
 L = LibStub("AceLocale-3.0"):NewLocale("Big Wigs: Common Auras", "frFR")
