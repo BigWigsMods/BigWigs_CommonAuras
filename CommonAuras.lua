@@ -15,7 +15,7 @@ local name = "Common Auras"
 local L = LibStub("AceLocale-3.0"):NewLocale("Big Wigs: Common Auras", "enUS", true)
 if L then
 	L.fw_cast = "%s fearwarded %s."
-	L.fw_bar = "%s: FW Cooldown"
+	L.fw_bar = "%s: Fearwarded"
 
 	L.usedon_cast = "%s: %s on %s"
 	L.usedon_bar = "%s: %s Cooldown"
@@ -115,7 +115,7 @@ end
 L = LibStub("AceLocale-3.0"):NewLocale("Big Wigs: Common Auras", "deDE")
 if L then
 	L.fw_cast = "%s: Furchtschutz auf %s"
-	L.fw_bar = "%s: Furchtschutz (CD)"
+	L.fw_bar = "%s: Furchtschutz"
 
 	L.usedon_cast = "%s: %s auf %s"
 	L.usedon_bar = "%s: %s (CD)"
@@ -162,7 +162,7 @@ local mod = BigWigs:NewBoss(L[name], L[name]) -- XXX this should not be a boss!
 if not mod then return end
 mod.locale = L
 mod.zoneName = L[name] -- XXX evil haxors
-mod.toggleOptions = { "portal", "repair", 6346, 871, 47788, 29166, 6940, 64205, 498, 33206, 32182, 2825 }
+mod.toggleOptions = { "portal", "repair", 6346, 871, 47788, 29166, 6940, 64205, 498, 33206, 32182, 2825, 51271, 49222, 48792 }
 
 ------------------------------
 --      Initialization      --
@@ -178,6 +178,7 @@ enabler:RegisterMessage("BigWigs_CoreEnabled")
 
 function mod:OnBossEnable()
 	self:Log("SPELL_CAST_SUCCESS", "FearWard", 6346) --Fear Ward
+	self:Log("SPELL_AURA_REMOVED", "FearWardOff", 6346) --Fear Ward, check the event! XXX
 	self:Log("SPELL_CAST_SUCCESS", "Repair", 22700, 44389, 54711, 67826) --Field Repair Bot 74A, Field Repair Bot 110G, Scrapbot, Jeeves
 	self:Log("SPELL_CREATE", "Portals", 11419, 32266,
 		11416, 11417, 33691, 35717, 32267, 10059, 11420, 11418, 49360, 49361, 53142
@@ -190,7 +191,11 @@ function mod:OnBossEnable()
 	self:Log("SPELL_CAST_SUCCESS", "Sacrifice", 6940) --Hand of Sacrifice
 	self:Log("SPELL_CAST_SUCCESS", "DivineSacrifice", 64205) --Divine Sacrifice
 	self:Log("SPELL_CAST_SUCCESS", "DivineProtection", 498) --Divine Protection
-	self:Log("SPELL_CAST_SUCCESS", "Suppression", 33206)
+	self:Log("SPELL_CAST_SUCCESS", "Suppression", 33206) --Pain Suppression
+	self:Log("SPELL_CAST_SUCCESS", "UnbreakableArmor", 51271) --Unbreakable Armor
+	self:Log("SPELL_CAST_SUCCESS", "BoneShield", 49222) --BoneShield
+	self:Log("SPELL_AURA_REMOVED", "BoneShieldOff", 49222) --BoneShield, check event! XXX
+	self:Log("SPELL_CAST_SUCCESS", "IceboundFortitude", 48792) --Icebound Fortitude
 end
 
 ------------------------------
@@ -205,12 +210,12 @@ local red = {r = 1, g = 0, b = 0}
 
 function mod:Suppression(target, spellId, nick, _, spellName)
 	self:Message(33206,L["usedon_cast"]:format(nick, spellName, target), yellow, spellId)
-	self:Bar(33206,L["used_bar"]:format(target, spellName), 10, spellId)
+	self:Bar(33206,L["used_bar"]:format(target, spellName), 8, spellId)
 end
 
 function mod:Bloodlust(_, spellId, nick, _, spellName)
 	self:TargetMessage(32182, L["used_cast"], nick, red, spellId, nil, spellName)
-	self:Bar(32182, L["used_bar"]:format(nick, spellName), 300, spellId)
+	self:Bar(32182, L["used_bar"]:format(nick, spellName), 40, spellId)
 end
 
 function mod:Guardian(target, spellId, nick, _, spellName)
@@ -242,6 +247,10 @@ function mod:FearWard(target, spellId, nick, _, spellName)
 	self:Bar(6346, L["fw_bar"]:format(nick), 180, spellId)
 end
 
+function mod:FearWardOff(target, spellId, nick, _, spellName)
+	self:SendMessage("BigWigs_StopBar", self, L["fw_bar"]:format(nick))
+end
+
 function mod:Repair(_, spellId, nick, _, spellName)
 	self:TargetMessage("repair", L["used_cast"], nick, blue, spellId, nil, spellName)
 	self:Bar("repair", L["used_bar"]:format(nick, spellName), spellId == 54711 and 300 or 600, spellId)
@@ -259,6 +268,23 @@ end
 
 function mod:Innervate(target, spellId, nick, _, spellName)
 	self:Message(29166, L["usedon_cast"]:format(nick, spellName, target), green, spellId)
-	self:Bar(29166, L["usedon_bar"]:format(nick, spellName), 180, spellId)
 end
 
+function mod:UnbreakableArmor(_, spellId, nick, _, spellName)
+	self:TargetMessage(51271, L["used_cast"], nick, blue, spellId, nil, spellName)
+	self:Bar(51271, L["used_bar"]:format(nick, spellName), 20, spellId)
+end
+
+function mod:BoneShield(_, spellId, nick, _, spellName)
+	self:TargetMessage(49222, L["used_cast"], nick, blue, spellId, nil, spellName)
+	self:Bar(49222, L["used_bar"]:format(nick, spellName), 60, spellId)
+end
+
+function mod:BoneShieldOff(target, spellId, nick, _, spellName)
+	self:SendMessage("BigWigs_StopBar", self, L["used_bar"]:format(nick, spellName))
+end
+
+function mod:IceboundFortitude(_, spellId, nick, _, spellName)
+	self:TargetMessage(48792, L["used_cast"], nick, blue, spellId, nil, spellName)
+	self:Bar(48792, L["used_bar"]:format(nick, spellName), 12, spellId)
+end
