@@ -218,7 +218,19 @@ function mod:OnRegister()
 	}
 end
 function mod:OnPluginEnable()
-	self:RegisterEvent("COMBAT_LOG_EVENT_UNFILTERED")
+	self:RegisterEvent("PLAYER_ENTERING_WORLD")
+end
+
+local registered = nil
+function mod:PLAYER_ENTERING_WORLD()
+	local inInstance, instanceType = IsInInstance()
+	if inInstance and (instanceType == "raid" or instanceType == "party") then
+		self:RegisterEvent("COMBAT_LOG_EVENT_UNFILTERED")
+		registered = true
+	elseif registered then
+		self:UnregisterEvent("COMBAT_LOG_EVENT_UNFILTERED")
+		registered = nil
+	end
 end
 
 function mod:COMBAT_LOG_EVENT_UNFILTERED(_, _, event, _, source, _, _, player, _, spellId, spellName)
@@ -250,12 +262,8 @@ local function message(key, text, color, icon)
 end
 local icons = setmetatable({}, {__index =
 	function(self, key)
-		if not key then return end
-		local value = nil
-		if type(key) == "number" then value = select(3, GetSpellInfo(key))
-		else value = "Interface\\Icons\\" .. key end
-		self[key] = value
-		return value
+		self[key] = select(3, GetSpellInfo(key))
+		return self[key]
 	end
 })
 local function bar(key, text, length, icon)
