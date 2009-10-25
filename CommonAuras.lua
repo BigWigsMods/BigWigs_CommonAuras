@@ -31,6 +31,9 @@ if L then
 	L.repair_desc = "Toggle showing when repair bots are available."
 
 	L["Common Auras"] = true
+	L["Group utility"] = true
+	L["Tanking cooldowns"] = true
+	L["Healing cooldowns"] = true
 end
 
 L = LibStub("AceLocale-3.0"):NewLocale("Big Wigs: Common Auras", "ruRU")
@@ -161,7 +164,12 @@ L = LibStub("AceLocale-3.0"):GetLocale("Big Wigs: Common Auras")
 local mod = BigWigs:NewPlugin(L[name])
 if not mod then return end
 mod.locale = L
-mod.toggleOptions = { "portal", "repair", 6346, 871, 47788, 29166, 6940, 64205, 498, 33206, 32182, 2825, 51271, 49222, 48792 }
+mod.toggleOptions = { "portal", "repair", 64205, 32182, 2825, 6346, 871, 498, 51271, 49222, 48792, 33206, 47788, 29166, 6940 }
+mod.optionHeaders = {
+	portal = L["Group utility"],
+	[871] = L["Tanking cooldowns"],
+	[33206] = L["Healing cooldowns"],
+}
 
 ------------------------------
 --      Initialization      --
