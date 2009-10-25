@@ -158,44 +158,67 @@ L = LibStub("AceLocale-3.0"):GetLocale("Big Wigs: Common Auras")
 --      Module              --
 ------------------------------
 
-local mod = BigWigs:NewBoss(L[name], L[name]) -- XXX this should not be a boss!
+local mod = BigWigs:NewPlugin(L[name])
 if not mod then return end
 mod.locale = L
-mod.zoneName = L[name] -- XXX evil haxors
 mod.toggleOptions = { "portal", "repair", 6346, 871, 47788, 29166, 6940, 64205, 498, 33206, 32182, 2825, 51271, 49222, 48792 }
 
 ------------------------------
 --      Initialization      --
 ------------------------------
 
--- XXX evil hacks once more
-local enabler = LibStub("AceEvent-3.0"):Embed({})
-function enabler:BigWigs_CoreEnabled()
-	mod:Enable()
+local combatLogMap = {}
+function mod:OnRegister()
+	combatLogMap.SPELL_CAST_SUCCESS = {
+		[22700] = "Repair",
+		[44389] = "Repair",
+		[54711] = "Repair",
+		[67826] = "Repair",
+		[6346] = "FearWard",
+		[871] = "ShieldWall",
+		[29166] = "Innervate",
+		[2825] = "Bloodlust",
+		[32182] = "Bloodlust",
+		[47788] = "Guardian",
+		[6940] = "Sacrifice",
+		[64205] = "DivineSacrifice",
+		[498] = "DivineProtection",
+		[33206] = "Suppression",
+		[51271] = "UnbreakableArmor",
+		[49222] = "BoneShield",
+		[48792] = "IceboundFortitude",
+	}
+	combatLogMap.SPELL_AURA_REMOVED = {
+		[6346] = "FearWardOff",
+		[47788] = "GuardianOff",
+		[49222] = "BoneShieldOff",
+	}
+	combatLogMap.SPELL_CREATE = {
+		[11419] = "Portals",
+		[32266] = "Portals",
+		[11416] = "Portals",
+		[11417] = "Portals",
+		[33691] = "Portals",
+		[35717] = "Portals",
+		[32267] = "Portals",
+		[10059] = "Portals",
+		[11420] = "Portals",
+		[11418] = "Portals",
+		[49360] = "Portals",
+		[49361] = "Portals",
+		[53142] = "Portals",
+	}
 end
-enabler:RegisterMessage("BigWigs_CoreEnabled")
---- XXX end evil hacks
+function mod:OnPluginEnable()
+	self:RegisterEvent("COMBAT_LOG_EVENT_UNFILTERED")
+end
 
-function mod:OnBossEnable()
-	self:Log("SPELL_CAST_SUCCESS", "FearWard", 6346) --Fear Ward
-	self:Log("SPELL_AURA_REMOVED", "FearWardOff", 6346) --Fear Ward, check the event! XXX
-	self:Log("SPELL_CAST_SUCCESS", "Repair", 22700, 44389, 54711, 67826) --Field Repair Bot 74A, Field Repair Bot 110G, Scrapbot, Jeeves
-	self:Log("SPELL_CREATE", "Portals", 11419, 32266,
-		11416, 11417, 33691, 35717, 32267, 10059, 11420, 11418, 49360, 49361, 53142
-	) --Portals, http://www.wowhead.com/?search=portal#abilities
-	self:Log("SPELL_CAST_SUCCESS", "ShieldWall", 871) --Shield Wall
-	self:Log("SPELL_CAST_SUCCESS", "Innervate", 29166) --Innervate
-	self:Log("SPELL_CAST_SUCCESS", "Bloodlust", 2825, 32182) -- Bloodlust and Heroism
-	self:Log("SPELL_CAST_SUCCESS", "Guardian", 47788) --Guardian Spirit
-	self:Log("SPELL_AURA_REMOVED", "GuardianOff", 47788) --Guardian Spirit
-	self:Log("SPELL_CAST_SUCCESS", "Sacrifice", 6940) --Hand of Sacrifice
-	self:Log("SPELL_CAST_SUCCESS", "DivineSacrifice", 64205) --Divine Sacrifice
-	self:Log("SPELL_CAST_SUCCESS", "DivineProtection", 498) --Divine Protection
-	self:Log("SPELL_CAST_SUCCESS", "Suppression", 33206) --Pain Suppression
-	self:Log("SPELL_CAST_SUCCESS", "UnbreakableArmor", 51271) --Unbreakable Armor
-	self:Log("SPELL_CAST_SUCCESS", "BoneShield", 49222) --BoneShield
-	self:Log("SPELL_AURA_REMOVED", "BoneShieldOff", 49222) --BoneShield, check event! XXX
-	self:Log("SPELL_CAST_SUCCESS", "IceboundFortitude", 48792) --Icebound Fortitude
+function mod:COMBAT_LOG_EVENT_UNFILTERED(_, _, event, sGUID, source, sFlags, dGUID, player, dFlags, spellId, spellName, _, secSpellId)
+	local m = combatLogMap[event]
+	if m and m[spellId] then
+		local func = m[spellId]
+		self[func](self, player, spellId, source, secSpellId, spellName, event, sFlags, dFlags, dGUID)
+	end
 end
 
 ------------------------------
@@ -209,8 +232,8 @@ local yellow = {r = 1, g = 1, b = 0}
 local red = {r = 1, g = 0, b = 0}
 
 function mod:Suppression(target, spellId, nick, _, spellName)
-	self:Message(33206,L["usedon_cast"]:format(nick, spellName, target), yellow, spellId)
-	self:Bar(33206,L["used_bar"]:format(target, spellName), 8, spellId)
+	self:Message(33206, L["usedon_cast"]:format(nick, spellName, target), yellow, spellId)
+	self:Bar(33206, L["used_bar"]:format(target, spellName), 8, spellId)
 end
 
 function mod:Bloodlust(_, spellId, nick, _, spellName)
@@ -288,3 +311,4 @@ function mod:IceboundFortitude(_, spellId, nick, _, spellName)
 	self:TargetMessage(48792, L["used_cast"], nick, blue, spellId, nil, spellName)
 	self:Bar(48792, L["used_bar"]:format(nick, spellName), 12, spellId)
 end
+
