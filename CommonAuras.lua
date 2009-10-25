@@ -240,9 +240,19 @@ local function message(key, text, color, spellId)
 	if not checkFlag(key, C.MESSAGE) then return end
 	mod:SendMessage("BigWigs_Message", text, color, nil, nil, nil, icon)
 end
-local function bar(key, ...)
+local icons = setmetatable({}, {__index =
+	function(self, key)
+		if not key then return end
+		local value = nil
+		if type(key) == "number" then value = select(3, GetSpellInfo(key))
+		else value = "Interface\\Icons\\" .. key end
+		self[key] = value
+		return value
+	end
+})
+local function bar(key, text, length, icon)
 	if not checkFlag(key, C.BAR) then return end
-	mod:SendMessage("BigWigs_StartBar", mod, text, length, icons[icon], ...)
+	mod:SendMessage("BigWigs_StartBar", mod, text, length, icons[icon])
 end
 
 function mod:Suppression(target, spellId, nick, spellName)
