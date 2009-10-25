@@ -244,7 +244,7 @@ local function checkFlag(key, flag)
 	return bit.band(mod.db.profile[key], flag) == flag
 end
 
-local function message(key, text, color, spellId)
+local function message(key, text, color, icon)
 	if not checkFlag(key, C.MESSAGE) then return end
 	mod:SendMessage("BigWigs_Message", text, color, nil, nil, nil, icon)
 end
