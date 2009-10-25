@@ -213,11 +213,10 @@ function mod:OnPluginEnable()
 	self:RegisterEvent("COMBAT_LOG_EVENT_UNFILTERED")
 end
 
-function mod:COMBAT_LOG_EVENT_UNFILTERED(_, _, event, sGUID, source, sFlags, dGUID, player, dFlags, spellId, spellName, _, secSpellId)
-	local m = combatLogMap[event]
-	if m and m[spellId] then
-		local func = m[spellId]
-		self[func](self, player, spellId, source, secSpellId, spellName, event, sFlags, dFlags, dGUID)
+function mod:COMBAT_LOG_EVENT_UNFILTERED(_, _, event, _, source, _, _, player, _, spellId, spellName)
+	local f = combatLogMap[event] and combatLogMap[event][spellId] or nil
+	if f then
+		self[f](self, player, spellId, source, spellName)
 	end
 end
 
@@ -231,84 +230,99 @@ local orange = {r = 1, g = 0.75, b = 0.14}
 local yellow = {r = 1, g = 1, b = 0}
 local red = {r = 1, g = 0, b = 0}
 
-function mod:Suppression(target, spellId, nick, _, spellName)
-	self:Message(33206, L["usedon_cast"]:format(nick, spellName, target), yellow, spellId)
-	self:Bar(33206, L["used_bar"]:format(target, spellName), 8, spellId)
+local C = BigWigs.C
+local function checkFlag(key, flag)
+	if type(key) == "number" then key = GetSpellInfo(key) end
+	return bit.band(mod.db.profile[key], flag) == flag
 end
 
-function mod:Bloodlust(_, spellId, nick, _, spellName)
-	self:TargetMessage(32182, L["used_cast"], nick, red, spellId, nil, spellName)
-	self:Bar(32182, L["used_bar"]:format(nick, spellName), 40, spellId)
+local function message(key, text, color, spellId)
+	if not checkFlag(key, C.MESSAGE) then return end
+	mod:SendMessage("BigWigs_Message", text, color, nil, nil, nil, icon)
+end
+local function bar(key, ...)
+	if not checkFlag(key, C.BAR) then return end
+	mod:SendMessage("BigWigs_StartBar", mod, text, length, icons[icon], ...)
 end
 
-function mod:Guardian(target, spellId, nick, _, spellName)
-	self:Message(47788, L["usedon_cast"]:format(nick, spellName, target), yellow, spellId)
-	self:Bar(47788, L["used_bar"]:format(target, spellName), 10, spellId)
+function mod:Suppression(target, spellId, nick, spellName)
+	message(33206, L["usedon_cast"]:format(nick, spellName, target), yellow, spellId)
+	bar(33206, L["used_bar"]:format(target, spellName), 8, spellId)
 end
 
-function mod:GuardianOff(target, spellId, nick, _, spellName) --Need to remove if fatal blow received and prevented
+function mod:Bloodlust(_, spellId, nick, spellName)
+	message(32182, L["used_cast"]:format(nick, spellName), red, spellId)
+	bar(32182, L["used_bar"]:format(nick, spellName), 40, spellId)
+end
+
+function mod:Guardian(target, spellId, nick, spellName)
+	message(47788, L["usedon_cast"]:format(nick, spellName, target), yellow, spellId)
+	bar(47788, L["used_bar"]:format(target, spellName), 10, spellId)
+end
+
+function mod:GuardianOff(target, spellId, nick, spellName) --Need to remove if fatal blow received and prevented
 	self:SendMessage("BigWigs_StopBar", self, L["used_bar"]:format(target, spellName))
 end
 
-function mod:Sacrifice(target, spellId, nick, _, spellName)
-	self:Message(6940, L["usedon_cast"]:format(nick, spellName, target), orange, nil, nil, nil, spellId)
-	self:Bar(6940, L["used_bar"]:format(target, spellName), 12, spellId)
+function mod:Sacrifice(target, spellId, nick, spellName)
+	message(6940, L["usedon_cast"]:format(nick, spellName, target), orange, nil, nil, nil, spellId)
+	bar(6940, L["used_bar"]:format(target, spellName), 12, spellId)
 end
 
-function mod:DivineSacrifice(_, spellId, nick, _, spellName)
-	self:TargetMessage(64205, L["used_cast"], nick, blue, spellId, nil, spellName)
-	self:Bar(64205, L["used_bar"]:format(nick, spellName), 10, spellId)
+function mod:DivineSacrifice(_, spellId, nick, spellName)
+	message(64205, L["used_cast"]:format(nick, spellName), nick, blue, spellId)
+	bar(64205, L["used_bar"]:format(nick, spellName), 10, spellId)
 end
 
-function mod:DivineProtection(_, spellId, nick, _, spellName)
-	self:TargetMessage(498, L["used_cast"], nick, blue, spellId, nil, spellName)
-	self:Bar(498, L["used_bar"]:format(nick, spellName), 12, spellId)
+function mod:DivineProtection(_, spellId, nick, spellName)
+	message(498, L["used_cast"]:format(nick, spellName), blue, spellId)
+	bar(498, L["used_bar"]:format(nick, spellName), 12, spellId)
 end
 
-function mod:FearWard(target, spellId, nick, _, spellName)
-	self:Message(6346, L["fw_cast"]:format(nick, target), green, spellId)
-	self:Bar(6346, L["fw_bar"]:format(nick), 180, spellId)
+function mod:FearWard(target, spellId, nick, spellName)
+	message(6346, L["fw_cast"]:format(nick, target), green, spellId)
+	bar(6346, L["fw_bar"]:format(nick), 180, spellId)
 end
 
-function mod:FearWardOff(target, spellId, nick, _, spellName)
+function mod:FearWardOff(target, spellId, nick, spellName)
 	self:SendMessage("BigWigs_StopBar", self, L["fw_bar"]:format(nick))
 end
 
-function mod:Repair(_, spellId, nick, _, spellName)
-	self:TargetMessage("repair", L["used_cast"], nick, blue, spellId, nil, spellName)
-	self:Bar("repair", L["used_bar"]:format(nick, spellName), spellId == 54711 and 300 or 600, spellId)
+function mod:Repair(_, spellId, nick, spellName)
+	message("repair", L["used_cast"]:format(nick, spellName), nick, blue, spellId)
+	bar("repair", L["used_bar"]:format(nick, spellName), spellId == 54711 and 300 or 600, spellId)
 end
 
-function mod:Portals(_, spellId, nick, _, spellName)
-	self:TargetMessage("portal", L["portal_cast"], nick, blue, spellId, nil, spellName)
-	self:Bar("portal", spellName.." ("..nick..")", 60, spellId)
+function mod:Portals(_, spellId, nick, spellName)
+	message("portal", L["portal_cast"]:format(nick, spellName), nick, blue, spellId)
+	bar("portal", spellName.." ("..nick..")", 60, spellId)
 end
 
-function mod:ShieldWall(_, spellId, nick, _, spellName)
-	self:TargetMessage(871, L["used_cast"], nick, blue, spellId, nil, spellName)
-	self:Bar(871, L["used_bar"]:format(nick, spellName), 12, spellId)
+function mod:ShieldWall(_, spellId, nick, spellName)
+	message(871, L["used_cast"]:format(nick, spellName), blue, spellId)
+	bar(871, L["used_bar"]:format(nick, spellName), 12, spellId)
 end
 
-function mod:Innervate(target, spellId, nick, _, spellName)
-	self:Message(29166, L["usedon_cast"]:format(nick, spellName, target), green, spellId)
+function mod:Innervate(target, spellId, nick, spellName)
+	message(29166, L["usedon_cast"]:format(nick, spellName, target), green, spellId)
 end
 
-function mod:UnbreakableArmor(_, spellId, nick, _, spellName)
-	self:TargetMessage(51271, L["used_cast"], nick, blue, spellId, nil, spellName)
-	self:Bar(51271, L["used_bar"]:format(nick, spellName), 20, spellId)
+function mod:UnbreakableArmor(_, spellId, nick, spellName)
+	message(51271, L["used_cast"]:format(nick, spellName), blue, spellId)
+	bar(51271, L["used_bar"]:format(nick, spellName), 20, spellId)
 end
 
-function mod:BoneShield(_, spellId, nick, _, spellName)
-	self:TargetMessage(49222, L["used_cast"], nick, blue, spellId, nil, spellName)
-	self:Bar(49222, L["used_bar"]:format(nick, spellName), 60, spellId)
+function mod:BoneShield(_, spellId, nick, spellName)
+	message(49222, L["used_cast"]:format(nick, spellName), blue, spellId)
+	bar(49222, L["used_bar"]:format(nick, spellName), 60, spellId)
 end
 
-function mod:BoneShieldOff(target, spellId, nick, _, spellName)
+function mod:BoneShieldOff(target, spellId, nick, spellName)
 	self:SendMessage("BigWigs_StopBar", self, L["used_bar"]:format(nick, spellName))
 end
 
-function mod:IceboundFortitude(_, spellId, nick, _, spellName)
-	self:TargetMessage(48792, L["used_cast"], nick, blue, spellId, nil, spellName)
-	self:Bar(48792, L["used_bar"]:format(nick, spellName), 12, spellId)
+function mod:IceboundFortitude(_, spellId, nick, spellName)
+	message(48792, L["used_cast"]:format(nick, spellName), blue, spellId)
+	bar(48792, L["used_bar"]:format(nick, spellName), 12, spellId)
 end
 
