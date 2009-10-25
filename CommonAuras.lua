@@ -291,12 +291,12 @@ function mod:GuardianOff(target, spellId, nick, spellName) --Need to remove if f
 end
 
 function mod:Sacrifice(target, spellId, nick, spellName)
-	message(6940, L["usedon_cast"]:format(nick, spellName, target), orange, nil, nil, nil, spellId)
+	message(6940, L["usedon_cast"]:format(nick, spellName, target), orange, spellId)
 	bar(6940, L["used_bar"]:format(target, spellName), 12, spellId)
 end
 
 function mod:DivineSacrifice(_, spellId, nick, spellName)
-	message(64205, L["used_cast"]:format(nick, spellName), nick, blue, spellId)
+	message(64205, L["used_cast"]:format(nick, spellName), blue, spellId)
 	bar(64205, L["used_bar"]:format(nick, spellName), 10, spellId)
 end
 
@@ -315,12 +315,12 @@ function mod:FearWardOff(target, spellId, nick, spellName)
 end
 
 function mod:Repair(_, spellId, nick, spellName)
-	message("repair", L["used_cast"]:format(nick, spellName), nick, blue, spellId)
+	message("repair", L["used_cast"]:format(nick, spellName), blue, spellId)
 	bar("repair", L["used_bar"]:format(nick, spellName), spellId == 54711 and 300 or 600, spellId)
 end
 
 function mod:Portals(_, spellId, nick, spellName)
-	message("portal", L["portal_cast"]:format(nick, spellName), nick, blue, spellId)
+	message("portal", L["portal_cast"]:format(nick, spellName), blue, spellId)
 	bar("portal", spellName.." ("..nick..")", 60, spellId)
 end
 
