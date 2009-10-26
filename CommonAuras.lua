@@ -55,7 +55,7 @@ end
 L = LibStub("AceLocale-3.0"):NewLocale("Big Wigs: Common Auras", "zhCN")
 if L then
 	L.fw_cast = "%s：防护恐惧结界于%s"
-	L.fw_bar = "<%s：防护恐惧结界 冷却>"
+	L.fw_bar = "<%s：防护恐惧结界>"
 
 	L.usedon_cast = "%s：%s于%s"
 	L.usedon_bar = "<%s：%s 冷却>"
@@ -71,12 +71,15 @@ if L then
 	L.repair_desc = "打开或关闭显示修理机器人可用时提示。"
 
 	L["Common Auras"] = "普通光环"
+	L["Group utility"] = "组效果"
+	L["Tanking cooldowns"] = "坦克冷却"
+	L["Healing cooldowns"] = "治疗冷却"
 end
 
 L = LibStub("AceLocale-3.0"):NewLocale("Big Wigs: Common Auras", "zhTW")
 if L then
 	L.fw_cast = "%s：防護恐懼結界於%s"
-	L.fw_bar = "<%s：防護恐懼結界 冷卻>"
+	L.fw_bar = "<%s：防護恐懼結界>"
 
 	L.usedon_cast = "%s：%s於%s"
 	L.usedon_bar = "<%s：%s 冷卻>"
@@ -92,6 +95,9 @@ if L then
 	L.repair_desc = "打開或關閉顯示修理機器人可用時提示。"
 	
 	L["Common Auras"] = "共同光環"
+	L["Group utility"] = "組效果"
+	L["Tanking cooldowns"] = "坦克冷卻"
+	L["Healing cooldowns"] = "治療冷卻"
 end
 
 L = LibStub("AceLocale-3.0"):NewLocale("Big Wigs: Common Auras", "koKR")
@@ -108,10 +114,10 @@ if L then
 	L.portal = "차원문"
 	L.portal_desc = "마법사의 차원문 표시합니다."
 	L.portal_cast = "%s: %s 차원문!"
-	
+
 	L.repair = "수리 로봇"
 	L.repair_desc = "수리 로봇 사용시 표시합니다."
-	
+
 	L["Common Auras"] = "공통 버프"
 	L["Group utility"] = "그룹에 유용한 것"
 	L["Tanking cooldowns"] = "탱킹 재사용 대기시간"
