@@ -141,6 +141,11 @@ if L then
 
 	L.repair = "Reparaturbots"
 	L.repair_desc = "Zeigt Reparaturbots an, sobald sie aufgestellt wurden."
+	
+	--L["Common Auras"] = true
+	L["Group utility"] = "Gruppenwerkzeuge"
+	L["Tanking cooldowns"] = "Tank-Cooldowns"
+	L["Healing cooldowns"] = "Heil-Cooldowns"
 end
 
 L = LibStub("AceLocale-3.0"):NewLocale("Big Wigs: Common Auras", "frFR")
