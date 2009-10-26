@@ -113,6 +113,9 @@ if L then
 	L.repair_desc = "수리 로봇 사용시 표시합니다."
 	
 	L["Common Auras"] = "공통 버프"
+	L["Group utility"] = "그룹에 유용한 것"
+	L["Tanking cooldowns"] = "탱킹 재사용 대기시간"
+	L["Healing cooldowns"] = "힐링 재사용 대기시간"
 end
 
 L = LibStub("AceLocale-3.0"):NewLocale("Big Wigs: Common Auras", "deDE")
