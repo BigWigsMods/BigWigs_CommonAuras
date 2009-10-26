@@ -141,7 +141,7 @@ if L then
 
 	L.repair = "Reparaturbots"
 	L.repair_desc = "Zeigt Reparaturbots an, sobald sie aufgestellt wurden."
-	
+
 	--L["Common Auras"] = true
 	L["Group utility"] = "Gruppenwerkzeuge"
 	L["Tanking cooldowns"] = "Tank-Cooldowns"
@@ -158,7 +158,7 @@ if L then
 
 	L.used_cast = "%s a utilisé %s."
 	L.used_bar = "%s : %s"
-	
+
 	L.portal = "Portail"
 	L.portal_desc = "Prévient ou non quand un mage ouvre un portail."
 	L.portal_cast = "%s a ouvert un %s !"
@@ -166,7 +166,10 @@ if L then
 	L.repair = "Robot réparateur"
 	L.repair_desc = "Prévient ou non quand un robot réparateur est déployé."
 
-	L["Common Auras"] = "Auras courantes"
+	L["Common Auras"] = "Auras habituelles"
+	L["Group utility"] = "Utilité de groupe"
+	L["Tanking cooldowns"] = "Temps de recharge de tank"
+	L["Healing cooldowns"] = "Temps de recharge de soigneur"
 end
 L = LibStub("AceLocale-3.0"):GetLocale("Big Wigs: Common Auras")
 
