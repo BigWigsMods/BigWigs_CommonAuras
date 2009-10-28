@@ -283,7 +283,7 @@ end
 
 local function message(key, text, color, icon)
 	if not checkFlag(key, C.MESSAGE) then return end
-	mod:SendMessage("BigWigs_Message", text, color, nil, nil, nil, icon)
+	mod:SendMessage("BigWigs_Message", mod, key, text, color, nil, nil, nil, icon)
 end
 local icons = setmetatable({}, {__index =
 	function(self, key)
@@ -293,7 +293,7 @@ local icons = setmetatable({}, {__index =
 })
 local function bar(key, text, length, icon)
 	if not checkFlag(key, C.BAR) then return end
-	mod:SendMessage("BigWigs_StartBar", mod, text, length, icons[icon])
+	mod:SendMessage("BigWigs_StartBar", mod, key, text, length, icons[icon])
 end
 
 function mod:Suppression(target, spellId, nick, spellName)
