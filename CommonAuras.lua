@@ -39,7 +39,7 @@ end
 L = LibStub("AceLocale-3.0"):NewLocale("Big Wigs: Common Auras", "ruRU")
 if L then
 	L.fw_cast = "%s защитил от страха |3-3(%s)."
-	L.fw_bar = "%s: Восстановление антистраха"
+	L.fw_bar = "%s: восстановление антистраха"
 
 	L.usedon_cast = "%s: %s на %s"
 	L.usedon_bar = "%s: %s восстановление"
@@ -47,9 +47,17 @@ if L then
 	L.used_cast = "%s использовал %s."
 	L.used_bar = "%s: %s"
 
+	L.portal = "Портал"
+	L.portal_desc = "Переключение отображения порталов мага."
 	L.portal_cast = "%s открыл %s!" --Player opened a Portal: Destination
 
+	L.repair = "Ремонтный робот"
+	L.repair_desc = "Вкл/выкл оповещение о доступности ремонтного робота."
+	
 	L["Common Auras"] = "Основные ауры"
+	L["Group utility"] = "Полезность группы"
+	L["Tanking cooldowns"] = "Восстоновления танка"
+	L["Healing cooldowns"] = "Восстоновления лекаря"
 end
 
 L = LibStub("AceLocale-3.0"):NewLocale("Big Wigs: Common Auras", "zhCN")
