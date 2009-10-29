@@ -269,11 +269,11 @@ end
 --      Events              --
 ------------------------------
 
-local green = {r = 0, g = 1, b = 0}
-local blue = {r = 0, g = 0, b = 1}
-local orange = {r = 1, g = 0.75, b = 0.14}
-local yellow = {r = 1, g = 1, b = 0}
-local red = {r = 1, g = 0, b = 0}
+local green = "Positive"
+local blue = "Personal"
+local orange = "Urgent"
+local yellow = "Attention"
+local red = "Important"
 
 local C = BigWigs.C
 local function checkFlag(key, flag)
