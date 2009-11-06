@@ -22,7 +22,7 @@ if L then
 
 	L.used_cast = "%s used %s."
 	L.used_bar = "%s: %s"
-	
+
 	L.portal = "Portal"
 	L.portal_desc = "Toggle showing of mage portals."
 	L.portal_cast = "%s opened a %s!" --Player opened a Portal: Destination
@@ -53,7 +53,7 @@ if L then
 
 	L.repair = "Ремонтный робот"
 	L.repair_desc = "Вкл/выкл оповещение о доступности ремонтного робота."
-	
+
 	L["Common Auras"] = "Основные ауры"
 	L["Group utility"] = "Полезность группы"
 	L["Tanking cooldowns"] = "Восстоновления танка"
@@ -101,7 +101,7 @@ if L then
 
 	L.repair = "修理機器人"
 	L.repair_desc = "打開或關閉顯示修理機器人可用時提示。"
-	
+
 	L["Common Auras"] = "共同光環"
 	L["Group utility"] = "組效果"
 	L["Tanking cooldowns"] = "坦克冷卻"
@@ -181,20 +181,20 @@ if L then
 end
 L = LibStub("AceLocale-3.0"):GetLocale("Big Wigs: Common Auras")
 
-
 ------------------------------
 --      Module              --
 ------------------------------
 
 local mod = BigWigs:NewPlugin(L[name])
 if not mod then return end
-mod.locale = L
 mod.toggleOptions = { "portal", "repair", 64205, 32182, 2825, 6346, 871, 498, 51271, 49222, 48792, 33206, 47788, 29166, 6940 }
 mod.optionHeaders = {
 	portal = L["Group utility"],
 	[871] = L["Tanking cooldowns"],
 	[33206] = L["Healing cooldowns"],
 }
+
+function mod:GetLocale() return L end
 
 ------------------------------
 --      Initialization      --
@@ -376,4 +376,3 @@ function mod:IceboundFortitude(_, spellId, nick, spellName)
 	message(48792, L["used_cast"]:format(nick, spellName), blue, spellId)
 	bar(48792, L["used_bar"]:format(nick, spellName), 12, spellId)
 end
-
