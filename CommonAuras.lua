@@ -219,7 +219,7 @@ function mod:OnRegister()
 		[33206] = "Suppression",
 		[51271] = "UnbreakableArmor",
 		[49222] = "BoneShield",
-		[48792] = "IceboundFortitude", 
+		[48792] = "IceboundFortitude",
 	}
 	combatLogMap.SPELL_AURA_REMOVED = {
 		[6346] = "FearWardOff",
@@ -241,9 +241,9 @@ function mod:OnRegister()
 		[49361] = "Portals",
 		[53142] = "Portals",
 	}
-  combatLogMap.SPELL_RESURRECT = {
-    [48477] = "Rebirth", 
-  }
+	combatLogMap.SPELL_RESURRECT = {
+	[48477] = "Rebirth",
+	}
 end
 function mod:OnPluginEnable()
 	self:RegisterEvent("PLAYER_ENTERING_WORLD")
@@ -299,24 +299,23 @@ local function bar(key, text, length, icon)
 	mod:SendMessage("BigWigs_StartBar", mod, key, text, length, icons[icon])
 end
 
+--[[
 -- subroutine to check if a particular glyph is in use
 local function hasGlyph(glyphSpellId)
-  for i = 1, GetNumGlyphSockets() do
-    local enabled, _, curGlyphSpellId, _ = GetGlyphSocketInfo(i)
- 
-    -- the glyph spell ID is that of the 'glyph effect' (eg. 63231 for Guardian Spirit)
-    if enabled and curGlyphSpellId == glyphSpellId then
-       return true
-    end
-  end
-
-  return false
+	for i = 1, GetNumGlyphSockets() do
+		local enabled, _, curGlyphSpellId, _ = GetGlyphSocketInfo(i)
+		-- the glyph spell ID is that of the 'glyph effect' (eg. 63231 for Guardian Spirit)
+		if enabled and curGlyphSpellId == glyphSpellId then
+			return true
+		end
+	end
+	return false
 end
+]]--
 
 function mod:Suppression(target, spellId, nick, spellName)
 	message(33206, L["usedon_cast"]:format(nick, spellName, target), yellow, spellId)
 	bar(33206, L["used_bar"]:format(target, spellName), 8, spellId)
-  bar(33206, L["usedon_bar"]:format(nick, spellName), 180, spellId)
 end
 
 function mod:Bloodlust(_, spellId, nick, spellName)
@@ -327,20 +326,10 @@ end
 function mod:Guardian(target, spellId, nick, spellName)
 	message(47788, L["usedon_cast"]:format(nick, spellName, target), yellow, spellId)
 	bar(47788, L["used_bar"]:format(target, spellName), 10, spellId)
-
-  if hasGlyph(63231) then
-    -- set cooldown to 70 seconds for glyphed guardian spirit (70 sec = 10 sec spell duration + 60 second glyphed cooldown)
-    bar(47788, L["usedon_bar"]:format(nick, spellName), 70, spellId)
-  else
-    bar(47788, L["usedon_bar"]:format(nick, spellName), 180, spellId)
-  end
 end
 
 function mod:GuardianOff(target, spellId, nick, spellName) --Need to remove if fatal blow received and prevented
 	self:SendMessage("BigWigs_StopBar", self, L["used_bar"]:format(target, spellName))
-
-  -- FIXME: how can we detect if the aura actually prevented a fatal blow vs. expired normally?
-  -- FIXME: ideally we need to reset the usedon_bar time to 3 min if it was a fatal blow
 end
 
 function mod:Sacrifice(target, spellId, nick, spellName)
@@ -384,7 +373,6 @@ end
 
 function mod:Innervate(target, spellId, nick, spellName)
 	message(29166, L["usedon_cast"]:format(nick, spellName, target), green, spellId)
-  bar(29166, L["usedon_bar"]:format(nick, spellName), 180, spellId)
 end
 
 function mod:UnbreakableArmor(_, spellId, nick, spellName)
@@ -408,6 +396,5 @@ end
 
 function mod:Rebirth(target, spellId, nick, spellName)
    message(48477, L["usedon_cast"]:format(nick, spellName, target), green, spellId)
-   bar(48477, L["used_bar"]:format(nick, spellName), 600, spellId)
 end
 
