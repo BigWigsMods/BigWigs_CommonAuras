@@ -242,7 +242,7 @@ function mod:OnRegister()
 		[53142] = "Portals",
 	}
 	combatLogMap.SPELL_RESURRECT = {
-	[48477] = "Rebirth",
+		[48477] = "Rebirth",
 	}
 end
 function mod:OnPluginEnable()
@@ -395,6 +395,5 @@ function mod:IceboundFortitude(_, spellId, nick, spellName)
 end
 
 function mod:Rebirth(target, spellId, nick, spellName)
-   message(48477, L["usedon_cast"]:format(nick, spellName, target), green, spellId)
+	message(48477, L["usedon_cast"]:format(nick, spellName, target), green, spellId)
 end
-
