@@ -187,7 +187,7 @@ L = LibStub("AceLocale-3.0"):GetLocale("Big Wigs: Common Auras")
 
 local mod = BigWigs:NewPlugin(L[name])
 if not mod then return end
-mod.toggleOptions = { "portal", "repair", 64205, 32182, 2825, 6346, 871, 498, 51271, 49222, 48792, 33206, 47788, 29166, 6940, 48477 }
+mod.toggleOptions = { "portal", "repair", 64205, 32182, 2825, 6346, 871, 498, 51271, 49222, 48792, 33206, 47788, 29166, 6940, 20484 }
 mod.optionHeaders = {
 	portal = L["Group utility"],
 	[871] = L["Tanking cooldowns"],
@@ -242,7 +242,7 @@ function mod:OnRegister()
 		[53142] = "Portals",
 	}
 	combatLogMap.SPELL_RESURRECT = {
-		[48477] = "Rebirth",
+		[20484] = "Rebirth",
 	}
 end
 function mod:OnPluginEnable()
@@ -395,5 +395,5 @@ function mod:IceboundFortitude(_, spellId, nick, spellName)
 end
 
 function mod:Rebirth(target, spellId, nick, spellName)
-	message(48477, L["usedon_cast"]:format(nick, spellName, target), green, spellId)
+	message(20484, L["usedon_cast"]:format(nick, spellName, target), green, spellId)
 end
