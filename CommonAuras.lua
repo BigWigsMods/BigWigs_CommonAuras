@@ -18,8 +18,6 @@ if L then
 	L.fw_bar = "%s: Fearwarded"
 
 	L.usedon_cast = "%s: %s on %s"
-	L.usedon_bar = "%s: %s Cooldown"
-
 	L.used_cast = "%s used %s."
 	L.used_bar = "%s: %s"
 
@@ -29,6 +27,10 @@ if L then
 
 	L.repair = "Repair Bot"
 	L.repair_desc = "Toggle showing when repair bots are available."
+
+	L.feast = "Feasts"
+	L.feast_desc = "Toggle showing when feasts get prepared."
+	L.feast_cast = "%s prepared a %s!"
 
 	L["Common Auras"] = true
 	L["Group utility"] = true
@@ -42,8 +44,6 @@ if L then
 	L.fw_bar = "%s: восстановление антистраха"
 
 	L.usedon_cast = "%s: %s на %s"
-	L.usedon_bar = "%s: %s восстановление"
-
 	L.used_cast = "%s использовал %s."
 	L.used_bar = "%s: %s"
 
@@ -66,8 +66,6 @@ if L then
 	L.fw_bar = "<%s：防护恐惧结界>"
 
 	L.usedon_cast = "%s：%s于%s"
-	L.usedon_bar = "<%s：%s 冷却>"
-
 	L.used_cast = " %s使用：%s。"
 	L.used_bar = "<%s：%s>"
 
@@ -90,8 +88,6 @@ if L then
 	L.fw_bar = "<%s：防護恐懼結界>"
 
 	L.usedon_cast = "%s：%s於%s"
-	L.usedon_bar = "<%s：%s 冷卻>"
-
 	L.used_cast = " %s使用：%s。"
 	L.used_bar = "<%s：%s>"
 
@@ -114,8 +110,6 @@ if L then
 	L.fw_bar = "%s: 공수 대기시간"
 
 	L.usedon_cast = "%1$s: %3$s에게 %2$s"
-	L.usedon_bar = "%s: %s 대기시간"
-
 	L.used_cast = "%s: %s 사용"
 	L.used_bar = "%s: %s"
 
@@ -138,8 +132,6 @@ if L then
 	L.fw_bar = "%s: Furchtschutz"
 
 	L.usedon_cast = "%s: %s auf %s"
-	L.usedon_bar = "%s: %s (CD)"
-
 	L.used_cast = "%s benutzt %s"
 	L.used_bar = "%s: %s"
 
@@ -149,6 +141,10 @@ if L then
 
 	L.repair = "Reparaturbots"
 	L.repair_desc = "Zeigt Reparaturbots an, sobald sie aufgestellt wurden."
+
+	L.feast = "Festmähler"
+	L.feast_desc = "Zeigt Festmähler an, sobald sie zubereitet wurden."
+	L.feast_cast = "%s hat ein %s zubereitet!"
 
 	--L["Common Auras"] = true
 	L["Group utility"] = "Gruppenwerkzeuge"
@@ -162,8 +158,6 @@ if L then
 	L.fw_bar = "%s : Recharge Gardien"
 
 	L.usedon_cast = "%s : %s sur %s"
-	L.usedon_bar = "%s : Recharge %s"
-
 	L.used_cast = "%s a utilisé %s."
 	L.used_bar = "%s : %s"
 
@@ -187,7 +181,7 @@ L = LibStub("AceLocale-3.0"):GetLocale("Big Wigs: Common Auras")
 
 local mod = BigWigs:NewPlugin(L[name])
 if not mod then return end
-mod.toggleOptions = { "portal", "repair", 64205, 32182, 2825, 6346, 871, 498, 51271, 49222, 48792, 33206, 47788, 29166, 6940, 20484 }
+mod.toggleOptions = { "portal", "repair", "feast", 64205, 32182, 2825, 6346, 871, 498, 31850, 48792, 61336, 33206, 47788, 29166, 6940, 20484 }
 mod.optionHeaders = {
 	portal = L["Group utility"],
 	[871] = L["Tanking cooldowns"],
@@ -202,6 +196,11 @@ function mod:GetLocale() return L end
 
 local combatLogMap = {}
 function mod:OnRegister()
+	combatLogMap.SPELL_CAST_START = {
+		[57426] = "Feasts", -- Fish Feast
+		[57301] = "Feasts", -- Great Feast
+		[66476] = "Feasts", -- Bountiful Feast
+	}
 	combatLogMap.SPELL_CAST_SUCCESS = {
 		[22700] = "Repair",
 		[44389] = "Repair",
@@ -212,19 +211,18 @@ function mod:OnRegister()
 		[29166] = "Innervate",
 		[2825] = "Bloodlust",
 		[32182] = "Bloodlust",
+		[33206] = "Suppression",
 		[47788] = "Guardian",
 		[6940] = "Sacrifice",
 		[64205] = "DivineSacrifice",
 		[498] = "DivineProtection",
-		[33206] = "Suppression",
-		[51271] = "UnbreakableArmor",
-		[49222] = "BoneShield",
+		[31850] = "ArdentDefender",
 		[48792] = "IceboundFortitude",
+		[61336] = "SurvivalInstincts",
 	}
 	combatLogMap.SPELL_AURA_REMOVED = {
 		[6346] = "FearWardOff",
 		[47788] = "GuardianOff",
-		[49222] = "BoneShieldOff",
 	}
 	combatLogMap.SPELL_CREATE = {
 		[11419] = "Portals",
@@ -249,11 +247,38 @@ function mod:OnPluginEnable()
 	self:RegisterEvent("PLAYER_ENTERING_WORLD")
 end
 
+local durModified = {}
+local glyphDuration = {
+	-- Format: [glyphSId] = {SId, Unmodified duration, Reduction}
+	[55678] = {6346, 180, 60},	-- Fear Ward
+}
+
+local function getDuration(spellId)
+	if durModified[spellId] then
+		local dur = durModified[spellId]
+	else
+		local dur = nil
+	end
+	return dur
+end
+
+function mod:UpdateDurModifiers()
+	wipe(durModified)
+	for i = 1, GetNumGlyphSockets() do
+		local enabled, _, _, gspellId = GetGlyphSocketInfo(i)
+		if enabled and gspellId and glyphDuration[gspellId] then
+			local info = glyphDuration[gspellId]
+			durModified[info[1]] = info[2] - info[3]
+		end
+	end
+end
+
 local registered = nil
 function mod:PLAYER_ENTERING_WORLD()
 	local inInstance, instanceType = IsInInstance()
 	if inInstance and (instanceType == "raid" or instanceType == "party") then
 		self:RegisterEvent("COMBAT_LOG_EVENT_UNFILTERED")
+		self:UpdateDurModifiers()
 		registered = true
 	elseif registered then
 		self:UnregisterEvent("COMBAT_LOG_EVENT_UNFILTERED")
@@ -299,20 +324,6 @@ local function bar(key, text, length, icon)
 	mod:SendMessage("BigWigs_StartBar", mod, key, text, length, icons[icon])
 end
 
---[[
--- subroutine to check if a particular glyph is in use
-local function hasGlyph(glyphSpellId)
-	for i = 1, GetNumGlyphSockets() do
-		local enabled, _, curGlyphSpellId, _ = GetGlyphSocketInfo(i)
-		-- the glyph spell ID is that of the 'glyph effect' (eg. 63231 for Guardian Spirit)
-		if enabled and curGlyphSpellId == glyphSpellId then
-			return true
-		end
-	end
-	return false
-end
-]]--
-
 function mod:Suppression(target, spellId, nick, spellName)
 	message(33206, L["usedon_cast"]:format(nick, spellName, target), yellow, spellId)
 	bar(33206, L["used_bar"]:format(target, spellName), 8, spellId)
@@ -344,12 +355,17 @@ end
 
 function mod:DivineProtection(_, spellId, nick, spellName)
 	message(498, L["used_cast"]:format(nick, spellName), blue, spellId)
-	bar(498, L["used_bar"]:format(nick, spellName), 12, spellId)
+	bar(498, L["used_bar"]:format(nick, spellName), 10, spellId)
+end
+
+function mod:ArdentDefender(_, spellId, nick, spellName)
+	message(31850, L["used_cast"]:format(nick, spellName), blue, spellId)
+	bar(31850, L["used_bar"]:format(nick, spellName), 10, spellId)
 end
 
 function mod:FearWard(target, spellId, nick, spellName)
 	message(6346, L["fw_cast"]:format(nick, target), green, spellId)
-	bar(6346, L["fw_bar"]:format(nick), 180, spellId)
+	bar(6346, L["fw_bar"]:format(nick), getDuration(spellId) == 120 and 120 or 180, spellId)
 end
 
 function mod:FearWardOff(target, spellId, nick, spellName)
@@ -366,6 +382,11 @@ function mod:Portals(_, spellId, nick, spellName)
 	bar("portal", spellName.." ("..nick..")", 60, spellId)
 end
 
+function mod:Feasts(_, spellId, nick, spellName)
+	message("feast", L["feast_cast"]:format(nick, spellName), blue, spellId)
+	bar("feast", L["used_bar"]:format(nick, spellName), 300, spellId)
+end
+
 function mod:ShieldWall(_, spellId, nick, spellName)
 	message(871, L["used_cast"]:format(nick, spellName), blue, spellId)
 	bar(871, L["used_bar"]:format(nick, spellName), 12, spellId)
@@ -375,23 +396,14 @@ function mod:Innervate(target, spellId, nick, spellName)
 	message(29166, L["usedon_cast"]:format(nick, spellName, target), green, spellId)
 end
 
-function mod:UnbreakableArmor(_, spellId, nick, spellName)
-	message(51271, L["used_cast"]:format(nick, spellName), blue, spellId)
-	bar(51271, L["used_bar"]:format(nick, spellName), 20, spellId)
-end
-
-function mod:BoneShield(_, spellId, nick, spellName)
-	message(49222, L["used_cast"]:format(nick, spellName), blue, spellId)
-	bar(49222, L["used_bar"]:format(nick, spellName), 60, spellId)
-end
-
-function mod:BoneShieldOff(target, spellId, nick, spellName)
-	self:SendMessage("BigWigs_StopBar", self, L["used_bar"]:format(nick, spellName))
-end
-
 function mod:IceboundFortitude(_, spellId, nick, spellName)
 	message(48792, L["used_cast"]:format(nick, spellName), blue, spellId)
 	bar(48792, L["used_bar"]:format(nick, spellName), 12, spellId)
+end
+
+function mod:SurvivalInstincts(_, spellId, nick, spellName)
+	message(61336, L["used_cast"]:format(nick, spellName), blue, spellId)
+	bar(61336, L["used_bar"]:format(nick, spellName), 12, spellId)
 end
 
 function mod:Rebirth(target, spellId, nick, spellName)
