@@ -200,6 +200,9 @@ function mod:OnRegister()
 		[57426] = "Feasts", -- Fish Feast
 		[57301] = "Feasts", -- Great Feast
 		[66476] = "Feasts", -- Bountiful Feast
+		[87643] = "Feasts", -- Broiled Dragon Feast
+		[87915] = "Feasts", -- Goblin Barbecue Feast
+		[87644] = "Feasts", -- Seafood Magnifique Feast
 	}
 	combatLogMap.SPELL_CAST_SUCCESS = {
 		[22700] = "Repair",
