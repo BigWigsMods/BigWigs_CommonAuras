@@ -181,7 +181,7 @@ L = LibStub("AceLocale-3.0"):GetLocale("Big Wigs: Common Auras")
 
 local mod = BigWigs:NewPlugin(L[name])
 if not mod then return end
-mod.toggleOptions = { "portal", "repair", "feast", 64205, 32182, 2825, 6346, 871, 498, 31850, 48792, 61336, 33206, 47788, 29166, 6940, 20484 }
+mod.toggleOptions = { "portal", "repair", "feast", 64205, 70940, 2825, 6346, 871, 12975, 498, 31850, 48792, 61336, 33206, 47788, 29166, 6940, 20484 }
 mod.optionHeaders = {
 	portal = L["Group utility"],
 	[871] = L["Tanking cooldowns"],
@@ -205,23 +205,30 @@ function mod:OnRegister()
 		[87644] = "Feasts", -- Seafood Magnifique Feast
 	}
 	combatLogMap.SPELL_CAST_SUCCESS = {
+		-- Group
 		[22700] = "Repair",
 		[44389] = "Repair",
 		[54711] = "Repair",
 		[67826] = "Repair",
-		[6346] = "FearWard",
-		[871] = "ShieldWall",
-		[29166] = "Innervate",
+		[64205] = "DivineSacrifice",
+		[70940] = "DivineGuardian",
 		[2825] = "Bloodlust",
 		[32182] = "Bloodlust",
-		[33206] = "Suppression",
-		[47788] = "Guardian",
-		[6940] = "Sacrifice",
-		[64205] = "DivineSacrifice",
-		[498] = "DivineProtection",
+		[80353] = "Bloodlust", -- Time Warp
+		[90355] = "Bloodlust", -- Ancient Hysteria
+		[6346] = "FearWard",
+		-- Tank
+		[871] = "ShieldWall",
+		[12975] = "LastStand",
 		[31850] = "ArdentDefender",
+		[498] = "DivineProtection",
 		[48792] = "IceboundFortitude",
 		[61336] = "SurvivalInstincts",
+		-- Healer
+		[33206] = "Suppression",
+		[47788] = "Guardian",
+		[29166] = "Innervate",
+		[6940] = "Sacrifice",
 	}
 	combatLogMap.SPELL_AURA_REMOVED = {
 		[6346] = "FearWardOff",
@@ -333,8 +340,8 @@ function mod:Suppression(target, spellId, nick, spellName)
 end
 
 function mod:Bloodlust(_, spellId, nick, spellName)
-	message(32182, L["used_cast"]:format(nick, spellName), red, spellId)
-	bar(32182, L["used_bar"]:format(nick, spellName), 40, spellId)
+	message(2825, L["used_cast"]:format(nick, spellName), red, spellId)
+	bar(2825, L["used_bar"]:format(nick, spellName), 40, spellId)
 end
 
 function mod:Guardian(target, spellId, nick, spellName)
@@ -354,6 +361,11 @@ end
 function mod:DivineSacrifice(_, spellId, nick, spellName)
 	message(64205, L["used_cast"]:format(nick, spellName), blue, spellId)
 	bar(64205, L["used_bar"]:format(nick, spellName), 10, spellId)
+end
+
+function mod:DivineGuardian(_, spellId, nick, spellName)
+	message(70940, L["used_cast"]:format(nick, spellName), blue, spellId)
+	bar(70940, L["used_bar"]:format(nick, spellName), 6, spellId)
 end
 
 function mod:DivineProtection(_, spellId, nick, spellName)
@@ -393,6 +405,11 @@ end
 function mod:ShieldWall(_, spellId, nick, spellName)
 	message(871, L["used_cast"]:format(nick, spellName), blue, spellId)
 	bar(871, L["used_bar"]:format(nick, spellName), 12, spellId)
+end
+
+function mod:LastStand(_, spellId, nick, spellName)
+	message(12975, L["used_cast"]:format(nick, spellName), blue, spellId)
+	bar(12975, L["used_bar"]:format(nick, spellName), 20, spellId)
 end
 
 function mod:Innervate(target, spellId, nick, spellName)
