@@ -32,6 +32,10 @@ if L then
 	L.feast_desc = "Toggle showing when feasts get prepared."
 	L.feast_cast = "%s prepared a %s!"
 
+	L.ritual = "Ritual of Summoning/Souls"
+	L.ritual_desc = "Toggles Ritual of Summoning/Souls warning - click the green circle!"
+	L.ritual_cast = "%s wants to perform a %s!"
+
 	L["Common Auras"] = true
 	L["Group utility"] = true
 	L["Tanking cooldowns"] = true
@@ -146,6 +150,10 @@ if L then
 	L.feast_desc = "Zeigt Festmähler an, sobald sie zubereitet wurden."
 	L.feast_cast = "%s hat ein %s zubereitet!"
 
+	L.ritual = "Ritual der Beschwörung/Seelen"
+	L.ritual_desc = "Zeigt eine Warnung für Ritual der Beschwörung/Seelen an - klicke auf den grünen Kreis!"
+	L.ritual_cast = "%s will ein %s initiieren!"
+
 	--L["Common Auras"] = true
 	L["Group utility"] = "Gruppenwerkzeuge"
 	L["Tanking cooldowns"] = "Tank-Cooldowns"
@@ -181,7 +189,7 @@ L = LibStub("AceLocale-3.0"):GetLocale("Big Wigs: Common Auras")
 
 local mod = BigWigs:NewPlugin(L[name])
 if not mod then return end
-mod.toggleOptions = { "portal", "repair", "feast", 64205, 70940, 2825, 6346, 871, 12975, 498, 31850, 48792, 61336, 33206, 47788, 29166, 6940, 20484 }
+mod.toggleOptions = { "portal", "repair", "feast", "ritual", 64205, 70940, 2825, 6346, 871, 12975, 498, 31850, 48792, 61336, 33206, 47788, 29166, 6940, 20484 }
 mod.optionHeaders = {
 	portal = L["Group utility"],
 	[871] = L["Tanking cooldowns"],
@@ -206,17 +214,19 @@ function mod:OnRegister()
 	}
 	combatLogMap.SPELL_CAST_SUCCESS = {
 		-- Group
-		[22700] = "Repair",
-		[44389] = "Repair",
-		[54711] = "Repair",
-		[67826] = "Repair",
+		[22700] = "Repair", -- Field Repair Bot 74A
+		[44389] = "Repair", -- Field Repair Bot 110G
+		[54711] = "Repair", -- Scrapbot
+		[67826] = "Repair", -- Jeeves
 		[64205] = "DivineSacrifice",
 		[70940] = "DivineGuardian",
-		[2825] = "Bloodlust",
-		[32182] = "Bloodlust",
+		[2825] = "Bloodlust", -- Bloodlust
+		[32182] = "Bloodlust", -- Heroism
 		[80353] = "Bloodlust", -- Time Warp
 		[90355] = "Bloodlust", -- Ancient Hysteria
 		[6346] = "FearWard",
+		[29893] = "Rituals", -- Ritual of Souls
+		[698] = "Rituals", -- Ritual of Summoning
 		-- Tank
 		[871] = "ShieldWall",
 		[12975] = "LastStand",
@@ -235,19 +245,21 @@ function mod:OnRegister()
 		[47788] = "GuardianOff",
 	}
 	combatLogMap.SPELL_CREATE = {
-		[11419] = "Portals",
-		[32266] = "Portals",
-		[11416] = "Portals",
-		[11417] = "Portals",
-		[33691] = "Portals",
-		[35717] = "Portals",
-		[32267] = "Portals",
-		[10059] = "Portals",
-		[11420] = "Portals",
-		[11418] = "Portals",
-		[49360] = "Portals",
-		[49361] = "Portals",
-		[53142] = "Portals",
+		[11419] = "Portals", -- Darnassus
+		[32266] = "Portals", -- Exodar
+		[11416] = "Portals", -- Ironforge
+		[11417] = "Portals", -- Orgrimmar
+		[33691] = "Portals", -- Shattrath (Alliance)
+		[35717] = "Portals", -- Shattrath (Horde)
+		[32267] = "Portals", -- Silvermoon
+		[10059] = "Portals", -- Stormwind
+		[11420] = "Portals", -- Thunder Bluff
+		[11418] = "Portals", -- Undercity
+		[49360] = "Portals", -- Theramore
+		[49361] = "Portals", -- Stonard
+		[53142] = "Portals", -- Dalaran
+		[88345] = "Portals", -- Tol Barad (Alliance)
+		[88346] = "Portals", -- Tol Barad (Horde)
 	}
 	combatLogMap.SPELL_RESURRECT = {
 		[20484] = "Rebirth",
@@ -400,6 +412,10 @@ end
 function mod:Feasts(_, spellId, nick, spellName)
 	message("feast", L["feast_cast"]:format(nick, spellName), blue, spellId)
 	bar("feast", L["used_bar"]:format(nick, spellName), 300, spellId)
+end
+
+function mod:Rituals(_, spellId, nick, spellName)
+	message("ritual", L["ritual_cast"]:format(nick, spellName), blue, spellId)
 end
 
 function mod:ShieldWall(_, spellId, nick, spellName)
