@@ -28,8 +28,8 @@ if L then
 	L.repair = "Repair Bot"
 	L.repair_desc = "Toggle showing when repair bots are available."
 
-	L.feast = "Feasts"
-	L.feast_desc = "Toggle showing when feasts get prepared."
+	L.feast = "Feasts/Cauldrons"
+	L.feast_desc = "Toggle showing when feasts/cauldrons get prepared."
 	L.feast_cast = "%s prepared a %s!"
 
 	L.ritual = "Ritual of Summoning/Souls"
@@ -141,18 +141,18 @@ if L then
 
 	L.portal = "Portale"
 	L.portal_desc = "Zeigt die Portale der Magier an."
-	L.portal_cast = "%s öffnet ein %s!"
+	L.portal_cast = "%s öffnet %s!"
 
 	L.repair = "Reparaturbots"
 	L.repair_desc = "Zeigt Reparaturbots an, sobald sie aufgestellt wurden."
 
-	L.feast = "Festmähler"
-	L.feast_desc = "Zeigt Festmähler an, sobald sie zubereitet wurden."
-	L.feast_cast = "%s hat ein %s zubereitet!"
+	L.feast = "Festmähler/Kessel"
+	L.feast_desc = "Zeigt Festmähler/Kessel an, sobald sie zubereitet wurden."
+	L.feast_cast = "%s hat %s zubereitet!"
 
 	L.ritual = "Ritual der Beschwörung/Seelen"
 	L.ritual_desc = "Zeigt eine Warnung für Ritual der Beschwörung/Seelen an - klicke auf den grünen Kreis!"
-	L.ritual_cast = "%s will ein %s initiieren!"
+	L.ritual_cast = "%s will %s initiieren!"
 
 	--L["Common Auras"] = true
 	L["Group utility"] = "Gruppenwerkzeuge"
@@ -211,6 +211,8 @@ function mod:OnRegister()
 		[87643] = "Feasts", -- Broiled Dragon Feast
 		[87915] = "Feasts", -- Goblin Barbecue Feast
 		[87644] = "Feasts", -- Seafood Magnifique Feast
+		[92649] = "Feasts", -- Cauldron of Battle
+		[92712] = "Feasts", -- Big Cauldron of Battle
 	}
 	combatLogMap.SPELL_CAST_SUCCESS = {
 		-- Group
