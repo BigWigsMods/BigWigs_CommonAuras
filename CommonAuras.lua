@@ -119,10 +119,18 @@ if L then
 
 	L.portal = "차원문"
 	L.portal_desc = "마법사의 차원문 표시합니다."
-	L.portal_cast = "%s: %s 차원문!"
+	L.portal_cast = "%s - %s 차원문!"
 
 	L.repair = "수리 로봇"
 	L.repair_desc = "수리 로봇 사용시 표시합니다."
+	
+	L.feast = "음식/가마솥"
+	L.feast_desc = "전체 음식/가마솥 사용시 표시합니다."
+	L.feast_cast = "%s - %s 사용!"
+
+	L.ritual = "영혼/소환 의식"
+	L.ritual_desc = "영혼/소환 의식을 알립니다 - 녹색 원을 클릭하셈!"
+	L.ritual_cast = "%s - %s 사용!"
 
 	L["Common Auras"] = "공통 버프"
 	L["Group utility"] = "그룹에 유용한 것"
