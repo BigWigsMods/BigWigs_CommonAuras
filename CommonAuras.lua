@@ -160,9 +160,9 @@ if L then
 
 	L.ritual = "Ritual der Beschwörung/Seelen"
 	L.ritual_desc = "Zeigt eine Warnung für Ritual der Beschwörung/Seelen an - klicke auf den grünen Kreis!"
-	L.ritual_cast = "%s will %s initiieren!"
+	L.ritual_cast = "%s will %s stellen!"
 
-	--L["Common Auras"] = true
+	L["Common Auras"] = "Common Auras"
 	L["Group utility"] = "Gruppenwerkzeuge"
 	L["Tanking cooldowns"] = "Tank-Cooldowns"
 	L["Healing cooldowns"] = "Heil-Cooldowns"
@@ -197,7 +197,7 @@ L = LibStub("AceLocale-3.0"):GetLocale("Big Wigs: Common Auras")
 
 local mod = BigWigs:NewPlugin(L[name])
 if not mod then return end
-mod.toggleOptions = { "portal", "repair", "feast", "ritual", 64205, 70940, 2825, 6346, 871, 12975, 498, 31850, 48792, 61336, 33206, 47788, 29166, 6940, 20484 }
+mod.toggleOptions = { "portal", "repair", "feast", "ritual", 92827, 64205, 70940, 2825, 6346, 871, 12975, 498, 31850, 48792, 61336, 33206, 47788, 29166, 6940, 20484 }
 mod.optionHeaders = {
 	portal = L["Group utility"],
 	[871] = L["Tanking cooldowns"],
@@ -237,6 +237,7 @@ function mod:OnRegister()
 		[6346] = "FearWard",
 		[29893] = "Rituals", -- Ritual of Souls
 		[698] = "Rituals", -- Ritual of Summoning
+		[92827] = "Refreshment", -- Ritual of Refreshment
 		-- Tank
 		[871] = "ShieldWall",
 		[12975] = "LastStand",
@@ -426,6 +427,10 @@ end
 
 function mod:Rituals(_, spellId, nick, spellName)
 	message("ritual", L["ritual_cast"]:format(nick, spellName), blue, spellId)
+end
+
+function mod:Refreshment(_, spellId, nick, spellName)
+	message(92827, L["ritual_cast"]:format(nick, spellName), blue, spellId)
 end
 
 function mod:ShieldWall(_, spellId, nick, spellName)
