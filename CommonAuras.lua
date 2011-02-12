@@ -144,7 +144,7 @@ if L then
 	L.fw_bar = "%s: Furchtschutz"
 
 	L.usedon_cast = "%s: %s auf %s"
-	L.used_cast = "%s benutzt %s"
+	L.used_cast = "%s: %s"
 	L.used_bar = "%s: %s"
 
 	L.portal = "Portale"
@@ -321,8 +321,10 @@ end
 
 function mod:COMBAT_LOG_EVENT_UNFILTERED(_, _, event, _, source, _, _, player, _, spellId, spellName)
 	local f = combatLogMap[event] and combatLogMap[event][spellId] or nil
-	if f then
-		self[f](self, player, spellId, source, spellName)
+	if f and player then
+		self[f](self, string.gsub(player, "(%a)%-(.*)", "%1"), spellId, string.gsub(source, "(%a)%-(.*)", "%1"), spellName)
+	elseif f then
+		self[f](self, player, spellId, string.gsub(source, "(%a)%-(.*)", "%1"), spellName)
 	end
 end
 
