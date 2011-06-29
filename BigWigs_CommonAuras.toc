@@ -1,4 +1,4 @@
-## Interface: 40000
+## Interface: 40200
 ## Title: Big Wigs |cffff0000+|r|cffffffffCommon Auras|r
 ## Notes: Notifies the raid about common buffs and debuffs.
 ## Title-zhCN: Big Wigs |cffff0000+|r|cffffffff普通光环|r
@@ -11,7 +11,7 @@
 ## X-Website: http://www.wowace.com
 ## X-eMail: rabbit.magtheridon@gmail.com
 ## X-Category: Raid
-## Version: 3.1.1
+## Version: 3.1.2
 ## Dependencies: BigWigs
 
 ## LoadOnDemand: 1

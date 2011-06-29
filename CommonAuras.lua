@@ -197,7 +197,7 @@ L = LibStub("AceLocale-3.0"):GetLocale("Big Wigs: Common Auras")
 
 local mod = BigWigs:NewPlugin(L[name])
 if not mod then return end
-mod.toggleOptions = { "portal", "repair", "feast", "ritual", 92827, 64205, 70940, 2825, 6346, 871, 12975, 498, 31850, 48792, 61336, 33206, 47788, 29166, 6940, 20484 }
+mod.toggleOptions = { "portal", "repair", "feast", "ritual", 92827, 64205, 70940, 2825, 6346, 871, 12975, 498, 31850, 20925, 48792, 61336, 33206, 47788, 29166, 6940, 20484 }
 mod.optionHeaders = {
 	portal = L["Group utility"],
 	[871] = L["Tanking cooldowns"],
@@ -243,6 +243,7 @@ function mod:OnRegister()
 		[12975] = "LastStand",
 		[31850] = "ArdentDefender",
 		[498] = "DivineProtection",
+		[20925] = "HolyShield",
 		[48792] = "IceboundFortitude",
 		[61336] = "SurvivalInstincts",
 		-- Healer
@@ -401,6 +402,11 @@ end
 function mod:ArdentDefender(_, spellId, nick, spellName)
 	message(31850, L["used_cast"]:format(nick, spellName), blue, spellId)
 	bar(31850, L["used_bar"]:format(nick, spellName), 10, spellId)
+end
+
+function mod:HolyShield(_, spellId, nick, spellName)
+	message(20925, L["used_cast"]:format(nick, spellName), blue, spellId)
+	bar(20925, L["used_bar"]:format(nick, spellName), 10, spellId)
 end
 
 function mod:FearWard(target, spellId, nick, spellName)
