@@ -319,7 +319,7 @@ function mod:PLAYER_ENTERING_WORLD()
 	end
 end
 
-function mod:COMBAT_LOG_EVENT_UNFILTERED(_, _, event, _, _, source, _, _, player, _, spellId, spellName)
+function mod:COMBAT_LOG_EVENT_UNFILTERED(_, _, event, _, _, source, _, _, _, player, _, _, spellId, spellName)
 	local f = combatLogMap[event] and combatLogMap[event][spellId] or nil
 	if f and player then
 		self[f](self, string.gsub(player, "(%a)%-(.*)", "%1"), spellId, string.gsub(source, "(%a)%-(.*)", "%1"), spellName)
