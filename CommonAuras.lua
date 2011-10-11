@@ -80,6 +80,14 @@ if L then
 	L.repair = "修理机器人"
 	L.repair_desc = "打开或关闭显示修理机器人可用时提示。"
 
+	L.feast = "盛宴/药锅"
+	L.feast_desc = "打开或关闭显示盛宴/药锅可用时提示。"
+	L.feast_cast = "%s准备了一顿%s！"
+
+	L.ritual = "召唤/灵魂仪式"
+	L.ritual_desc = "打开或关闭显示召唤/灵魂仪式可用时提示 - 点击绿色圆圈！"
+	L.ritual_cast = "%s想进行一次%s！"
+
 	L["Common Auras"] = "普通光环"
 	L["Group utility"] = "组效果"
 	L["Tanking cooldowns"] = "坦克冷却"
