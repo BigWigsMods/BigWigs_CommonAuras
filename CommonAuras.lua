@@ -476,7 +476,7 @@ end
 
 function mod:VampiricBlood(_, spellId, nick, spellName)
 	message(55233, L["used_cast"]:format(nick, spellName), blue, spellId)
-	bar(55233, L["used_bar"]:format(nick, spellName), 12, spellId)
+	bar(55233, L["used_bar"]:format(nick, spellName), 10, spellId)
 end
 
 function mod:Barkskin(_, spellId, nick, spellName)
