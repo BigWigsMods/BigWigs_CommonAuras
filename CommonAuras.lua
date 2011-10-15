@@ -96,6 +96,9 @@ if L then
 	L.ritual_desc = "打开或关闭显示召唤/灵魂仪式可用时提示 - 点击绿色圆圈！"
 	L.ritual_cast = "%s想进行一次%s！"
 
+	L.rebirth = "复生"
+	L.rebirth_desc = "打开或关闭显示战斗复活提示。"
+
 	L["Common Auras"] = "普通光环"
 	L["Group utility"] = "组效果"
 	L["Tanking cooldowns"] = "坦克冷却"
