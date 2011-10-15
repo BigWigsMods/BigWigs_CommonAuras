@@ -24,17 +24,25 @@ if L then
 	L.portal = "Portal"
 	L.portal_desc = "Toggle showing of mage portals."
 	L.portal_cast = "%s opened a %s!" --Player opened a Portal: Destination
+	L.portal_icon = 53142
 
 	L.repair = "Repair Bot"
 	L.repair_desc = "Toggle showing when repair bots are available."
+	L.repair_icon = 67826
 
 	L.feast = "Feasts/Cauldrons"
 	L.feast_desc = "Toggle showing when feasts/cauldrons get prepared."
 	L.feast_cast = "%s prepared a %s!"
+	L.feast_icon = 44102
 
 	L.ritual = "Ritual of Summoning/Souls"
 	L.ritual_desc = "Toggles Ritual of Summoning/Souls warning - click the green circle!"
 	L.ritual_cast = "%s wants to perform a %s!"
+	L.ritual_icon = 698
+
+	L.rebirth = "Rebirth"
+	L.rebirth_desc = "Toggle showing combat ressurections."
+	L.rebirth_icon = 20484
 
 	L["Common Auras"] = true
 	L["Group utility"] = true
@@ -205,7 +213,12 @@ L = LibStub("AceLocale-3.0"):GetLocale("Big Wigs: Common Auras")
 
 local mod = BigWigs:NewPlugin(L[name])
 if not mod then return end
-mod.toggleOptions = { "portal", "repair", "feast", "ritual", 92827, 64205, 70940, 2825, 6346, 871, 12975, 498, 31850, 20925, 48792, 61336, 33206, 47788, 29166, 6940, 20484 }
+
+mod.toggleOptions = { 
+	"portal", "repair", "feast", "ritual", 92827, 97462, 70940, 2825, 6346,
+	871, 12975, 498, 31850, 20925, 48792, 61336,
+	33206, 47788, 29166, 6940, "rebirth",
+}
 mod.optionHeaders = {
 	portal = L["Group utility"],
 	[871] = L["Tanking cooldowns"],
@@ -236,7 +249,6 @@ function mod:OnRegister()
 		[44389] = "Repair", -- Field Repair Bot 110G
 		[54711] = "Repair", -- Scrapbot
 		[67826] = "Repair", -- Jeeves
-		[64205] = "DivineSacrifice",
 		[70940] = "DivineGuardian",
 		[2825] = "Bloodlust", -- Bloodlust
 		[32182] = "Bloodlust", -- Heroism
@@ -246,6 +258,7 @@ function mod:OnRegister()
 		[29893] = "Rituals", -- Ritual of Souls
 		[698] = "Rituals", -- Ritual of Summoning
 		[92827] = "Refreshment", -- Ritual of Refreshment
+		[97462] = "RallyingCry",
 		-- Tank
 		[871] = "ShieldWall",
 		[12975] = "LastStand",
@@ -282,7 +295,9 @@ function mod:OnRegister()
 		[88346] = "Portals", -- Tol Barad (Horde)
 	}
 	combatLogMap.SPELL_RESURRECT = {
-		[20484] = "Rebirth",
+		[20484] = "Rebirth", -- Rebirth
+		[95750] = "Rebirth", -- Soulstone Resurrection
+		[61999] = "Rebirth", -- Raise Ally
 	}
 end
 function mod:OnPluginEnable()
@@ -296,12 +311,7 @@ local glyphDuration = {
 }
 
 local function getDuration(spellId)
-	if durModified[spellId] then
-		local dur = durModified[spellId]
-	else
-		local dur = nil
-	end
-	return dur
+	return durModified[spellId]
 end
 
 function mod:UpdateDurModifiers()
@@ -392,11 +402,6 @@ function mod:Sacrifice(target, spellId, nick, spellName)
 	bar(6940, L["used_bar"]:format(target, spellName), 12, spellId)
 end
 
-function mod:DivineSacrifice(_, spellId, nick, spellName)
-	message(64205, L["used_cast"]:format(nick, spellName), blue, spellId)
-	bar(64205, L["used_bar"]:format(nick, spellName), 10, spellId)
-end
-
 function mod:DivineGuardian(_, spellId, nick, spellName)
 	message(70940, L["used_cast"]:format(nick, spellName), blue, spellId)
 	bar(70940, L["used_bar"]:format(nick, spellName), 6, spellId)
@@ -459,6 +464,11 @@ function mod:LastStand(_, spellId, nick, spellName)
 	bar(12975, L["used_bar"]:format(nick, spellName), 20, spellId)
 end
 
+function mod:RallyingCry(_, spellId, nick, spellName)
+	message(97462, L["used_cast"]:format(nick, spellName), blue, spellId)
+	bar(97462, L["used_bar"]:format(nick, spellName), 10, spellId)
+end
+
 function mod:Innervate(target, spellId, nick, spellName)
 	message(29166, L["usedon_cast"]:format(nick, spellName, target), green, spellId)
 end
@@ -474,5 +484,5 @@ function mod:SurvivalInstincts(_, spellId, nick, spellName)
 end
 
 function mod:Rebirth(target, spellId, nick, spellName)
-	message(20484, L["usedon_cast"]:format(nick, spellName, target), green, spellId)
+	message("rebirth", L["usedon_cast"]:format(nick, spellName, target), green, spellId)
 end
