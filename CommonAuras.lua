@@ -41,7 +41,7 @@ if L then
 	L.ritual_icon = 698
 
 	L.rebirth = "Rebirth"
-	L.rebirth_desc = "Toggle showing combat ressurections."
+	L.rebirth_desc = "Toggle showing combat resurrections."
 	L.rebirth_icon = 20484
 
 	L["Common Auras"] = true
