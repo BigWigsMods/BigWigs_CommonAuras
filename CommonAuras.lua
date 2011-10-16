@@ -448,7 +448,7 @@ end
 
 function mod:Feasts(_, spellId, nick, spellName)
 	message("feast", L["feast_cast"]:format(nick, spellName), blue, spellId)
-	bar("feast", L["used_bar"]:format(nick, spellName), 300, spellId)
+	bar("feast", L["used_bar"]:format(nick, spellName), 180, spellId)
 end
 
 function mod:Rituals(_, spellId, nick, spellName)
