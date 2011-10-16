@@ -219,7 +219,7 @@ if not mod then return end
 
 mod.toggleOptions = { 
 	"portal", "repair", "feast", "ritual", 92827, 97462, 70940, 2825, 6346,
-	871, 12975, 498, 31850, 48792, 55233, 22812, 61336,
+	871, 12975, 498, 31850, 20925, 48792, 55233, 22812, 61336,
 	33206, 47788, 29166, 6940, "rebirth",
 }
 mod.optionHeaders = {
@@ -267,6 +267,7 @@ function mod:OnRegister()
 		[12975] = "LastStand",
 		[31850] = "ArdentDefender",
 		[498] = "DivineProtection",
+		[20925] = "HolyShield",
 		[48792] = "IceboundFortitude",
 		[55233] = "VampiricBlood",
 		[22812] = "Barkskin",
@@ -419,6 +420,11 @@ end
 function mod:ArdentDefender(_, spellId, nick, spellName)
 	message(31850, L["used_cast"]:format(nick, spellName), blue, spellId)
 	bar(31850, L["used_bar"]:format(nick, spellName), 10, spellId)
+end
+
+function mod:HolyShield(_, spellId, nick, spellName)
+	message(20925, L["used_cast"]:format(nick, spellName), blue, spellId)
+	bar(20925, L["used_bar"]:format(nick, spellName), 10, spellId)
 end
 
 function mod:FearWard(target, spellId, nick, spellName)
