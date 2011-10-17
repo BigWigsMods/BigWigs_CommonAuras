@@ -181,6 +181,9 @@ if L then
 	L.ritual_desc = "Zeigt eine Warnung für Ritual der Beschwörung/Seelen an - klicke auf den grünen Kreis!"
 	L.ritual_cast = "%s will %s stellen!"
 
+	L.rebirth = "Battle Res"
+	L.rebirth_desc = "Zeigt ausgeführte Battle Resses an."
+
 	L["Common Auras"] = "Common Auras"
 	L["Group utility"] = "Gruppenwerkzeuge"
 	L["Tanking cooldowns"] = "Tank-Cooldowns"
