@@ -371,16 +371,16 @@ local function checkFlag(key, flag)
 	return bit.band(mod.db.profile[key], flag) == flag
 end
 
-local function message(key, text, color, icon)
-	if not checkFlag(key, C.MESSAGE) then return end
-	mod:SendMessage("BigWigs_Message", mod, key, text, color, nil, nil, nil, icon)
-end
 local icons = setmetatable({}, {__index =
 	function(self, key)
 		self[key] = select(3, GetSpellInfo(key))
 		return self[key]
 	end
 })
+local function message(key, text, color, icon)
+	if not checkFlag(key, C.MESSAGE) then return end
+	mod:SendMessage("BigWigs_Message", mod, key, text, color, nil, nil, nil, icons[icon])
+end
 local function bar(key, text, length, icon)
 	if not checkFlag(key, C.BAR) then return end
 	mod:SendMessage("BigWigs_StartBar", mod, key, text, length, icons[icon])
@@ -504,3 +504,4 @@ end
 function mod:Rebirth(target, spellId, nick, spellName)
 	message("rebirth", L["usedon_cast"]:format(nick, spellName, target), green, spellId)
 end
+
