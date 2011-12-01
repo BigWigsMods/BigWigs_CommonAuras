@@ -75,11 +75,11 @@ end
 L = LibStub("AceLocale-3.0"):NewLocale("Big Wigs: Common Auras", "zhCN")
 if L then
 	L.fw_cast = "%s：防护恐惧结界于%s"
-	L.fw_bar = "<%s：防护恐惧结界>"
+	L.fw_bar = "%s：防护恐惧结界"
 
 	L.usedon_cast = "%s：%s于%s"
 	L.used_cast = " %s使用：%s。"
-	L.used_bar = "<%s：%s>"
+	L.used_bar = "%s：%s"
 
 	L.portal = "传送门"
 	L.portal_desc = "打开或关闭显示法师传送门时提示。"
@@ -108,11 +108,11 @@ end
 L = LibStub("AceLocale-3.0"):NewLocale("Big Wigs: Common Auras", "zhTW")
 if L then
 	L.fw_cast = "%s：防護恐懼結界於%s"
-	L.fw_bar = "<%s：防護恐懼結界>"
+	L.fw_bar = "%s：防護恐懼結界"
 
 	L.usedon_cast = "%s：%s於%s"
 	L.used_cast = " %s使用：%s。"
-	L.used_bar = "<%s：%s>"
+	L.used_bar = "%s：%s"
 
 	L.portal = "傳送門"
 	L.portal_desc = "打開或關閉顯示法師傳送門時提示。"
@@ -142,7 +142,7 @@ if L then
 
 	L.repair = "수리 로봇"
 	L.repair_desc = "수리 로봇 사용시 표시합니다."
-	
+
 	L.feast = "음식/가마솥"
 	L.feast_desc = "전체 음식/가마솥 사용시 표시합니다."
 	L.feast_cast = "%s - %s 사용!"
@@ -220,7 +220,7 @@ L = LibStub("AceLocale-3.0"):GetLocale("Big Wigs: Common Auras")
 local mod = BigWigs:NewPlugin(L[name])
 if not mod then return end
 
-mod.toggleOptions = { 
+mod.toggleOptions = {
 	"portal", "repair", "feast", "ritual", 92827, 97462, 70940, 2825, 6346,
 	871, 12975, 498, 31850, 20925, 48792, 55233, 22812, 61336,
 	33206, 47788, 29166, 6940, "rebirth",
