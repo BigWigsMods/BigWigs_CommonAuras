@@ -315,6 +315,8 @@ function mod:OnRegister()
 		Portals = true,
 		Repair = true,
 		Feasts = true,
+        Rituals = true,
+        Refreshment = true,
 	}
 	for event, tbl in pairs(combatLogMap) do
 		for spellId, spellType in pairs(tbl) do
