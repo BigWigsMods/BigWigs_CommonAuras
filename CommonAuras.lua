@@ -410,7 +410,7 @@ end
 do
 	local t = nil
 	function mod:Bloodlust(_, spellId, nick, spellName)
-		if not t or (t + 40) < GetTime() then return
+		if t and (t + 40) < GetTime() then return end
 		t = GetTime()
 		message(2825, L["used_cast"]:format(nick, spellName), red, spellId)
 		bar(2825, L["used_bar"]:format(nick, spellName), 40, spellId)
