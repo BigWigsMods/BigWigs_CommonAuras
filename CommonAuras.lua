@@ -310,6 +310,7 @@ function mod:OnRegister()
 end
 function mod:OnPluginEnable()
 	self:RegisterEvent("PLAYER_ENTERING_WORLD")
+	self:RegisterEvent("PLAYER_REGEN_DISABLED")
 end
 
 local durModified = {}
@@ -317,6 +318,10 @@ local glyphDuration = {
 	-- Format: [glyphSId] = {SId, Unmodified duration, Reduction}
 	[55678] = {6346, 180, 60},	-- Fear Ward
 }
+local nonCombat = {
+	-- Map of spells to only show out of combat.
+}
+local firedNonCombat = {} -- Bars that we fired that should be hidden on combat.
 
 local function getDuration(spellId)
 	return durModified[spellId]
@@ -331,6 +336,13 @@ function mod:UpdateDurModifiers()
 			durModified[info[1]] = info[2] - info[3]
 		end
 	end
+end
+
+function mod:PLAYER_REGEN_DISABLED()
+	for i, barText in next, firedNonCombat do
+		self:SendMessage("BigWigs_StopBar", self, barText)
+	end
+	wipe(firedNonCombat)
 end
 
 local registered = nil
@@ -349,9 +361,9 @@ end
 function mod:COMBAT_LOG_EVENT_UNFILTERED(_, _, event, _, _, source, _, _, _, player, _, _, spellId, spellName)
 	local f = combatLogMap[event] and combatLogMap[event][spellId] or nil
 	if f and player then
-		self[f](self, string.gsub(player, "(%a)%-(.*)", "%1"), spellId, string.gsub(source, "(%a)%-(.*)", "%1"), spellName)
+		self[f](self, player:gsub("(%a)%-(.*)", "%1"), spellId, source:gsub("(%a)%-(.*)", "%1"), spellName)
 	elseif f then
-		self[f](self, player, spellId, string.gsub(source, "(%a)%-(.*)", "%1"), spellName)
+		self[f](self, player, spellId, source:gsub("(%a)%-(.*)", "%1"), spellName)
 	end
 end
 
@@ -383,6 +395,10 @@ local function message(key, text, color, icon)
 end
 local function bar(key, text, length, icon)
 	if not checkFlag(key, C.BAR) then return end
+	if nonCombat[key] then
+		if InCombatLockdown() then return end
+		firedNonCombat[#firedNonCombat + 1] = text
+	end
 	mod:SendMessage("BigWigs_StartBar", mod, key, text, length, icons[icon])
 end
 
@@ -391,9 +407,14 @@ function mod:Suppression(target, spellId, nick, spellName)
 	bar(33206, L["used_bar"]:format(target, spellName), 8, spellId)
 end
 
-function mod:Bloodlust(_, spellId, nick, spellName)
-	message(2825, L["used_cast"]:format(nick, spellName), red, spellId)
-	bar(2825, L["used_bar"]:format(nick, spellName), 40, spellId)
+do
+	local t = nil
+	function mod:Bloodlust(_, spellId, nick, spellName)
+		if not t or (t + 40) < GetTime() then return
+		t = GetTime()
+		message(2825, L["used_cast"]:format(nick, spellName), red, spellId)
+		bar(2825, L["used_bar"]:format(nick, spellName), 40, spellId)
+	end
 end
 
 function mod:Guardian(target, spellId, nick, spellName)
