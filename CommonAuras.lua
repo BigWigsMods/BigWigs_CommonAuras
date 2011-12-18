@@ -237,6 +237,10 @@ function mod:GetLocale() return L end
 --      Initialization      --
 ------------------------------
 
+local nonCombat = {
+	-- Map of spells to only show out of combat.
+}
+local firedNonCombat = {} -- Bars that we fired that should be hidden on combat.
 local combatLogMap = {}
 function mod:OnRegister()
 	combatLogMap.SPELL_CAST_START = {
@@ -307,6 +311,18 @@ function mod:OnRegister()
 		[95750] = "Rebirth", -- Soulstone Resurrection
 		[61999] = "Rebirth", -- Raise Ally
 	}
+	local nonCombatTypes = {
+		Portals = true,
+		Repair = true,
+		Feasts = true,
+	}
+	for event, tbl in pairs(combatLogMap) do
+		for spellId, spellType in pairs(tbl) do
+			if nonCombatTypes[spellType] then
+				nonCombat[spellId] = true
+			end
+		end
+	end
 end
 function mod:OnPluginEnable()
 	self:RegisterEvent("PLAYER_ENTERING_WORLD")
@@ -318,10 +334,6 @@ local glyphDuration = {
 	-- Format: [glyphSId] = {SId, Unmodified duration, Reduction}
 	[55678] = {6346, 180, 60},	-- Fear Ward
 }
-local nonCombat = {
-	-- Map of spells to only show out of combat.
-}
-local firedNonCombat = {} -- Bars that we fired that should be hidden on combat.
 
 local function getDuration(spellId)
 	return durModified[spellId]
