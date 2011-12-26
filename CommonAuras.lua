@@ -193,18 +193,29 @@ end
 L = LibStub("AceLocale-3.0"):NewLocale("Big Wigs: Common Auras", "frFR")
 if L then
 	L.fw_cast = "%s a protégé %s contre la peur ."
-	L.fw_bar = "%s : Recharge Gardien"
+	L.fw_bar = "%s : Rech. Gardien"
 
 	L.usedon_cast = "%s : %s sur %s"
 	L.used_cast = "%s a utilisé %s."
 	L.used_bar = "%s : %s"
 
 	L.portal = "Portail"
-	L.portal_desc = "Prévient ou non quand un mage ouvre un portail."
+	L.portal_desc = "Prévient quand un mage ouvre un portail."
 	L.portal_cast = "%s a ouvert un %s !"
 
 	L.repair = "Robot réparateur"
-	L.repair_desc = "Prévient ou non quand un robot réparateur est déployé."
+	L.repair_desc = "Prévient quand un robot réparateur est déployé."
+
+	L.feast = "Festins/Chaudrons"
+	L.feast_desc = "Prévient quand des festins ou des chaudrons sont préparés."
+	L.feast_cast = "%s a préparé un %s !"
+
+	L.ritual = "Ritual of Summoning/Souls"
+	L.ritual_desc = "Prévient quand un rituel d'invocation/des âmes est effectué - cliquez sur le cercle vert !"
+	L.ritual_cast = "%s souhaite effectuer un %s !"
+
+	L.rebirth = "Renaissance"
+	L.rebirth_desc = "Prévient quand des ressurections en combat sont effectuées."
 
 	L["Common Auras"] = "Auras habituelles"
 	L["Group utility"] = "Utilité de groupe"
