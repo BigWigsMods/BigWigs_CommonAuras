@@ -210,7 +210,7 @@ if L then
 	L.feast_desc = "Prévient quand des festins ou des chaudrons sont préparés."
 	L.feast_cast = "%s a préparé un %s !"
 
-	L.ritual = "Ritual of Summoning/Souls"
+	L.ritual = "Rituel d'invocation/des âmes"
 	L.ritual_desc = "Prévient quand un rituel d'invocation/des âmes est effectué - cliquez sur le cercle vert !"
 	L.ritual_cast = "%s souhaite effectuer un %s !"
 
