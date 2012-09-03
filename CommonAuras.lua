@@ -232,9 +232,9 @@ local mod = BigWigs:NewPlugin(L[name])
 if not mod then return end
 
 mod.toggleOptions = {
-	"portal", "repair", "feast", "ritual", 92827, 97462, 70940, 2825, 6346,
+	"portal", "repair", "feast", "ritual", 92827, 97462, 2825, 6346,
 	871, 12975, 498, 31850, 20925, 48792, 55233, 22812, 61336,
-	33206, 47788, 29166, 6940, "rebirth",
+	33206, 47788, 29166, 6940, "rebirth", 120668,
 }
 mod.optionHeaders = {
 	portal = L["Group utility"],
@@ -270,7 +270,6 @@ function mod:OnRegister()
 		[44389] = "Repair", -- Field Repair Bot 110G
 		[54711] = "Repair", -- Scrapbot
 		[67826] = "Repair", -- Jeeves
-		[70940] = "DivineGuardian",
 		[2825] = "Bloodlust", -- Bloodlust
 		[32182] = "Bloodlust", -- Heroism
 		[80353] = "Bloodlust", -- Time Warp
@@ -280,6 +279,7 @@ function mod:OnRegister()
 		[698] = "Rituals", -- Ritual of Summoning
 		[92827] = "Refreshment", -- Ritual of Refreshment
 		[97462] = "RallyingCry",
+		[120668] = "StormlashTotem",
 		-- Tank
 		[871] = "ShieldWall",
 		[12975] = "LastStand",
@@ -456,11 +456,6 @@ function mod:Sacrifice(target, spellId, nick, spellName)
 	bar(6940, L["used_bar"]:format(target, spellName), 12, spellId)
 end
 
-function mod:DivineGuardian(_, spellId, nick, spellName)
-	message(70940, L["used_cast"]:format(nick, spellName), blue, spellId)
-	bar(70940, L["used_bar"]:format(nick, spellName), 6, spellId)
-end
-
 function mod:DivineProtection(_, spellId, nick, spellName)
 	message(498, L["used_cast"]:format(nick, spellName), blue, spellId)
 	bar(498, L["used_bar"]:format(nick, spellName), 10, spellId)
@@ -521,6 +516,11 @@ end
 function mod:RallyingCry(_, spellId, nick, spellName)
 	message(97462, L["used_cast"]:format(nick, spellName), blue, spellId)
 	bar(97462, L["used_bar"]:format(nick, spellName), 10, spellId)
+end
+
+function mod:StormlashTotem(_, spellId, nick, spellName)
+	message(120668, L["used_cast"]:format(nick, spellName), blue, spellId)
+	bar(120668, L["used_bar"]:format(nick, spellName), 10, spellId)
 end
 
 function mod:Innervate(target, spellId, nick, spellName)
