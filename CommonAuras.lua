@@ -232,9 +232,9 @@ local mod = BigWigs:NewPlugin(L[name])
 if not mod then return end
 
 mod.toggleOptions = {
-	"portal", "repair", "feast", "ritual", 92827, 97462, 2825, 6346,
+	"portal", "repair", "feast", "ritual", 92827, 97462, 2825, 6346, 120668,
 	871, 12975, 498, 31850, 20925, 48792, 55233, 22812, 61336,
-	33206, 47788, 29166, 6940, "rebirth", 120668,
+	33206, 47788, 29166, 6940, "rebirth", 
 }
 mod.optionHeaders = {
 	portal = L["Group utility"],
