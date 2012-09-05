@@ -1,4 +1,4 @@
---[[
+﻿--[[
 --
 -- BigWigs Strategy Module - Common Auras
 --
@@ -234,7 +234,7 @@ if not mod then return end
 mod.toggleOptions = {
 	"portal", "repair", "feast", "ritual", 92827, 97462, 2825, 6346, 120668,
 	871, 12975, 498, 31850, 20925, 48792, 55233, 22812, 61336,
-	33206, 47788, 29166, 6940, "rebirth", 
+	33206, 47788, 102342, 29166, 6940, "rebirth", 
 }
 mod.optionHeaders = {
 	portal = L["Group utility"],
@@ -293,6 +293,7 @@ function mod:OnRegister()
 		-- Healer
 		[33206] = "Suppression",
 		[47788] = "Guardian",
+		[102342] = "Ironbark",
 		[29166] = "Innervate",
 		[6940] = "Sacrifice",
 	}
@@ -551,3 +552,7 @@ function mod:Rebirth(target, spellId, nick, spellName)
 	message("rebirth", L["usedon_cast"]:format(nick, spellName, target), green, spellId)
 end
 
+function mod:Ironbark(target, spellId, nick, spellName)
+	message(102342, L["usedon_cast"]:format(nick, spellName, target), yellow, spellId)
+	bar(102342, L["used_bar"]:format(target, spellName), 12, spellId)
+end
