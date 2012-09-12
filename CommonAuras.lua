@@ -556,3 +556,4 @@ function mod:Ironbark(target, spellId, nick, spellName)
 	message(102342, L["usedon_cast"]:format(nick, spellName, target), yellow, spellId)
 	bar(102342, L["used_bar"]:format(target, spellName), 12, spellId)
 end
+
