@@ -297,8 +297,6 @@ function mod:OnRegister()
 		[92827] = "Refreshment", -- Ritual of Refreshment
 		[97462] = "RallyingCry",
 		[120668] = "StormlashTotem",
-        [114203] = "Demoralizing Banner",
-        [114207] = "Skull Banner",
 		-- Tank
 		[871] = "ShieldWall",
 		[12975] = "LastStand",
@@ -309,7 +307,6 @@ function mod:OnRegister()
 		[55233] = "VampiricBlood",
 		[22812] = "Barkskin",
 		[61336] = "SurvivalInstincts",
-        [114192] = "Mocking Banner",
 		-- Healer
 		[33206] = "Suppression",
 		[47788] = "Guardian",
@@ -345,6 +342,12 @@ function mod:OnRegister()
 		[95750] = "Rebirth", -- Soulstone Resurrection
 		[61999] = "Rebirth", -- Raise Ally
 	}
+	combatLogMap.SPELL_SUMMON = {
+		[114203] = "Demoralizing Banner",
+		[114207] = "Skull Banner",
+		[114192] = "Mocking Banner",
+	}
+
 	local nonCombatTypes = {
 		Portals = true,
 		Repair = true,
