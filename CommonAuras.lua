@@ -14,9 +14,6 @@ local name = "Common Auras"
 ------------------------------
 local L = LibStub("AceLocale-3.0"):NewLocale("Big Wigs: Common Auras", "enUS", true)
 if L then
-	L.fw_cast = "%s fearwarded %s."
-	L.fw_bar = "%s: Fearwarded"
-
 	L.usedon_cast = "%s: %s on %s"
 	L.used_cast = "%s used %s."
 	L.used_bar = "%s: %s"
@@ -52,9 +49,6 @@ end
 
 L = LibStub("AceLocale-3.0"):NewLocale("Big Wigs: Common Auras", "ruRU")
 if L then
-	L.fw_cast = "%s защитил от страха |3-3(%s)."
-	L.fw_bar = "%s: восстановление антистраха"
-
 	L.usedon_cast = "%s: %s на %s"
 	L.used_cast = "%s использовал %s."
 	L.used_bar = "%s: %s"
@@ -74,9 +68,6 @@ end
 
 L = LibStub("AceLocale-3.0"):NewLocale("Big Wigs: Common Auras", "zhCN")
 if L then
-	L.fw_cast = "%s：防护恐惧结界于%s"
-	L.fw_bar = "%s：防护恐惧结界"
-
 	L.usedon_cast = "%s：%s于%s"
 	L.used_cast = " %s使用：%s。"
 	L.used_bar = "%s：%s"
@@ -107,9 +98,6 @@ end
 
 L = LibStub("AceLocale-3.0"):NewLocale("Big Wigs: Common Auras", "zhTW")
 if L then
-	L.fw_cast = "%s：防護恐懼結界於%s"
-	L.fw_bar = "%s：防護恐懼結界"
-
 	L.usedon_cast = "%s：%s於%s"
 	L.used_cast = " %s使用：%s。"
 	L.used_bar = "%s：%s"
@@ -129,9 +117,6 @@ end
 
 L = LibStub("AceLocale-3.0"):NewLocale("Big Wigs: Common Auras", "koKR")
 if L then
-	L.fw_cast = "%s: %s에게 공포의 수호물"
-	L.fw_bar = "%s: 공수 대기시간"
-
 	L.usedon_cast = "%1$s: %3$s에게 %2$s"
 	L.used_cast = "%s: %s 사용"
 	L.used_bar = "%s: %s"
@@ -159,9 +144,6 @@ end
 
 L = LibStub("AceLocale-3.0"):NewLocale("Big Wigs: Common Auras", "deDE")
 if L then
-	L.fw_cast = "%s: Furchtschutz auf %s"
-	L.fw_bar = "%s: Furchtschutz"
-
 	L.usedon_cast = "%s: %s auf %s"
 	L.used_cast = "%s: %s"
 	L.used_bar = "%s: %s"
@@ -192,9 +174,6 @@ end
 
 L = LibStub("AceLocale-3.0"):NewLocale("Big Wigs: Common Auras", "frFR")
 if L then
-	L.fw_cast = "%s a protégé %s contre la peur ."
-	L.fw_bar = "%s : Rech. Gardien"
-
 	L.usedon_cast = "%s : %s sur %s"
 	L.used_cast = "%s a utilisé %s."
 	L.used_bar = "%s : %s"
@@ -232,7 +211,7 @@ local mod = BigWigs:NewPlugin(L[name])
 if not mod then return end
 
 mod.toggleOptions = {
-	"portal", "repair", "feast", "ritual", 92827, 97462, 2825, 6346, 120668,
+	"portal", "repair", "feast", "ritual", 92827, 97462, 2825, 120668,
 	871, 12975, 498, 31850, 20925, 48792, 55233, 22812, 61336,
 	33206, 47788, 102342, 29166, 6940, "rebirth", 
 }
@@ -291,7 +270,6 @@ function mod:OnRegister()
 		[32182] = "Bloodlust", -- Heroism
 		[80353] = "Bloodlust", -- Time Warp
 		[90355] = "Bloodlust", -- Ancient Hysteria
-		[6346] = "FearWard",
 		[29893] = "Rituals", -- Ritual of Souls
 		[698] = "Rituals", -- Ritual of Summoning
 		[92827] = "Refreshment", -- Ritual of Refreshment
@@ -315,7 +293,6 @@ function mod:OnRegister()
 		[6940] = "Sacrifice",
 	}
 	combatLogMap.SPELL_AURA_REMOVED = {
-		[6346] = "FearWardOff",
 		[47788] = "GuardianOff",
 	}
 	combatLogMap.SPELL_CREATE = {
@@ -369,27 +346,6 @@ function mod:OnPluginEnable()
 	self:ZONE_CHANGED_NEW_AREA()
 end
 
-local durModified = {}
-local glyphDuration = {
-	-- Format: [glyphSId] = {SId, Unmodified duration, Reduction}
-	[55678] = {6346, 180, 60},	-- Fear Ward
-}
-
-local function getDuration(spellId)
-	return durModified[spellId]
-end
-
-function mod:UpdateDurModifiers()
-	wipe(durModified)
-	for i = 1, GetNumGlyphSockets() do
-		local enabled, _, _, gspellId = GetGlyphSocketInfo(i)
-		if enabled and gspellId and glyphDuration[gspellId] then
-			local info = glyphDuration[gspellId]
-			durModified[info[1]] = info[2] - info[3]
-		end
-	end
-end
-
 function mod:PLAYER_REGEN_DISABLED()
 	for i, barText in next, firedNonCombat do
 		self:SendMessage("BigWigs_StopBar", self, barText)
@@ -402,7 +358,6 @@ function mod:ZONE_CHANGED_NEW_AREA()
 	local inInstance, instanceType = IsInInstance()
 	if inInstance and (instanceType == "raid" or instanceType == "party") then
 		self:RegisterEvent("COMBAT_LOG_EVENT_UNFILTERED")
-		self:UpdateDurModifiers()
 		registered = true
 	elseif registered then
 		self:UnregisterEvent("COMBAT_LOG_EVENT_UNFILTERED")
@@ -497,15 +452,6 @@ end
 function mod:HolyShield(_, spellId, nick, spellName)
 	message(20925, L["used_cast"]:format(nick, spellName), blue, spellId)
 	bar(20925, L["used_bar"]:format(nick, spellName), 10, spellId)
-end
-
-function mod:FearWard(target, spellId, nick, spellName)
-	message(6346, L["fw_cast"]:format(nick, target), green, spellId)
-	bar(6346, L["fw_bar"]:format(nick), getDuration(spellId) == 120 and 120 or 180, spellId)
-end
-
-function mod:FearWardOff(target, spellId, nick, spellName)
-	self:SendMessage("BigWigs_StopBar", self, L["fw_bar"]:format(nick))
 end
 
 function mod:Repair(_, spellId, nick, spellName)
