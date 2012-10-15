@@ -1,4 +1,4 @@
-﻿--[[
+--[[
 --
 -- BigWigs Strategy Module - Common Auras
 --
@@ -263,23 +263,23 @@ function mod:OnRegister()
 		[87644] = "Feasts", -- Seafood Magnifique Feast
 		[92649] = "Feasts", -- Cauldron of Battle
 		[92712] = "Feasts", -- Big Cauldron of Battle
-        -- MoP Feasts
-        -- 10 man
-        [126492] = "Feasts", -- Banquet of the Grill
-        [126501] = "Feasts", -- Banquet of the Oven
-        [126497] = "Feasts", -- Banquet of the Pot
-        [126499] = "Feasts", -- Banquet of the Steamer
-        [126495] = "Feasts", -- Banquet of the Wok
-        [126503] = "Feasts", -- Banquet of the Brew
-        [104958] = "Feasts", -- Pandaren Banquet
-        -- 25 man
-        [126494] = "Feasts", -- Great Banquet of the Grill
-        [126502] = "Feasts", -- Great Banquet of the Oven
-        [126498] = "Feasts", -- Great Banquet of the Pot
-        [126500] = "Feasts", -- Great Banquet of the Steamer
-        [126496] = "Feasts", -- Great Banquet of the Wok
-        [126504] = "Feasts", -- Great Banquet of the Brew
-        [105193] = "Feasts", -- Great Pandaren Banquet
+		-- MoP Feasts
+		-- 10 man
+		[126492] = "Feasts", -- Banquet of the Grill
+		[126501] = "Feasts", -- Banquet of the Oven
+		[126497] = "Feasts", -- Banquet of the Pot
+		[126499] = "Feasts", -- Banquet of the Steamer
+		[126495] = "Feasts", -- Banquet of the Wok
+		[126503] = "Feasts", -- Banquet of the Brew
+		[104958] = "Feasts", -- Pandaren Banquet
+		-- 25 man
+		[126494] = "Feasts", -- Great Banquet of the Grill
+		[126502] = "Feasts", -- Great Banquet of the Oven
+		[126498] = "Feasts", -- Great Banquet of the Pot
+		[126500] = "Feasts", -- Great Banquet of the Steamer
+		[126496] = "Feasts", -- Great Banquet of the Wok
+		[126504] = "Feasts", -- Great Banquet of the Brew
+		[105193] = "Feasts", -- Great Pandaren Banquet
 	}
 	combatLogMap.SPELL_CAST_SUCCESS = {
 		-- Group
@@ -334,8 +334,8 @@ function mod:OnRegister()
 		[53142] = "Portals", -- Dalaran
 		[88345] = "Portals", -- Tol Barad (Alliance)
 		[88346] = "Portals", -- Tol Barad (Horde)
-        [132626] = "Portals", -- Vale Blossom
-        [132626] = "Portals", -- Vale Blossom
+		[132626] = "Portals", -- Vale Blossom
+		[132626] = "Portals", -- Vale Blossom
 	}
 	combatLogMap.SPELL_RESURRECT = {
 		[20484] = "Rebirth", -- Rebirth
@@ -352,8 +352,8 @@ function mod:OnRegister()
 		Portals = true,
 		Repair = true,
 		Feasts = true,
-        Rituals = true,
-        Refreshment = true,
+		Rituals = true,
+		Refreshment = true,
 	}
 	for event, tbl in pairs(combatLogMap) do
 		for spellId, spellType in pairs(tbl) do
@@ -364,8 +364,9 @@ function mod:OnRegister()
 	end
 end
 function mod:OnPluginEnable()
-	self:RegisterEvent("PLAYER_ENTERING_WORLD")
+	self:RegisterEvent("ZONE_CHANGED_NEW_AREA")
 	self:RegisterEvent("PLAYER_REGEN_DISABLED")
+	self:ZONE_CHANGED_NEW_AREA()
 end
 
 local durModified = {}
@@ -397,7 +398,7 @@ function mod:PLAYER_REGEN_DISABLED()
 end
 
 local registered = nil
-function mod:PLAYER_ENTERING_WORLD()
+function mod:ZONE_CHANGED_NEW_AREA()
 	local inInstance, instanceType = IsInInstance()
 	if inInstance and (instanceType == "raid" or instanceType == "party") then
 		self:RegisterEvent("COMBAT_LOG_EVENT_UNFILTERED")
@@ -412,9 +413,9 @@ end
 function mod:COMBAT_LOG_EVENT_UNFILTERED(_, _, event, _, _, source, _, _, _, player, _, _, spellId, spellName)
 	local f = combatLogMap[event] and combatLogMap[event][spellId] or nil
 	if f and player then
-		self[f](self, player:gsub("(%a)%-(.*)", "%1"), spellId, source:gsub("(%a)%-(.*)", "%1"), spellName)
+		self[f](self, player:gsub("%-.+", "*"), spellId, source:gsub("%-.+", "*"), spellName)
 	elseif f then
-		self[f](self, player, spellId, source:gsub("(%a)%-(.*)", "%1"), spellName)
+		self[f](self, player, spellId, source:gsub("%-.+", "*"), spellName)
 	end
 end
 
@@ -436,7 +437,8 @@ end
 
 local icons = setmetatable({}, {__index =
 	function(self, key)
-		self[key] = select(3, GetSpellInfo(key))
+		local _, _, icon = GetSpellInfo(key)
+		self[key] = icon
 		return self[key]
 	end
 })

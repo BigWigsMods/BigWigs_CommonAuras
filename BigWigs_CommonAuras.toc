@@ -1,15 +1,16 @@
 ## Interface: 50001
+
 ## Title: Big Wigs |cffff0000+|r|cffffffffCommon Auras|r
-## Notes: Notifies the raid about common buffs and debuffs.
 ## Title-zhCN: Big Wigs |cffff0000+|r|cffffffff普通光环|r
-## Notes-zhCN: 显示团队通用的增益效果与负面影响。
 ## Title-frFR: Big Wigs |cffff0000+|r|cffffffffAuras habituelles|r
-## Notes-frFR: Prévient le raid lors de l'utilisation de certains buffs & débuffs habituels.
 ## Title-ruRU: Big Wigs |cffff0000+|r|cffffffffОсновные ауры|r
+
+## Notes: Notifies the raid about common buffs and debuffs.
+## Notes-zhCN: 显示团队通用的增益效果与负面影响。
+## Notes-frFR: Prévient le raid lors de l'utilisation de certains buffs & débuffs habituels.
 ## Notes-ruRU: Предупреждает рейд об основных положительных и отрицательных эффектах.
+
 ## Author: Rabbit
-## X-Website: http://www.wowace.com
-## X-eMail: rabbit.magtheridon@gmail.com
 ## X-Category: Raid
 ## Version: 3.2
 ## Dependencies: BigWigs
