@@ -211,8 +211,8 @@ local mod = BigWigs:NewPlugin(L[name])
 if not mod then return end
 
 mod.toggleOptions = {
-	"portal", "repair", "feast", "ritual", 92827, 97462, 2825, 120668,
-	871, 12975, 498, 31850, 20925, 48792, 55233, 22812, 61336,
+	"portal", "repair", "feast", "ritual", 92827, 97462, 2825, 120668, 114207, 
+	871, 12975, 498, 31850, 20925, 48792, 55233, 22812, 61336, 114203, 114192,
 	33206, 47788, 102342, 29166, 6940, "rebirth", 
 }
 mod.optionHeaders = {
@@ -320,9 +320,9 @@ function mod:OnRegister()
 		[61999] = "Rebirth", -- Raise Ally
 	}
 	combatLogMap.SPELL_SUMMON = {
-		[114203] = "Demoralizing Banner",
-		[114207] = "Skull Banner",
-		[114192] = "Mocking Banner",
+		[114203] = "DemoralizingBanner",
+		[114207] = "SkullBanner",
+		[114192] = "MockingBanner",
 	}
 
 	local nonCombatTypes = {
@@ -530,3 +530,17 @@ function mod:Ironbark(target, spellId, nick, spellName)
 	bar(102342, L["used_bar"]:format(target, spellName), 12, spellId)
 end
 
+function mod:DemoralizingBanner(_, spellId, nick, spellName)
+	message(114203, L["used_cast"]:format(nick, spellName), red, spellId)
+	bar(114203, L["used_bar"]:format(nick, spellName), 15, spellId)
+end
+
+function mod:SkullBanner(_, spellId, nick, spellName)
+	message(114207, L["used_cast"]:format(nick, spellName), yellow, spellId)
+	bar(114207, L["used_bar"]:format(nick, spellName), 10, spellId)
+end
+
+function mod:MockingBanner(_, spellId, nick, spellName)
+	message(114192, L["used_cast"]:format(nick, spellName), green, spellId)
+	bar(114192, L["used_bar"]:format(nick, spellName), 30, spellId)
+end
