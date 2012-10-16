@@ -12,9 +12,8 @@
 
 ## Author: Rabbit
 ## X-Category: Raid
-## Version: 3.2
+## Version: 3.3
 ## Dependencies: BigWigs
-## OptionalDeps: BigWigs_Core, BigWigs_Plugins
 
 ## LoadOnDemand: 1
 
