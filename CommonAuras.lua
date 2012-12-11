@@ -461,7 +461,7 @@ end
 
 function mod:Portals(_, spellId, nick, spellName)
 	message("portal", L["portal_cast"]:format(nick, spellName), blue, spellId)
-	bar("portal", spellName.." ("..nick..")", 60, spellId)
+	bar("portal", spellName.." ("..nick..")", 65, spellId)
 end
 
 function mod:Feasts(_, spellId, nick, spellName)
