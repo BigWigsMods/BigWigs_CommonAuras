@@ -211,9 +211,9 @@ local mod = BigWigs:NewPlugin(L[name])
 if not mod then return end
 
 mod.toggleOptions = {
-	"portal", "repair", "feast", "ritual", 92827, 97462, 2825, 120668, 114207, 
+	"portal", "repair", "feast", "ritual", 92827, 97462, 2825, 120668, 114207,
 	871, 12975, 498, 31850, 20925, 48792, 55233, 22812, 61336, 114203, 114192,
-	33206, 47788, 102342, 29166, 6940, "rebirth", 
+	33206, 47788, 102342, 29166, 6940, "rebirth",
 }
 mod.optionHeaders = {
 	portal = L["Group utility"],
@@ -311,8 +311,8 @@ function mod:OnRegister()
 		[53142] = "Portals", -- Dalaran
 		[88345] = "Portals", -- Tol Barad (Alliance)
 		[88346] = "Portals", -- Tol Barad (Horde)
-		[132626] = "Portals", -- Vale Blossom
-		[132626] = "Portals", -- Vale Blossom
+		[132620] = "Portals", -- Vale of Eternal Blossoms (Alliance)
+		[132626] = "Portals", -- Vale of Eternal Blossoms (Horde)
 	}
 	combatLogMap.SPELL_RESURRECT = {
 		[20484] = "Rebirth", -- Rebirth
