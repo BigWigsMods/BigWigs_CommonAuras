@@ -201,6 +201,36 @@ if L then
 	L["Tanking cooldowns"] = "Temps de recharge de tank"
 	L["Healing cooldowns"] = "Temps de recharge de soigneur"
 end
+
+L = LibStub("AceLocale-3.0"):NewLocale("Big Wigs: Common Auras", "itIT")
+if L then
+	L.usedon_cast = "%s : %s su %s"
+	L.used_cast = "%s ha usato %s."
+	L.used_bar = "%s : %s"
+
+	L.portal = "Portale"
+	L.portal_desc = "Avvisa quando un mago apre un portale."
+	L.portal_cast = "%s ha aperto un %s !"
+
+	L.repair = "Robot di Riparazione"
+	L.repair_desc = "Avvisa quando un Robot di Riparazione è disponibile."
+
+	L.feast = "Banchetti/Tripudi"
+	L.feast_desc = "Avvisa quando vengono messi a disposizione dei Festini, Banchetti, Tripudi o Calderoni."
+	L.feast_cast = "%s ha preparato un %s !"
+
+	L.ritual = "Rituale d'Invocazione/Pozzo dell'Anima"
+	L.ritual_desc = "Avvisa quando viene evocato un Rituale d'Invocazione o dell'Anima - cliccate sul cerchio verde!!!"
+	L.ritual_cast = "%s sta lanciando un %s !"
+
+	L.rebirth = "Resurrezione"
+	L.rebirth_desc = "Avvisa quando viene utilizzata un'abilità di Resurrezione in combattimento."
+
+	L["Common Auras"] = "Auree Comuni"
+	L["Group utility"] = "Utilità di Gruppo"
+	L["Tanking cooldowns"] = "Tempi di Recupero per Difensori"
+	L["Healing cooldowns"] = "Tempi di Recupero per Guaritori"
+end
 L = LibStub("AceLocale-3.0"):GetLocale("Big Wigs: Common Auras")
 
 ------------------------------
