@@ -238,7 +238,7 @@ if L then
 	L.rebirth_desc = "Avvisa quando viene utilizzata un'abilità di Resurrezione in combattimento."
 
 	L["Common Auras"] = "Auree Comuni"
-	L["Noncombat"] = "Noncombat"
+	L["Noncombat"] = "Fuori dal Combattimento"
 	L["Group utility"] = "Utilità di Gruppo"
 	L["Tanking cooldowns"] = "Tempi di Recupero per Difensori"
 	L["Healing cooldowns"] = "Tempi di Recupero per Guaritori"
