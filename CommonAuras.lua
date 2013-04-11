@@ -270,11 +270,10 @@ function mod:GetLocale() return L end
 --      Initialization      --
 ------------------------------
 
-local nonCombat = {
-	-- Map of spells to only show out of combat.
-}
+local nonCombat = {} -- Map of spells to only show out of combat.
 local firedNonCombat = {} -- Bars that we fired that should be hidden on combat.
 local combatLogMap = {}
+
 function mod:OnRegister()
 	combatLogMap.SPELL_CAST_START = {
 		-- 10 man
@@ -384,8 +383,8 @@ function mod:OnRegister()
 		[29893] = true, -- Create Soulwell
 		[43987] = true, -- Conjure Refreshment Table
 	}
-	for _, tbl in pairs(combatLogMap) do
-		for spellId, spellType in pairs(tbl) do
+	for _, event in next, combatLogMap do
+		for spellId, spellType in next, event do
 			if nonCombatTypes[spellType] then
 				nonCombat[spellId] = true
 			end
@@ -396,13 +395,6 @@ function mod:OnPluginEnable()
 	self:RegisterEvent("ZONE_CHANGED_NEW_AREA")
 	self:RegisterEvent("PLAYER_REGEN_DISABLED")
 	self:ZONE_CHANGED_NEW_AREA()
-end
-
-function mod:PLAYER_REGEN_DISABLED()
-	for _, barText in next, firedNonCombat do
-		self:StopBar(barText)
-	end
-	wipe(firedNonCombat)
 end
 
 local registered = nil
@@ -426,10 +418,6 @@ function mod:COMBAT_LOG_EVENT_UNFILTERED(_, _, event, _, _, source, _, _, _, pla
 	end
 end
 
-------------------------------
---      Events              --
-------------------------------
-
 local green = "Positive" 		-- utility cds
 local blue = "Personal"			-- everything else
 local orange = "Urgent"			-- dangerous healer cds
@@ -441,186 +429,212 @@ local function checkFlag(key, flag)
 	if type(key) == "number" then key = GetSpellInfo(key) end
 	return bit.band(mod.db.profile[key], flag) == flag
 end
-
 local icons = setmetatable({}, {__index =
 	function(self, key)
 		local _, _, icon = GetSpellInfo(key)
 		self[key] = icon
-		return self[key]
+		return icon
 	end
 })
 local function message(key, text, color, icon)
 	if not checkFlag(key, C.MESSAGE) then return end
-	mod:SendMessage("BigWigs_Message", mod, key, text, color, nil, icons[icon])
+	mod:SendMessage("BigWigs_Message", mod, key, text, color, nil, icons[icon or key])
 end
-local function bar(key, text, length, icon)
+local function bar(key, length, player, text, icon)
 	if not checkFlag(key, C.BAR) then return end
 	if nonCombat[key] then
 		if InCombatLockdown() then return end
 		firedNonCombat[#firedNonCombat + 1] = text
 	end
-	mod:SendMessage("BigWigs_StartBar", mod, key, text, length, icons[icon])
+	mod:SendMessage("BigWigs_StartBar", mod, key, player and L["used_bar"]:format(text, player) or text, length, icons[icon or key])
 end
+local function stopbar(text, player)
+	mod:SendMessage("BigWigs_StopBar", mod, player and L["used_bar"]:format(text, player) or text)
+	mod:SendMessage("BigWigs_StopEmphasize", mod, nil, player and L["used_bar"]:format(text, player) or text)
+end
+
+function mod:PLAYER_REGEN_DISABLED()
+	for _, text in next, firedNonCombat do
+		stopbar(text)
+	end
+	wipe(firedNonCombat)
+end
+
+------------------------------
+--      Events              --
+------------------------------
 
 
 function mod:Repair(_, spellId, nick, spellName)
 	message("repair", L["used_cast"]:format(nick, spellName), blue, spellId)
-	bar("repair", L["used_bar"]:format(nick, spellName), spellId == 54711 and 300 or 600, spellId)
+	bar("repair", spellId == 54711 and 300 or 600, nick, spellName, spellId)
 end
 
 function mod:Feasts(_, spellId, nick, spellName)
 	message("feast", L["feast_cast"]:format(nick, spellName), blue, spellId)
-	bar("feast", L["used_bar"]:format(nick, spellName), 180, spellId)
+	bar("feast", 180, nick, spellName, spellId)
 end
 
 function mod:Portals(_, spellId, nick, spellName)
 	message("portal", L["portal_cast"]:format(nick, spellName), blue, spellId)
-	bar("portal", L["portal_bar"]:format(spellName, nick), 65, spellId)
+	bar("portal", L["portal_bar"]:format(spellName, nick), 65, nick, spellName, spellId)
 end
 
 function mod:SummoningStone(_, spellId, nick, spellName)
-	message(698, L["ritual_cast"]:format(nick, spellName), blue, spellId)
+	message(spellId, L["ritual_cast"]:format(nick, spellName), blue)
 end
 
 function mod:Refreshment(_, spellId, nick, spellName)
-	message(43987, L["used_cast"]:format(nick, spellName), blue, spellId)
+	message(spellId, L["used_cast"]:format(nick, spellName), blue)
 end
 
 function mod:Soulwell(_, spellId, nick, spellName)
-	message(29893, L["used_cast"]:format(nick, spellName), blue, spellId)
+	message(spellId, L["used_cast"]:format(nick, spellName), blue)
 end
 
 do
-	local t = nil
+	local prev = 0
 	function mod:Bloodlust(_, spellId, nick, spellName)
-		if t and GetTime() < (t + 40) then return end
-		t = GetTime()
-		message(2825, L["used_cast"]:format(nick, spellName), red, spellId)
-		bar(2825, L["used_bar"]:format(nick, spellName), 40, spellId)
+		local t = GetTime()
+		if t-40 > prev then
+			message(2825, L["used_cast"]:format(nick, spellName), red)
+			bar(2825, 40, nick, spellName, spellId)
+			prev = t
+		end
 	end
 end
 
 function mod:SpiritLink(_, spellId, nick, spellName)
-	message(98008, L["used_cast"]:format(nick, spellName), orange, spellId)
-	bar(98008, L["used_bar"]:format(nick, spellName), 6, spellId)
+	message(spellId, L["used_cast"]:format(nick, spellName), orange)
+	bar(spellId, 6, nick, spellName)
 end
 
-function mod:StormlashTotem(_, spellId, nick, spellName)
-	message(120668, L["used_cast"]:format(nick, spellName), blue, spellId)
-	bar(120668, L["used_bar"]:format(nick, spellName), 10, spellId)
+do
+	local last = ""
+	function mod:StormlashTotem(_, spellId, nick, spellName)
+		message(spellId, L["used_cast"]:format(nick, spellName), blue)
+		stopbar(spellName, last)
+		bar(spellId, 10, nick, spellName)
+		last = nick
+	end
 end
 
 function mod:PainSuppression(target, spellId, nick, spellName)
-	message(33206, L["usedon_cast"]:format(nick, spellName, target), yellow, spellId)
-	bar(33206, L["used_bar"]:format(target, spellName), 8, spellId)
+	message(spellId, L["usedon_cast"]:format(nick, spellName, target), yellow)
+	bar(spellId, 8, target, spellName)
 end
 
 function mod:GuardianSpirit(target, spellId, nick, spellName)
-	message(47788, L["usedon_cast"]:format(nick, spellName, target), yellow, spellId)
-	bar(47788, L["used_bar"]:format(target, spellName), 10, spellId)
+	message(spellId, L["usedon_cast"]:format(nick, spellName, target), yellow)
+	bar(spellId, 10, target, spellName)
 end
 
-function mod:GuardianSpiritOff(target, spellId, nick, spellName) --removed on absorbed fatal blow
-	--self:StopBar(L["used_bar"]:format(nick, spellName))
+function mod:GuardianSpiritOff(target, spellId, nick, spellName)
+	stopbar(spellName, nick, spellName) --removed on absorbed fatal blow
 end
 
 function mod:Barrier(_, spellId, nick, spellName)
-	message(62618, L["used_cast"]:format(nick, spellName), blue, spellId)
-	bar(62618, L["used_bar"]:format(nick, spellName), 10, spellId)
+	message(spellId, L["used_cast"]:format(nick, spellName), blue)
+	bar(spellId, 10, nick, spellName)
 end
 
 function mod:Sacrifice(target, spellId, nick, spellName)
-	message(6940, L["usedon_cast"]:format(nick, spellName, target), orange, spellId)
-	bar(6940, L["used_bar"]:format(target, spellName), 12, spellId)
+	message(spellId, L["usedon_cast"]:format(nick, spellName, target), orange)
+	bar(spellId, 12, target, spellName)
 end
 
 function mod:DevotionAura(_, spellId, nick, spellName)
-	message(31821, L["used_cast"]:format(nick, spellName), blue, spellId)
-	bar(31821, L["used_bar"]:format(nick, spellName), 6, spellId)
+	message(spellId, L["used_cast"]:format(nick, spellName), blue)
+	bar(spellId, 6, nick, spellName)
 end
 
 function mod:DivineProtection(_, spellId, nick, spellName)
-	message(498, L["used_cast"]:format(nick, spellName), blue, spellId)
-	bar(498, L["used_bar"]:format(nick, spellName), 10, spellId)
+	message(spellId, L["used_cast"]:format(nick, spellName), blue)
+	bar(spellId, 10, nick, spellName)
 end
 
 function mod:ArdentDefender(_, spellId, nick, spellName)
-	message(31850, L["used_cast"]:format(nick, spellName), blue, spellId)
-	bar(31850, L["used_bar"]:format(nick, spellName), 10, spellId)
+	message(spellId, L["used_cast"]:format(nick, spellName), blue)
+	bar(spellId, 10, nick, spellName)
 end
 
 function mod:GuardianAncientKings(_, spellId, nick, spellName)
-	message(86659, L["used_cast"]:format(nick, spellName), blue, spellId)
-	bar(86659, L["used_bar"]:format(nick, spellName), 12, spellId)
+	message(spellId, L["used_cast"]:format(nick, spellName), blue)
+	bar(spellId, 12, nick, spellName)
 end
 
 function mod:ShieldWall(_, spellId, nick, spellName)
-	message(871, L["used_cast"]:format(nick, spellName), blue, spellId)
-	bar(871, L["used_bar"]:format(nick, spellName), 12, spellId)
+	message(spellId, L["used_cast"]:format(nick, spellName), blue)
+	bar(spellId, 12, nick, spellName)
 end
 
 function mod:LastStand(_, spellId, nick, spellName)
-	message(12975, L["used_cast"]:format(nick, spellName), blue, spellId)
-	bar(12975, L["used_bar"]:format(nick, spellName), 20, spellId)
+	message(spellId, L["used_cast"]:format(nick, spellName), blue)
+	bar(spellId, 20, nick, spellName)
 end
 
 function mod:RallyingCry(_, spellId, nick, spellName)
-	message(97462, L["used_cast"]:format(nick, spellName), blue, spellId)
-	bar(97462, L["used_bar"]:format(nick, spellName), 10, spellId)
+	message(spellId, L["used_cast"]:format(nick, spellName), blue)
+	bar(spellId, 10, nick, spellName)
 end
 
 function mod:Vigilance(target, spellId, nick, spellName)
-	message(114030, L["usedon_cast"]:format(nick, spellName, target), orange, spellId)
-	bar(114030, L["used_bar"]:format(target, spellName), 12, spellId)
+	message(spellId, L["usedon_cast"]:format(nick, spellName, target), orange)
+	bar(spellId, 12, target, spellName)
 end
 
 function mod:DemoralizingShout(_, spellId, nick, spellName)
-	message(1160, L["used_cast"]:format(nick, spellName), blue, spellId)
-	bar(1160, L["used_bar"]:format(nick, spellName), 10, spellId)
+	message(spellId, L["used_cast"]:format(nick, spellName), blue)
+	bar(spellId, 10, nick, spellName)
 end
 
 function mod:DemoralizingBanner(_, spellId, nick, spellName)
-	message(114203, L["used_cast"]:format(nick, spellName), blue, spellId)
-	bar(114203, L["used_bar"]:format(nick, spellName), 15, spellId)
+	message(spellId, L["used_cast"]:format(nick, spellName), blue)
+	bar(spellId, 15, nick, spellName)
 end
 
-function mod:SkullBanner(_, spellId, nick, spellName)
-	message(114207, L["used_cast"]:format(nick, spellName), red, spellId)
-	bar(114207, L["used_bar"]:format(nick, spellName), 10, spellId)
+do
+	local last = ""
+	function mod:SkullBanner(_, spellId, nick, spellName)
+		message(spellId, L["used_cast"]:format(nick, spellName), red)
+		stopbar(spellName, last)
+		bar(spellId, 10, nick, spellName)
+		last = nick
+	end
 end
 
 function mod:MockingBanner(_, spellId, nick, spellName)
-	message(114192, L["used_cast"]:format(nick, spellName), orange, spellId)
-	bar(114192, L["used_bar"]:format(nick, spellName), 30, spellId)
+	message(spellId, L["used_cast"]:format(nick, spellName), orange)
+	bar(spellId, 30, nick, spellName)
 end
 
 function mod:ShatteringThrow(target, spellId, nick, spellName)
-	message(64382, L["usedon_cast"]:format(nick, spellName, target), red, spellId)
-	bar(64382, L["used_bar"]:format(target, spellName), 10, spellId)
+	message(64382, L["usedon_cast"]:format(nick, spellName, target), red)
+	bar(64382, 10, target, spellName)
 end
 
 function mod:IceboundFortitude(_, spellId, nick, spellName)
-	message(48792, L["used_cast"]:format(nick, spellName), blue, spellId)
-	bar(48792, L["used_bar"]:format(nick, spellName), 12, spellId)
+	message(spellId, L["used_cast"]:format(nick, spellName), blue)
+	bar(spellId, 12, nick, spellName)
 end
 
 function mod:VampiricBlood(_, spellId, nick, spellName)
-	message(55233, L["used_cast"]:format(nick, spellName), blue, spellId)
-	bar(55233, L["used_bar"]:format(nick, spellName), 10, spellId)
+	message(spellId, L["used_cast"]:format(nick, spellName), blue)
+	bar(spellId, 10, nick, spellName)
 end
 
 function mod:Innervate(target, spellId, nick, spellName)
-	message(29166, L["usedon_cast"]:format(nick, spellName, target), green, spellId)
+	message(spellId, L["usedon_cast"]:format(nick, spellName, target), green)
 end
 
 function mod:Barkskin(_, spellId, nick, spellName)
-	message(22812, L["used_cast"]:format(nick, spellName), blue, spellId)
-	bar(22812, L["used_bar"]:format(nick, spellName), 12, spellId)
+	message(spellId, L["used_cast"]:format(nick, spellName), blue)
+	bar(spellId, 12, nick, spellName)
 end
 
 function mod:SurvivalInstincts(_, spellId, nick, spellName)
-	message(61336, L["used_cast"]:format(nick, spellName), blue, spellId)
-	bar(61336, L["used_bar"]:format(nick, spellName), 12, spellId)
+	message(spellId, L["used_cast"]:format(nick, spellName), blue)
+	bar(spellId, 12, nick, spellName)
 end
 
 function mod:Rebirth(target, spellId, nick, spellName)
@@ -628,30 +642,31 @@ function mod:Rebirth(target, spellId, nick, spellName)
 end
 
 function mod:Ironbark(target, spellId, nick, spellName)
-	message(102342, L["usedon_cast"]:format(nick, spellName, target), yellow, spellId)
-	bar(102342, L["used_bar"]:format(target, spellName), 12, spellId)
+	message(spellId, L["usedon_cast"]:format(nick, spellName, target), yellow)
+	bar(spellId, 12, target, spellName)
 end
 
 function mod:StampedingRoar(_, spellId, nick, spellName)
-	message(106898, L["used_cast"]:format(nick, spellName), green, spellId)
-	bar(106898, L["used_bar"]:format(nick, spellName), 8, spellId)
+	message(106898, L["used_cast"]:format(nick, spellName), green)
+	bar(106898, 8, nick, spellName)
 end
 
 function mod:FortifyingBrew(_, spellId, nick, spellName)
-	message(115203, L["used_cast"]:format(nick, spellName), blue, spellId)
-	bar(115203, L["used_bar"]:format(nick, spellName), 12, spellId)
+	message(spellId, L["used_cast"]:format(nick, spellName), blue)
+	bar(spellId, 12, nick, spellName)
 end
 
 function mod:ZenMeditation(_, spellId, nick, spellName)
-	message(115176, L["used_cast"]:format(nick, spellName), yellow, spellId)
-	bar(115176, L["used_bar"]:format(nick, spellName), 8, spellId)
+	message(spellId, L["used_cast"]:format(nick, spellName), yellow)
+	bar(spellId, 8, nick, spellName)
 end
 
-function mod:ZenMeditationOff(_, spellId, nick, spellName) --removed on melee
-	--self:StopBar(L["used_bar"]:format(nick, spellName))
+function mod:ZenMeditationOff(_, spellId, nick, spellName)
+	stopbar(spellName, nick) --removed on melee
 end
 
 function mod:SmokeBomb(_, spellId, nick, spellName)
-	message(76577, L["used_cast"]:format(nick, spellName), blue, spellId)
-	bar(76577, L["used_bar"]:format(nick, spellName), 5, spellId)
+	message(spellId, L["used_cast"]:format(nick, spellName), blue)
+	bar(spellId, 5, nick, spellName)
 end
+
