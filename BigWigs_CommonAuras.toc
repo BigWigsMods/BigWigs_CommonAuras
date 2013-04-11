@@ -14,7 +14,7 @@
 
 ## Author: Rabbit
 ## X-Category: Raid
-## Version: 3.31
+## Version: 3.4
 ## Dependencies: BigWigs
 
 ## LoadOnDemand: 1
