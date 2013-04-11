@@ -428,7 +428,7 @@ end
 local function bar(key, length, player, text, icon)
 	if nonCombat[key] then
 		if InCombatLockdown() then return end
-		firedNonCombat[text] = true
+		firedNonCombat[text] = player or false
 	end
 	if checkFlag(key, C.BAR) then
 		mod:SendMessage("BigWigs_StartBar", mod, key, player and CL["other"]:format(text, player) or text, length, icons[icon or key])
@@ -443,8 +443,8 @@ local function stopbar(text, player)
 end
 
 function mod:PLAYER_REGEN_DISABLED()
-	for text in next, firedNonCombat do
-		stopbar(text)
+	for text, player in next, firedNonCombat do
+		stopbar(text, player)
 	end
 	wipe(firedNonCombat)
 end
