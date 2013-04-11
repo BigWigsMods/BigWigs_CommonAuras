@@ -442,7 +442,7 @@ local function bar(key, length, player, text, icon)
 end
 local function stopbar(text, player)
 	mod:SendMessage("BigWigs_StopBar", mod, player and CL["other"]:format(text, player) or text)
-	mod:SendMessage("BigWigs_StopEmphasize", mod, nil, player and CL["other"]:format(text, player) or text)
+	mod:SendMessage("BigWigs_StopEmphasize", mod, player and CL["other"]:format(text, player) or text)
 end
 
 function mod:PLAYER_REGEN_DISABLED()
