@@ -16,7 +16,6 @@ local L = LibStub("AceLocale-3.0"):NewLocale("Big Wigs: Common Auras", "enUS", t
 if L then
 	L.usedon_cast = "%s: %s on %s"
 	L.used_cast = "%s used %s."
-	L.used_bar = "%s: %s"
 	L.ritual_cast = "%s wants to perform a %s!"
 
 	L.portal = "Portal"
@@ -49,7 +48,6 @@ L = LibStub("AceLocale-3.0"):NewLocale("Big Wigs: Common Auras", "ruRU")
 if L then
 	L.usedon_cast = "%s: %s на %s"
 	L.used_cast = "%s использовал %s."
-	L.used_bar = "%s: %s"
 	L.ritual_cast = "%s wants to perform a %s!"
 
 	L.portal = "Портал"
@@ -78,7 +76,6 @@ L = LibStub("AceLocale-3.0"):NewLocale("Big Wigs: Common Auras", "zhCN")
 if L then
 	L.usedon_cast = "%s：%s于%s"
 	L.used_cast = " %s使用：%s。"
-	L.used_bar = "%s：%s"
 	L.ritual_cast = "%s想进行一次%s！"
 
 	L.portal = "传送门"
@@ -107,7 +104,6 @@ L = LibStub("AceLocale-3.0"):NewLocale("Big Wigs: Common Auras", "zhTW")
 if L then
 	L.usedon_cast = "%s：%s於%s"
 	L.used_cast = " %s使用：%s。"
-	L.used_bar = "%s：%s"
 	L.ritual_cast = "%s wants to perform a %s!"
 
 	L.portal = "傳送門"
@@ -136,7 +132,6 @@ L = LibStub("AceLocale-3.0"):NewLocale("Big Wigs: Common Auras", "koKR")
 if L then
 	L.usedon_cast = "%1$s: %3$s에게 %2$s"
 	L.used_cast = "%s: %s 사용"
-	L.used_bar = "%s: %s"
 	L.ritual_cast = "%s - %s 사용!"
 
 	L.portal = "차원문"
@@ -162,7 +157,6 @@ L = LibStub("AceLocale-3.0"):NewLocale("Big Wigs: Common Auras", "deDE")
 if L then
 	L.usedon_cast = "%s: %s auf %s"
 	L.used_cast = "%s: %s"
-	L.used_bar = "%s: %s"
 	L.ritual_cast = "%s will %s stellen!"
 
 	L.portal = "Portale"
@@ -191,7 +185,6 @@ L = LibStub("AceLocale-3.0"):NewLocale("Big Wigs: Common Auras", "frFR")
 if L then
 	L.usedon_cast = "%s : %s sur %s"
 	L.used_cast = "%s a utilisé %s."
-	L.used_bar = "%s : %s"
 	L.ritual_cast = "%s souhaite effectuer un %s !"
 
 	L.portal = "Portail"
@@ -220,7 +213,6 @@ L = LibStub("AceLocale-3.0"):NewLocale("Big Wigs: Common Auras", "itIT")
 if L then
 	L.usedon_cast = "%s : %s su %s"
 	L.used_cast = "%s ha usato %s."
-	L.used_bar = "%s : %s"
 	L.feast_cast = "%s ha preparato un %s !"
 
 	L.portal = "Portale"
@@ -249,7 +241,7 @@ L = LibStub("AceLocale-3.0"):GetLocale("Big Wigs: Common Auras")
 --      Module              --
 ------------------------------
 
-local mod = BigWigs:NewPlugin(L[name])
+local mod, CL = BigWigs:NewPlugin(L[name])
 if not mod then return end
 
 mod.toggleOptions = {
@@ -418,11 +410,11 @@ function mod:COMBAT_LOG_EVENT_UNFILTERED(_, _, event, _, _, source, _, _, _, pla
 	end
 end
 
-local green = "Positive" 		-- utility cds
-local blue = "Personal"			-- everything else
-local orange = "Urgent"			-- dangerous healer cds
-local yellow = "Attention"	-- targeted healer cds
-local red = "Important"			-- dps cds
+local green = "Positive"   -- utility cds
+local orange = "Urgent"    -- dangerous healer cds
+local yellow = "Attention" -- targeted healer cds
+local red = "Important"    -- dps cds
+local blue = "Personal"    -- everything else
 
 local C = BigWigs.C
 local function checkFlag(key, flag)
@@ -444,17 +436,17 @@ local function bar(key, length, player, text, icon)
 	if not checkFlag(key, C.BAR) then return end
 	if nonCombat[key] then
 		if InCombatLockdown() then return end
-		firedNonCombat[#firedNonCombat + 1] = text
+		firedNonCombat[text] = true
 	end
-	mod:SendMessage("BigWigs_StartBar", mod, key, player and L["used_bar"]:format(text, player) or text, length, icons[icon or key])
+	mod:SendMessage("BigWigs_StartBar", mod, key, player and CL["other"]:format(text, player) or text, length, icons[icon or key])
 end
 local function stopbar(text, player)
-	mod:SendMessage("BigWigs_StopBar", mod, player and L["used_bar"]:format(text, player) or text)
-	mod:SendMessage("BigWigs_StopEmphasize", mod, nil, player and L["used_bar"]:format(text, player) or text)
+	mod:SendMessage("BigWigs_StopBar", mod, player and CL["other"]:format(text, player) or text)
+	mod:SendMessage("BigWigs_StopEmphasize", mod, nil, player and CL["other"]:format(text, player) or text)
 end
 
 function mod:PLAYER_REGEN_DISABLED()
-	for _, text in next, firedNonCombat do
+	for text in next, firedNonCombat do
 		stopbar(text)
 	end
 	wipe(firedNonCombat)
@@ -497,7 +489,7 @@ do
 	function mod:Bloodlust(_, spellId, nick, spellName)
 		local t = GetTime()
 		if t-40 > prev then
-			message(2825, L["used_cast"]:format(nick, spellName), red)
+			message(2825, L["used_cast"]:format(nick, spellName), red, spellId)
 			bar(2825, 40, nick, spellName, spellId)
 			prev = t
 		end
