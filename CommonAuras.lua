@@ -433,12 +433,16 @@ local function message(key, text, color, icon)
 	mod:SendMessage("BigWigs_Message", mod, key, text, color, nil, icons[icon or key])
 end
 local function bar(key, length, player, text, icon)
-	if not checkFlag(key, C.BAR) then return end
 	if nonCombat[key] then
 		if InCombatLockdown() then return end
 		firedNonCombat[text] = true
 	end
-	mod:SendMessage("BigWigs_StartBar", mod, key, player and CL["other"]:format(text, player) or text, length, icons[icon or key])
+	if checkFlag(key, C.BAR) then
+		mod:SendMessage("BigWigs_StartBar", mod, key, player and CL["other"]:format(text, player) or text, length, icons[icon or key])
+	end
+	if checkFlag(key, C.EMPHASIZE) then
+		mod:SendMessage("BigWigs_StartEmphasize", mod, player and CL["other"]:format(text, player) or text, length)
+	end
 end
 local function stopbar(text, player)
 	mod:SendMessage("BigWigs_StopBar", mod, player and CL["other"]:format(text, player) or text)
@@ -462,9 +466,12 @@ function mod:Repair(_, spellId, nick, spellName)
 	bar("repair", spellId == 54711 and 300 or 600, nick, spellName, spellId)
 end
 
-function mod:Feasts(_, spellId, nick, spellName)
-	message("feast", L["feast_cast"]:format(nick, spellName), blue, spellId)
-	bar("feast", 180, nick, spellName, spellId)
+do
+	local banquet = GetSpellInfo(133493)
+	function mod:Feasts(_, spellId, nick, spellName)
+		message("feast", L["feast_cast"]:format(nick, spellName), blue, spellId)
+		bar("feast", 180, nick, banquet, spellId)
+	end
 end
 
 function mod:Portals(_, spellId, nick, spellName)
