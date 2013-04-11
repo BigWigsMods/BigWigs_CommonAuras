@@ -245,7 +245,8 @@ local mod, CL = BigWigs:NewPlugin(L[name])
 if not mod then return end
 
 mod.toggleOptions = {
-	"portal", "repair", "feast", 698, 29893, 43987, 97462, 114192, 114207, 64382, 120668, 2825, 106898, 29166, "rebirth",
+	"portal", "repair", "feast", 698, 29893, 43987,
+	97462, 114192, 114207, 64382, 120668, 2825, 106898, 29166, "rebirth",
 	871, 12975, 114030, 1160, 114203, 498, 31850, 86659, 48792, 55233, 22812, 61336, 115203, 115176,
 	33206, 47788, 102342, 6940, 31821, 62618, 98008, 76577,
 }
@@ -262,7 +263,14 @@ function mod:GetLocale() return L end
 --      Initialization      --
 ------------------------------
 
-local nonCombat = {} -- Map of spells to only show out of combat.
+local nonCombat = { -- Map of spells to only show out of combat.
+	portal = true,
+	repair = true,
+	feast = true,
+	[698] = true, -- Rital of Summoning
+	[29893] = true, -- Create Soulwell
+	[43987] = true, -- Conjure Refreshment Table
+}
 local firedNonCombat = {} -- Bars that we fired that should be hidden on combat.
 local combatLogMap = {}
 
@@ -366,23 +374,8 @@ function mod:OnRegister()
 		[114207] = "SkullBanner",
 		[114192] = "MockingBanner",
 	}
-
-	local nonCombatTypes = {
-		Portals = true,
-		Repair = true,
-		Feasts = true,
-		[698] = true, -- Rital of Summoning
-		[29893] = true, -- Create Soulwell
-		[43987] = true, -- Conjure Refreshment Table
-	}
-	for _, event in next, combatLogMap do
-		for spellId, spellType in next, event do
-			if nonCombatTypes[spellType] then
-				nonCombat[spellId] = true
-			end
-		end
-	end
 end
+
 function mod:OnPluginEnable()
 	self:RegisterEvent("ZONE_CHANGED_NEW_AREA")
 	self:RegisterEvent("PLAYER_REGEN_DISABLED")
