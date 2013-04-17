@@ -213,7 +213,7 @@ L = LibStub("AceLocale-3.0"):NewLocale("Big Wigs: Common Auras", "itIT")
 if L then
 	L.usedon_cast = "%s : %s su %s"
 	L.used_cast = "%s ha usato %s."
-	L.feast_cast = "%s ha preparato un %s !"
+	L.ritual_cast = "%s sta evocando %s!"
 
 	L.portal = "Portale"
 	L.portal_desc = "Avvisa quando un mago apre un portale."
@@ -225,6 +225,7 @@ if L then
 
 	L.feast = "Banchetti"
 	L.feast_desc = "Avvisa quando vengono messi a disposizione dei Festini."
+	L.feast_cast = "%s ha preparato un %s !"
 
 	L.rebirth = "Resurrezione"
 	L.rebirth_desc = "Avvisa quando viene utilizzata un'abilità di Resurrezione in combattimento."
