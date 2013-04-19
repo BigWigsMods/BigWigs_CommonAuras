@@ -12,9 +12,9 @@
 ## Notes-ruRU: Предупреждает рейд об основных положительных и отрицательных эффектах.
 ## Notes-itIT: Avvisa l'incursione di certi benefici e malefici comuni.
 
-## Author: Rabbit
+## Author: Funkydude, Nebula169
 ## X-Category: Raid
-## Version: 3.4
+## Version: 3.41
 ## Dependencies: BigWigs
 
 ## LoadOnDemand: 1
