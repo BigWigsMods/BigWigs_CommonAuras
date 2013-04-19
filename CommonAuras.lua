@@ -470,7 +470,7 @@ end
 
 function mod:Portals(_, spellId, nick, spellName)
 	message("portal", L["portal_cast"]:format(nick, spellName), blue, spellId)
-	bar("portal", L["portal_bar"]:format(spellName, nick), 65, nick, spellName, spellId)
+	bar("portal", 65, L["portal_bar"]:format(spellName, nick), nick, spellName, spellId)
 end
 
 function mod:SummoningStone(_, spellId, nick, spellName)
