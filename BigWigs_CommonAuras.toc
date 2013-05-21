@@ -14,7 +14,6 @@
 
 ## Author: Funkydude, Nebula169
 ## X-Category: Raid
-## Version: 3.41
 ## Dependencies: BigWigs
 
 ## LoadOnDemand: 1
