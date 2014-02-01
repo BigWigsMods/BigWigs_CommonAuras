@@ -303,6 +303,9 @@ function mod:OnRegister()
 		[698] = "SummoningStone", -- Ritual of Summoning
 		[29893] = "Soulwell", -- Create Soulwell
 		[43987] = "Refreshment", -- Conjure Refreshment Table
+		[145166] = "NoodleCart", -- Noodle Cart
+		[145169] = "NoodleCart", -- Deluxe Noodle Cart
+		[145196] = "NoodleCart", -- Pandaren Treasure Noodle Cart
 		-- Group
 		[97462] = "RallyingCry",
 		[106898] = "StampedingRoar",
@@ -466,6 +469,10 @@ do
 		message("feast", L["feast_cast"]:format(nick, spellName), blue, spellId)
 		bar("feast", 180, nick, banquet, spellId)
 	end
+end
+
+function mod:NoodleCart(_, spellId, nick, spellName)
+	message("feast", L["feast_cast"]:format(nick, spellName), blue, spellId)
 end
 
 function mod:Portals(_, spellId, nick, spellName)
