@@ -1,4 +1,4 @@
-## Interface: 50400
+## Interface: 60000
 
 ## Title: Big Wigs |cffff0000+|r|cffffffffCommon Auras|r
 ## Title-zhCN: Big Wigs |cffff0000+|r|cffffffff普通光环|r
