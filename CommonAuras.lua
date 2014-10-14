@@ -247,8 +247,8 @@ if not mod then return end
 
 mod.toggleOptions = {
 	"portal", "repair", "feast", 698, 29893, 43987,
-	97462, 114192, 114207, 64382, 120668, 2825, 106898, 29166, "rebirth",
-	871, 12975, 114030, 1160, 114203, 498, 31850, 86659, 48792, 55233, 22812, 61336, 115203, 115176,
+	97462, 114192, 2825, 106898, "rebirth",
+	871, 12975, 114030, 1160, 498, 31850, 86659, 48792, 55233, 22812, 61336, 115203, 115176,
 	33206, 47788, 102342, 6940, 31821, 62618, 98008, 76577,
 }
 mod.optionHeaders = {
@@ -309,17 +309,12 @@ function mod:OnRegister()
 		-- Group
 		[97462] = "RallyingCry",
 		[106898] = "StampedingRoar",
-		[122294] = "StampedingRoar", -- Symbiosis
-		[29166] = "Innervate",
 		-- DPS
 		[2825] = "Bloodlust", -- Bloodlust
 		[32182] = "Bloodlust", -- Heroism
 		[80353] = "Bloodlust", -- Time Warp
 		[90355] = "Bloodlust", -- Ancient Hysteria
 		[160452] = "Bloodlust", -- Netherwinds
-		[120668] = "StormlashTotem",
-		[64382] = "ShatteringThrow",
-		[112997] = "ShatteringThrow", -- Symbiosis
 		-- Tank
 		[871] = "ShieldWall",
 		[12975] = "LastStand",
@@ -371,12 +366,9 @@ function mod:OnRegister()
 		[20484] = "Rebirth", -- Rebirth
 		[95750] = "Rebirth", -- Soulstone Resurrection
 		[61999] = "Rebirth", -- Raise Ally
-		[113269] = "Rebirth", -- Rebirth (Symbiosis)
 		[126393] = "Rebirth", -- Eternal Guardian (Hunter Quilen pet)
 	}
 	combatLogMap.SPELL_SUMMON = {
-		[114203] = "DemoralizingBanner",
-		[114207] = "SkullBanner",
 		[114192] = "MockingBanner",
 	}
 end
@@ -510,16 +502,6 @@ function mod:SpiritLink(_, spellId, nick, spellName)
 	bar(spellId, 6, nick, spellName)
 end
 
-do
-	local last = ""
-	function mod:StormlashTotem(_, spellId, nick, spellName)
-		message(spellId, L["used_cast"]:format(nick, spellName), blue)
-		stopbar(spellName, last)
-		bar(spellId, 10, nick, spellName)
-		last = nick
-	end
-end
-
 function mod:PainSuppression(target, spellId, nick, spellName)
 	message(spellId, L["usedon_cast"]:format(nick, spellName, target), yellow)
 	bar(spellId, 8, target, spellName)
@@ -589,29 +571,9 @@ function mod:DemoralizingShout(_, spellId, nick, spellName)
 	bar(spellId, 10, nick, spellName)
 end
 
-function mod:DemoralizingBanner(_, spellId, nick, spellName)
-	message(spellId, L["used_cast"]:format(nick, spellName), blue)
-	bar(spellId, 15, nick, spellName)
-end
-
-do
-	local last = ""
-	function mod:SkullBanner(_, spellId, nick, spellName)
-		message(spellId, L["used_cast"]:format(nick, spellName), red)
-		stopbar(spellName, last)
-		bar(spellId, 10, nick, spellName)
-		last = nick
-	end
-end
-
 function mod:MockingBanner(_, spellId, nick, spellName)
 	message(spellId, L["used_cast"]:format(nick, spellName), orange)
 	bar(spellId, 30, nick, spellName)
-end
-
-function mod:ShatteringThrow(target, spellId, nick, spellName)
-	message(64382, L["usedon_cast"]:format(nick, spellName, target), red)
-	bar(64382, 10, target, spellName)
 end
 
 function mod:IceboundFortitude(_, spellId, nick, spellName)
@@ -622,10 +584,6 @@ end
 function mod:VampiricBlood(_, spellId, nick, spellName)
 	message(spellId, L["used_cast"]:format(nick, spellName), blue)
 	bar(spellId, 10, nick, spellName)
-end
-
-function mod:Innervate(target, spellId, nick, spellName)
-	message(spellId, L["usedon_cast"]:format(nick, spellName, target), green)
 end
 
 function mod:Barkskin(_, spellId, nick, spellName)
