@@ -316,6 +316,7 @@ function mod:OnRegister()
 		[32182] = "Bloodlust", -- Heroism
 		[80353] = "Bloodlust", -- Time Warp
 		[90355] = "Bloodlust", -- Ancient Hysteria
+		[160452] = "Bloodlust", -- Netherwinds
 		[120668] = "StormlashTotem",
 		[64382] = "ShatteringThrow",
 		[112997] = "ShatteringThrow", -- Symbiosis
