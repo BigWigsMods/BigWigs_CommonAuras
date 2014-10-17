@@ -247,9 +247,9 @@ if not mod then return end
 
 mod.toggleOptions = {
 	"portal", "repair", "feast", 698, 29893, 43987,
-	97462, 114192, 2825, 106898, "rebirth",
+	97462, 114192, 2825, 106898, 172106, "rebirth",
 	871, 12975, 114030, 1160, 498, 31850, 86659, 48792, 55233, 22812, 61336, 115203, 115176,
-	33206, 47788, 102342, 6940, 31821, 62618, 98008, 76577,
+	33206, 47788, 102342, 6940, 31821, 62618, 98008, 76577, 159916,
 }
 mod.optionHeaders = {
 	portal = L["Noncombat"],
@@ -309,6 +309,7 @@ function mod:OnRegister()
 		-- Group
 		[97462] = "RallyingCry",
 		[106898] = "StampedingRoar",
+		[172106] = "AspectOfTheFox",
 		-- DPS
 		[2825] = "Bloodlust", -- Bloodlust
 		[32182] = "Bloodlust", -- Heroism
@@ -338,6 +339,7 @@ function mod:OnRegister()
 		[98008] = "SpiritLink",
 		[62618] = "Barrier",
 		[76577] = "SmokeBomb",
+		[159916] = "AmplifyMagic",
 	}
 	combatLogMap.SPELL_AURA_REMOVED = {
 		[47788] = "GuardianSpiritOff",
@@ -627,5 +629,15 @@ end
 function mod:SmokeBomb(_, spellId, nick, spellName)
 	message(spellId, L["used_cast"]:format(nick, spellName), blue)
 	bar(spellId, 5, nick, spellName)
+end
+
+function mod:AmplifyMagic(_, spellId, nick, spellName)
+	message(spellId, L["used_cast"]:format(nick, spellName), blue)
+	bar(spellId, 6, nick, spellName)
+end
+
+function mod:AspectOfTheFox(_, spellId, nick, spellName)
+	message(spellId, L["used_cast"]:format(nick, spellName), green)
+	bar(spellId, 6, nick, spellName)
 end
 
