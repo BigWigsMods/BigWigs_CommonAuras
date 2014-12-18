@@ -249,7 +249,7 @@ mod.toggleOptions = {
 	"portal", "repair", "feast", 698, 29893, 43987,
 	97462, 114192, 2825, 106898, 172106, "rebirth",
 	871, 12975, 114030, 1160, 498, 31850, 86659, 48792, 55233, 22812, 61336, 115203, 115176,
-	33206, 47788, 102342, 6940, 31821, 62618, 98008, 76577, 159916,
+	33206, 62618, 47788, 64843, 102342, 740, 6940, 31821, 98008, 116849, 115310, 159916, 51052, 76577,
 }
 mod.optionHeaders = {
 	portal = L["Noncombat"],
@@ -277,22 +277,9 @@ local combatLogMap = {}
 
 function mod:OnRegister()
 	combatLogMap.SPELL_CAST_START = {
-		-- 10 man
-		[126492] = "Feasts", -- Banquet of the Grill
-		[126501] = "Feasts", -- Banquet of the Oven
-		[126497] = "Feasts", -- Banquet of the Pot
-		[126499] = "Feasts", -- Banquet of the Steamer
-		[126495] = "Feasts", -- Banquet of the Wok
-		[126503] = "Feasts", -- Banquet of the Brew
-		[104958] = "Feasts", -- Pandaren Banquet
-		-- 25 man
-		[126494] = "Feasts", -- Great Banquet of the Grill
-		[126502] = "Feasts", -- Great Banquet of the Oven
-		[126498] = "Feasts", -- Great Banquet of the Pot
-		[126500] = "Feasts", -- Great Banquet of the Steamer
-		[126496] = "Feasts", -- Great Banquet of the Wok
-		[126504] = "Feasts", -- Great Banquet of the Brew
-		[105193] = "Feasts", -- Great Pandaren Banquet
+		[160740] = "Feasts", -- Feast of Blood (+75)
+		[160914] = "Feasts", -- Feast of the Waters (+75)
+		[175215] = "Feasts", -- Savage Feast (+100)
 	}
 	combatLogMap.SPELL_CAST_SUCCESS = {
 		--OOC
@@ -300,12 +287,10 @@ function mod:OnRegister()
 		[44389] = "Repair", -- Field Repair Bot 110G
 		[54711] = "Repair", -- Scrapbot
 		[67826] = "Repair", -- Jeeves
+		[157066] = "Repair", -- Walter
 		[698] = "SummoningStone", -- Ritual of Summoning
 		[29893] = "Soulwell", -- Create Soulwell
 		[43987] = "Refreshment", -- Conjure Refreshment Table
-		[145166] = "NoodleCart", -- Noodle Cart
-		[145169] = "NoodleCart", -- Deluxe Noodle Cart
-		[145196] = "NoodleCart", -- Pandaren Treasure Noodle Cart
 		-- Group
 		[97462] = "RallyingCry",
 		[106898] = "StampedingRoar",
@@ -332,18 +317,26 @@ function mod:OnRegister()
 		[115176] = "ZenMeditation",
 		-- Healing
 		[33206] = "PainSuppression",
+		[62618] = "Barrier",
 		[47788] = "GuardianSpirit",
+		[64843] = "DivineHymn",
 		[102342] = "Ironbark",
+		[740] = "Tranquility",
 		[6940] = "Sacrifice",
 		[31821] = "DevotionAura",
 		[98008] = "SpiritLink",
-		[62618] = "Barrier",
+		[116849] = "LifeCocoon",
+		[115310] = "Revival",
+		[51052] = "AntiMagicZone",
 		[76577] = "SmokeBomb",
 		[159916] = "AmplifyMagic",
 	}
 	combatLogMap.SPELL_AURA_REMOVED = {
 		[47788] = "GuardianSpiritOff",
 		[115176] = "ZenMeditationOff",
+		[64843] = "DivineHymnOff",
+		[740] = "TranquilityOff",
+		[116849] = "LifeCocoonOff",
 	}
 	combatLogMap.SPELL_CREATE = {
 		[11419] = "Portals", -- Darnassus
@@ -363,12 +356,16 @@ function mod:OnRegister()
 		[88346] = "Portals", -- Tol Barad (Horde)
 		[132620] = "Portals", -- Vale of Eternal Blossoms (Alliance)
 		[132626] = "Portals", -- Vale of Eternal Blossoms (Horde)
+		[176246] = "Portals", -- Stormshield (Alliance)
+		[176244] = "Portals", -- Warspear (Horde)
 	}
 	combatLogMap.SPELL_RESURRECT = {
 		[20484] = "Rebirth", -- Rebirth
 		[95750] = "Rebirth", -- Soulstone Resurrection
 		[61999] = "Rebirth", -- Raise Ally
-		[126393] = "Rebirth", -- Eternal Guardian (Hunter Quilen pet)
+		[126393] = "Rebirth", -- Eternal Guardian (Hunter pet)
+		[159931] = "Rebirth", -- Gift of Chi-Ji (Hunter pet)
+		[159956] = "Rebirth", -- Dust of Life (Hunter pet)
 	}
 	combatLogMap.SPELL_SUMMON = {
 		[114192] = "MockingBanner",
@@ -455,19 +452,16 @@ end
 
 function mod:Repair(_, spellId, nick, spellName)
 	message("repair", L["used_cast"]:format(nick, spellName), blue, spellId)
-	bar("repair", spellId == 54711 and 300 or 600, nick, spellName, spellId)
+	-- scrapbot = 5min, walter = 6min, field repair bot/jeeves = 10min
+	bar("repair", spellId == 54711 and 300 or spellId == 157066 and 360 or 600, nick, spellName, spellId)
 end
 
 do
-	local banquet = GetSpellInfo(133493)
+	local feast = GetSpellInfo(66477)
 	function mod:Feasts(_, spellId, nick, spellName)
 		message("feast", L["feast_cast"]:format(nick, spellName), blue, spellId)
-		bar("feast", 180, nick, banquet, spellId)
+		bar("feast", 180, nick, feast, spellId)
 	end
-end
-
-function mod:NoodleCart(_, spellId, nick, spellName)
-	message("feast", L["feast_cast"]:format(nick, spellName), blue, spellId)
 end
 
 function mod:Portals(_, spellId, nick, spellName)
@@ -491,7 +485,7 @@ do
 	local prev = 0
 	function mod:Bloodlust(_, spellId, nick, spellName)
 		local t = GetTime()
-		if t-40 > prev then
+		if t-prev > 40 then
 			message(2825, L["used_cast"]:format(nick, spellName), red, spellId)
 			bar(2825, 40, nick, spellName, spellId)
 			prev = t
@@ -521,6 +515,15 @@ end
 function mod:Barrier(_, spellId, nick, spellName)
 	message(spellId, L["used_cast"]:format(nick, spellName), blue)
 	bar(spellId, 10, nick, spellName)
+end
+
+function mod:DivineHymn(_, spellId, nick, spellName)
+	message(spellId, L["used_cast"]:format(nick, spellName), blue)
+	bar(spellId, 8, nick, spellName)
+end
+
+function mod:DivineHymnOff(_, spellId, nick, spellName)
+	stopbar(spellName, nick, spellName)
 end
 
 function mod:Sacrifice(target, spellId, nick, spellName)
@@ -588,6 +591,11 @@ function mod:VampiricBlood(_, spellId, nick, spellName)
 	bar(spellId, 10, nick, spellName)
 end
 
+function mod:AntiMagicZone(_, spellId, nick, spellName)
+	message(spellId, L["used_cast"]:format(nick, spellName), blue)
+	bar(spellId, 3, nick, spellName)
+end
+
 function mod:Barkskin(_, spellId, nick, spellName)
 	message(spellId, L["used_cast"]:format(nick, spellName), blue)
 	bar(spellId, 12, nick, spellName)
@@ -607,6 +615,15 @@ function mod:Ironbark(target, spellId, nick, spellName)
 	bar(spellId, 12, target, spellName)
 end
 
+function mod:Tranquility(_, spellId, nick, spellName)
+	message(spellId, L["used_cast"]:format(nick, spellName), blue)
+	bar(spellId, 8, nick, spellName)
+end
+
+function mod:TranquilityOff(_, spellId, nick, spellName)
+	stopbar(spellName, nick, spellName)
+end
+
 function mod:StampedingRoar(_, spellId, nick, spellName)
 	message(106898, L["used_cast"]:format(nick, spellName), green)
 	bar(106898, 8, nick, spellName)
@@ -624,6 +641,19 @@ end
 
 function mod:ZenMeditationOff(_, spellId, nick, spellName)
 	stopbar(spellName, nick) --removed on melee
+end
+
+function mod:LifeCocoon(target, spellId, nick, spellName)
+	message(spellId, L["usedon_cast"]:format(nick, spellName, target), yellow)
+	bar(spellId, 12, target, spellName)
+end
+
+function mod:LifeCocoonOff(target, spellId, nick, spellName)
+	stopbar(spellName, target)
+end
+
+function mod:Revival(_, spellId, nick, spellName)
+	message(spellId, L["used_cast"]:format(nick, spellName), blue)
 end
 
 function mod:SmokeBomb(_, spellId, nick, spellName)
