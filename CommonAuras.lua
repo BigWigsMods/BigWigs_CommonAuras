@@ -419,7 +419,7 @@ local icons = setmetatable({}, {__index =
 })
 local function message(key, text, color, icon)
 	if not checkFlag(key, C.MESSAGE) then return end
-	mod:SendMessage("BigWigs_Message", mod, key, text, color, nil, icons[icon or key])
+	mod:SendMessage("BigWigs_Message", mod, key, text, color, icons[icon or key])
 end
 local function bar(key, length, player, text, icon)
 	if nonCombat[key] then
