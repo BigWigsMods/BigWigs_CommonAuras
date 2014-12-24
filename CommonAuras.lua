@@ -399,7 +399,7 @@ function mod:COMBAT_LOG_EVENT_UNFILTERED(_, _, event, _, _, source, _, _, _, pla
 	end
 end
 
-local green = "Positive"   -- utility cds
+local green = "Positive"   -- utility/healing cds
 local orange = "Urgent"    -- dangerous healer cds
 local yellow = "Attention" -- targeted healer cds
 local red = "Important"    -- dps cds
@@ -518,7 +518,7 @@ function mod:Barrier(_, spellId, nick, spellName)
 end
 
 function mod:DivineHymn(_, spellId, nick, spellName)
-	message(spellId, L["used_cast"]:format(nick, spellName), blue)
+	message(spellId, L["used_cast"]:format(nick, spellName), green)
 	bar(spellId, 8, nick, spellName)
 end
 
@@ -616,7 +616,7 @@ function mod:Ironbark(target, spellId, nick, spellName)
 end
 
 function mod:Tranquility(_, spellId, nick, spellName)
-	message(spellId, L["used_cast"]:format(nick, spellName), blue)
+	message(spellId, L["used_cast"]:format(nick, spellName), green)
 	bar(spellId, 8, nick, spellName)
 end
 
@@ -653,7 +653,7 @@ function mod:LifeCocoonOff(target, spellId, nick, spellName)
 end
 
 function mod:Revival(_, spellId, nick, spellName)
-	message(spellId, L["used_cast"]:format(nick, spellName), blue)
+	message(spellId, L["used_cast"]:format(nick, spellName), green)
 end
 
 function mod:SmokeBomb(_, spellId, nick, spellName)
