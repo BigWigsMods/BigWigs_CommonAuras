@@ -224,7 +224,7 @@ if L then
 	L.repair_desc = "Avvisa quando un Robot di Riparazione è disponibile."
 
 	L.feast = "Banchetti"
-	L.feast_desc = "Avvisa quando vengono messi a disposizione dei Festini."
+	L.feast_desc = "Avvisa quando vengono messi a disposizione dei Banchetti."
 	L.feast_cast = "%s ha preparato un %s !"
 
 	L.rebirth = "Resurrezione"
