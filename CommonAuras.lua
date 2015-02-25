@@ -407,12 +407,11 @@ local blue = "Personal"    -- everything else
 
 local C = BigWigs.C
 local function checkFlag(key, flag)
-	if type(key) == "number" then key = GetSpellInfo(key) end
 	return bit.band(mod.db.profile[key], flag) == flag
 end
 local icons = setmetatable({}, {__index =
 	function(self, key)
-		local _, _, icon = GetSpellInfo(key)
+		local icon = GetSpellTexture(key)
 		self[key] = icon
 		return icon
 	end
