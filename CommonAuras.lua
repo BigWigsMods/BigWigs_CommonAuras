@@ -538,7 +538,7 @@ end
 
 function mod:DivineProtection(_, spellId, nick, spellName)
 	message(spellId, L["used_cast"]:format(nick, spellName), blue)
-	bar(spellId, 10, nick, spellName)
+	bar(spellId, 8, nick, spellName)
 end
 
 function mod:ArdentDefender(_, spellId, nick, spellName)
@@ -548,17 +548,17 @@ end
 
 function mod:GuardianAncientKings(_, spellId, nick, spellName)
 	message(spellId, L["used_cast"]:format(nick, spellName), blue)
-	bar(spellId, 12, nick, spellName)
+	bar(spellId, 8, nick, spellName)
 end
 
 function mod:ShieldWall(_, spellId, nick, spellName)
 	message(spellId, L["used_cast"]:format(nick, spellName), blue)
-	bar(spellId, 12, nick, spellName)
+	bar(spellId, 8, nick, spellName)
 end
 
 function mod:LastStand(_, spellId, nick, spellName)
 	message(spellId, L["used_cast"]:format(nick, spellName), blue)
-	bar(spellId, 20, nick, spellName)
+	bar(spellId, 15, nick, spellName)
 end
 
 function mod:RallyingCry(_, spellId, nick, spellName)
@@ -573,7 +573,7 @@ end
 
 function mod:DemoralizingShout(_, spellId, nick, spellName)
 	message(spellId, L["used_cast"]:format(nick, spellName), blue)
-	bar(spellId, 10, nick, spellName)
+	bar(spellId, 8, nick, spellName)
 end
 
 function mod:MockingBanner(_, spellId, nick, spellName)
@@ -583,7 +583,7 @@ end
 
 function mod:IceboundFortitude(_, spellId, nick, spellName)
 	message(spellId, L["used_cast"]:format(nick, spellName), blue)
-	bar(spellId, 12, nick, spellName)
+	bar(spellId, 8, nick, spellName)
 end
 
 function mod:VampiricBlood(_, spellId, nick, spellName)
@@ -603,7 +603,7 @@ end
 
 function mod:SurvivalInstincts(_, spellId, nick, spellName)
 	message(spellId, L["used_cast"]:format(nick, spellName), blue)
-	bar(spellId, 12, nick, spellName)
+	bar(spellId, 6, nick, spellName)
 end
 
 function mod:Rebirth(target, spellId, nick, spellName)
@@ -631,7 +631,7 @@ end
 
 function mod:FortifyingBrew(_, spellId, nick, spellName)
 	message(spellId, L["used_cast"]:format(nick, spellName), blue)
-	bar(spellId, 12, nick, spellName)
+	bar(spellId, 15, nick, spellName)
 end
 
 function mod:ZenMeditation(_, spellId, nick, spellName)
