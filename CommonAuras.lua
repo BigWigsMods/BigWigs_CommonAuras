@@ -173,11 +173,11 @@ end
 local function updateProfile()
 	local db = mod.db.profile
 	-- migrate old settings
-	for key, value in next, mod.toggleDefaults do
+	for key in next, mod.toggleDefaults do
 		if type(key) == "number" then
 			local oldKey = GetSpellInfo(key)
 			if db[oldKey] then
-				db[key] = db[oldKey] or value
+				db[key] = db[oldKey]
 				db[oldKey] = nil
 			end
 		end
