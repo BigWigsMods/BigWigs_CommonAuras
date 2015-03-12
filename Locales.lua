@@ -12,7 +12,7 @@ end
 
 L = LibStub("AceLocale-3.0"):NewLocale("Big Wigs: Common Auras", "esMX")
 if L then
---@localization(locale="esMX", format="lua_additive_table", handle-unlocalized="ignore")@
+--@localization(locale="esES", format="lua_additive_table", handle-unlocalized="ignore")@
 end
 
 L = LibStub("AceLocale-3.0"):NewLocale("Big Wigs: Common Auras", "frFR")

@@ -18,7 +18,7 @@
 
 ## LoadOnDemand: 1
 
-## X-BigWigs-LoadOn-CoreLoaded: 1
+## X-BigWigs-LoadOn-CoreEnabled: 1
 
 Locales.lua
 CommonAuras.lua
