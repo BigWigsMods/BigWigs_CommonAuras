@@ -1,16 +1,28 @@
 ## Interface: 60100
 
 ## Title: Big Wigs |cffff0000+|r|cffffffffCommon Auras|r
-## Title-zhCN: Big Wigs |cffff0000+|r|cffffffff普通光环|r
-## Title-frFR: Big Wigs |cffff0000+|r|cffffffffAuras habituelles|r
-## Title-ruRU: Big Wigs |cffff0000+|r|cffffffffОсновные ауры|r
-## Title-itIT: Big Wigs |cffff0000+|r|cffffffffAuree Comuni|r
+## Title-deDE: Big Wigs |cffff0000+|r|cffffffff@localization(locale="deDE", key="Common Auras")@|r
+## Title-esES: Big Wigs |cffff0000+|r|cffffffff@localization(locale="esES", key="Common Auras")@|r
+## Title-esMX: Big Wigs |cffff0000+|r|cffffffff@localization(locale="esMX", key="Common Auras")@|r
+## Title-frFR: Big Wigs |cffff0000+|r|cffffffff@localization(locale="frFR", key="Common Auras")@|r
+## Title-itIT: Big Wigs |cffff0000+|r|cffffffff@localization(locale="itIT", key="Common Auras")@|r
+## Title-koKR: Big Wigs |cffff0000+|r|cffffffff@localization(locale="koKR", key="Common Auras")@|r
+## Title-ptBR: Big Wigs |cffff0000+|r|cffffffff@localization(locale="ptBR", key="Common Auras")@|r
+## Title-ruRU: Big Wigs |cffff0000+|r|cffffffff@localization(locale="ruRU", key="Common Auras")@|r
+## Title-zhCN: Big Wigs |cffff0000+|r|cffffffff@localization(locale="zhCN", key="Common Auras")@|r
+## Title-zhTW: Big Wigs |cffff0000+|r|cffffffff@localization(locale="zhTW", key="Common Auras")@|r
 
-## Notes: Notifies the raid about common buffs and debuffs.
-## Notes-zhCN: 显示团队通用的增益效果与负面影响。
-## Notes-frFR: Prévient le raid lors de l'utilisation de certains buffs & débuffs habituels.
-## Notes-ruRU: Предупреждает рейд об основных положительных и отрицательных эффектах.
-## Notes-itIT: Avvisa l'incursione di certi benefici e malefici comuni.
+## Notes: Notifies you about common raid cooldowns.
+## Notes-deDE: @localization(locale="deDE", key="Notifies you about common raid cooldowns.")@
+## Notes-esES: @localization(locale="esES", key="Notifies you about common raid cooldowns.")@
+## Notes-esMX: @localization(locale="esMX", key="Notifies you about common raid cooldowns.")@
+## Notes-frFR: @localization(locale="frFR", key="Notifies you about common raid cooldowns.")@
+## Notes-itIT: @localization(locale="itIT", key="Notifies you about common raid cooldowns.")@
+## Notes-koKR: @localization(locale="koKR", key="Notifies you about common raid cooldowns.")@
+## Notes-ptBR: @localization(locale="ptBR", key="Notifies you about common raid cooldowns.")@
+## Notes-ruRU: @localization(locale="ruRU", key="Notifies you about common raid cooldowns.")@
+## Notes-zhCN: @localization(locale="zhCN", key="Notifies you about common raid cooldowns.")@
+## Notes-zhTW: @localization(locale="zhTW", key="Notifies you about common raid cooldowns.")@
 
 ## Author: Funkydude, Nebula169
 ## X-Category: Raid
