@@ -563,6 +563,16 @@ end
 -- Event Handlers
 --
 
+-- General
+
+do
+	local feast = GetSpellInfo(66477)
+	function mod:Feasts(_, spellId, nick, spellName)
+		message("feast", L.feast_cast:format(nick, spellName), nil, spellId)
+		bar("feast", 180, nick, feast, spellId)
+	end
+end
+
 do
 	-- heaven forbid they all just be 10min or something
 	local durations = {
@@ -578,134 +588,19 @@ do
 	end
 end
 
-do
-	local feast = GetSpellInfo(66477)
-	function mod:Feasts(_, spellId, nick, spellName)
-		message("feast", L.feast_cast:format(nick, spellName), nil, spellId)
-		bar("feast", 180, nick, feast, spellId)
-	end
+function mod:Rebirth(target, spellId, nick, spellName)
+	message("rebirth", L.usedon_cast:format(nick, spellName, target), nil, spellId)
 end
 
-function mod:Portals(_, spellId, nick, spellName)
-	message("portal", L.portal_cast:format(nick, spellName), nil, spellId)
-	bar("portal", 65, L.portal_bar:format(spellName, nick), nick, spellName, spellId)
-end
+-- Deathknight
 
-function mod:SummoningStone(_, spellId, nick, spellName)
-	message(spellId, L.ritual_cast:format(nick, spellName))
-end
-
-function mod:Refreshment(_, spellId, nick, spellName)
+function mod:AntiMagicZone(_, spellId, nick, spellName)
 	message(spellId, L.used_cast:format(nick, spellName))
+	bar(spellId, 3, nick, spellName)
 end
 
-function mod:Soulwell(_, spellId, nick, spellName)
+function mod:GorefiendsGrasp(_, spellId, nick, spellName)
 	message(spellId, L.used_cast:format(nick, spellName))
-end
-
-do
-	local prev = 0
-	function mod:Bloodlust(_, spellId, nick, spellName)
-		local t = GetTime()
-		if t-prev > 40 then
-			message(2825, L.used_cast:format(nick, spellName), nil, spellId)
-			bar(2825, 40, nick, spellName, spellId)
-			prev = t
-		end
-	end
-end
-
-function mod:SpiritLink(_, spellId, nick, spellName)
-	message(spellId, L.used_cast:format(nick, spellName))
-	bar(spellId, 6, nick, spellName)
-end
-
-function mod:PainSuppression(target, spellId, nick, spellName)
-	message(spellId, L.usedon_cast:format(nick, spellName, target))
-	bar(spellId, 8, target, spellName)
-end
-
-function mod:GuardianSpirit(target, spellId, nick, spellName)
-	message(spellId, L.usedon_cast:format(nick, spellName, target))
-	bar(spellId, 10, target, spellName)
-end
-
-function mod:GuardianSpiritOff(target, spellId, nick, spellName)
-	stopbar(spellName, nick, spellName) -- removed on absorbed fatal blow
-end
-
-function mod:PowerWordBarrier(_, spellId, nick, spellName)
-	message(spellId, L.used_cast:format(nick, spellName))
-	bar(spellId, 10, nick, spellName)
-end
-
-function mod:DivineHymn(_, spellId, nick, spellName)
-	message(spellId, L.used_cast:format(nick, spellName))
-	bar(spellId, 8, nick, spellName)
-end
-
-function mod:DivineHymnOff(_, spellId, nick, spellName)
-	stopbar(spellName, nick, spellName)
-end
-
-function mod:HandOfSacrifice(target, spellId, nick, spellName)
-	message(spellId, L.usedon_cast:format(nick, spellName, target))
-	bar(spellId, 12, target, spellName)
-end
-
-function mod:HandOfPurity(target, spellId, nick, spellName)
-	message(spellId, L.usedon_cast:format(nick, spellName, target))
-	bar(spellId, 6, target, spellName)
-end
-
-function mod:DevotionAura(_, spellId, nick, spellName)
-	message(spellId, L.used_cast:format(nick, spellName))
-	bar(spellId, 6, nick, spellName)
-end
-
-function mod:DivineProtection(_, spellId, nick, spellName)
-	message(spellId, L.used_cast:format(nick, spellName), nick)
-	bar(spellId, 8, nick, spellName)
-end
-
-function mod:ArdentDefender(_, spellId, nick, spellName)
-	message(spellId, L.used_cast:format(nick, spellName), nick)
-	bar(spellId, 10, nick, spellName)
-end
-
-function mod:GuardianOfAncientKings(_, spellId, nick, spellName)
-	message(spellId, L.used_cast:format(nick, spellName), nick)
-	bar(spellId, 8, nick, spellName)
-end
-
-function mod:ShieldWall(_, spellId, nick, spellName)
-	message(spellId, L.used_cast:format(nick, spellName), nick)
-	bar(spellId, 8, nick, spellName)
-end
-
-function mod:LastStand(_, spellId, nick, spellName)
-	message(spellId, L.used_cast:format(nick, spellName), nick)
-	bar(spellId, 15, nick, spellName)
-end
-
-function mod:RallyingCry(_, spellId, nick, spellName)
-	message(spellId, L.used_cast:format(nick, spellName))
-	bar(spellId, 10, nick, spellName)
-end
-
-function mod:Vigilance(target, spellId, nick, spellName)
-	message(spellId, L.usedon_cast:format(nick, spellName, target))
-	bar(spellId, 12, target, spellName)
-end
-
-function mod:DemoralizingShout(_, spellId, nick, spellName)
-	message(spellId, L.used_cast:format(nick, spellName), nick)
-	bar(spellId, 8, nick, spellName)
-end
-
-function mod:MockingBanner(_, spellId, nick, spellName)
-	message(spellId, L.used_cast:format(nick, spellName))
-	bar(spellId, 30, nick, spellName)
 end
 
 function mod:IceboundFortitude(_, spellId, nick, spellName)
@@ -723,32 +618,26 @@ function mod:VampiricBlood(_, spellId, nick, spellName)
 	bar(spellId, 10, nick, spellName)
 end
 
-function mod:GorefiendsGrasp(_, spellId, nick, spellName)
-	message(spellId, L.used_cast:format(nick, spellName))
-end
-
-function mod:AntiMagicZone(_, spellId, nick, spellName)
-	message(spellId, L.used_cast:format(nick, spellName))
-	bar(spellId, 3, nick, spellName)
-end
+-- Druid
 
 function mod:Barkskin(_, spellId, nick, spellName)
 	message(spellId, L.used_cast:format(nick, spellName))
 	bar(spellId, 12, nick, spellName)
 end
 
-function mod:SurvivalInstincts(_, spellId, nick, spellName)
-	message(spellId, L.used_cast:format(nick, spellName), nick)
-	bar(spellId, 6, nick, spellName)
-end
-
-function mod:Rebirth(target, spellId, nick, spellName)
-	message("rebirth", L.usedon_cast:format(nick, spellName, target), nil, spellId)
-end
-
 function mod:Ironbark(target, spellId, nick, spellName)
 	message(spellId, L.usedon_cast:format(nick, spellName, target))
 	bar(spellId, 12, target, spellName)
+end
+
+function mod:StampedingRoar(_, spellId, nick, spellName)
+	message(spellId, L.used_cast:format(nick, spellName))
+	bar(spellId, 8, nick, spellName)
+end
+
+function mod:SurvivalInstincts(_, spellId, nick, spellName)
+	message(spellId, L.used_cast:format(nick, spellName), nick)
+	bar(spellId, 6, nick, spellName)
 end
 
 function mod:Tranquility(_, spellId, nick, spellName)
@@ -760,10 +649,30 @@ function mod:TranquilityOff(_, spellId, nick, spellName)
 	stopbar(spellName, nick, spellName)
 end
 
-function mod:StampedingRoar(_, spellId, nick, spellName)
+-- Hunter
+
+function mod:AspectOfTheFox(_, spellId, nick, spellName)
 	message(spellId, L.used_cast:format(nick, spellName))
-	bar(spellId, 8, nick, spellName)
+	bar(spellId, 6, nick, spellName)
 end
+
+-- Mage
+
+function mod:AmplifyMagic(_, spellId, nick, spellName)
+	message(spellId, L.used_cast:format(nick, spellName))
+	bar(spellId, 6, nick, spellName)
+end
+
+function mod:Portals(_, spellId, nick, spellName)
+	message("portal", L.portal_cast:format(nick, spellName), nil, spellId)
+	bar("portal", 65, L.portal_bar:format(spellName, nick), nick, spellName, spellId)
+end
+
+function mod:Refreshment(_, spellId, nick, spellName)
+	message(spellId, L.used_cast:format(nick, spellName))
+end
+
+-- Monk
 
 function mod:DampenHarm(_, spellId, nick, spellName)
 	message(spellId, L.used_cast:format(nick, spellName), nick)
@@ -784,15 +693,6 @@ function mod:FortifyingBrew(_, spellId, nick, spellName)
 	bar(spellId, 15, nick, spellName)
 end
 
-function mod:ZenMeditation(_, spellId, nick, spellName)
-	message(spellId, L.used_cast:format(nick, spellName), nick)
-	bar(spellId, 8, nick, spellName)
-end
-
-function mod:ZenMeditationOff(_, spellId, nick, spellName)
-	stopbar(spellName, nick) -- removed on melee
-end
-
 function mod:LifeCocoon(target, spellId, nick, spellName)
 	message(spellId, L.usedon_cast:format(nick, spellName, target))
 	bar(spellId, 12, target, spellName)
@@ -806,18 +706,142 @@ function mod:Revival(_, spellId, nick, spellName)
 	message(spellId, L.used_cast:format(nick, spellName))
 end
 
+function mod:ZenMeditation(_, spellId, nick, spellName)
+	message(spellId, L.used_cast:format(nick, spellName), nick)
+	bar(spellId, 8, nick, spellName)
+end
+
+function mod:ZenMeditationOff(_, spellId, nick, spellName)
+	stopbar(spellName, nick) -- removed on melee
+end
+
+-- Paladin
+
+function mod:ArdentDefender(_, spellId, nick, spellName)
+	message(spellId, L.used_cast:format(nick, spellName), nick)
+	bar(spellId, 10, nick, spellName)
+end
+
+function mod:DevotionAura(_, spellId, nick, spellName)
+	message(spellId, L.used_cast:format(nick, spellName))
+	bar(spellId, 6, nick, spellName)
+end
+
+function mod:DivineProtection(_, spellId, nick, spellName)
+	message(spellId, L.used_cast:format(nick, spellName), nick)
+	bar(spellId, 8, nick, spellName)
+end
+
+function mod:GuardianOfAncientKings(_, spellId, nick, spellName)
+	message(spellId, L.used_cast:format(nick, spellName), nick)
+	bar(spellId, 8, nick, spellName)
+end
+
+function mod:HandOfSacrifice(target, spellId, nick, spellName)
+	message(spellId, L.usedon_cast:format(nick, spellName, target))
+	bar(spellId, 12, target, spellName)
+end
+
+function mod:HandOfPurity(target, spellId, nick, spellName)
+	message(spellId, L.usedon_cast:format(nick, spellName, target))
+	bar(spellId, 6, target, spellName)
+end
+
+-- Priest
+
+function mod:DivineHymn(_, spellId, nick, spellName)
+	message(spellId, L.used_cast:format(nick, spellName))
+	bar(spellId, 8, nick, spellName)
+end
+
+function mod:DivineHymnOff(_, spellId, nick, spellName)
+	stopbar(spellName, nick, spellName)
+end
+
+function mod:GuardianSpirit(target, spellId, nick, spellName)
+	message(spellId, L.usedon_cast:format(nick, spellName, target))
+	bar(spellId, 10, target, spellName)
+end
+
+function mod:GuardianSpiritOff(target, spellId, nick, spellName)
+	stopbar(spellName, nick, spellName) -- removed on absorbed fatal blow
+end
+
+function mod:PainSuppression(target, spellId, nick, spellName)
+	message(spellId, L.usedon_cast:format(nick, spellName, target))
+	bar(spellId, 8, target, spellName)
+end
+
+function mod:PowerWordBarrier(_, spellId, nick, spellName)
+	message(spellId, L.used_cast:format(nick, spellName))
+	bar(spellId, 10, nick, spellName)
+end
+
+-- Rogue
+
 function mod:SmokeBomb(_, spellId, nick, spellName)
 	message(spellId, L.used_cast:format(nick, spellName))
 	bar(spellId, 5, nick, spellName)
 end
 
-function mod:AmplifyMagic(_, spellId, nick, spellName)
+-- Shaman
+
+do
+	local prev = 0
+	function mod:Bloodlust(_, spellId, nick, spellName)
+		local t = GetTime()
+		if t-prev > 40 then
+			prev = t
+			message(2825, L.used_cast:format(nick, spellName), nil, spellId)
+			bar(2825, 40, nick, spellName, spellId)
+		end
+	end
+end
+
+function mod:SpiritLink(_, spellId, nick, spellName)
 	message(spellId, L.used_cast:format(nick, spellName))
 	bar(spellId, 6, nick, spellName)
 end
 
-function mod:AspectOfTheFox(_, spellId, nick, spellName)
+-- Warlock
+
+function mod:Soulwell(_, spellId, nick, spellName)
 	message(spellId, L.used_cast:format(nick, spellName))
-	bar(spellId, 6, nick, spellName)
+end
+
+function mod:SummoningStone(_, spellId, nick, spellName)
+	message(spellId, L.ritual_cast:format(nick, spellName))
+end
+
+-- Warrior
+
+function mod:DemoralizingShout(_, spellId, nick, spellName)
+	message(spellId, L.used_cast:format(nick, spellName), nick)
+	bar(spellId, 8, nick, spellName)
+end
+
+function mod:LastStand(_, spellId, nick, spellName)
+	message(spellId, L.used_cast:format(nick, spellName), nick)
+	bar(spellId, 15, nick, spellName)
+end
+
+function mod:MockingBanner(_, spellId, nick, spellName)
+	message(spellId, L.used_cast:format(nick, spellName))
+	bar(spellId, 30, nick, spellName)
+end
+
+function mod:RallyingCry(_, spellId, nick, spellName)
+	message(spellId, L.used_cast:format(nick, spellName))
+	bar(spellId, 10, nick, spellName)
+end
+
+function mod:ShieldWall(_, spellId, nick, spellName)
+	message(spellId, L.used_cast:format(nick, spellName), nick)
+	bar(spellId, 8, nick, spellName)
+end
+
+function mod:Vigilance(target, spellId, nick, spellName)
+	message(spellId, L.usedon_cast:format(nick, spellName, target))
+	bar(spellId, 12, target, spellName)
 end
 
