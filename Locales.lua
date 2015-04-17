@@ -1,52 +1,25 @@
 -- update at http://www.wowace.com/addons/big-wigs_common-auras/localization/
 
-local L = LibStub("AceLocale-3.0"):NewLocale("Big Wigs: Common Auras", "deDE")
-if L then
+local n, L = ...
+local locale = GetLocale()
+
+if locale == "deDE" then
 --@localization(locale="deDE", format="lua_additive_table", handle-unlocalized="ignore")@
-end
-
-L = LibStub("AceLocale-3.0"):NewLocale("Big Wigs: Common Auras", "esES")
-if L then
+elseif locale == "esES" or locale == "esMX" then
 --@localization(locale="esES", format="lua_additive_table", handle-unlocalized="ignore")@
-end
-
-L = LibStub("AceLocale-3.0"):NewLocale("Big Wigs: Common Auras", "esMX")
-if L then
---@localization(locale="esES", format="lua_additive_table", handle-unlocalized="ignore")@
-end
-
-L = LibStub("AceLocale-3.0"):NewLocale("Big Wigs: Common Auras", "frFR")
-if L then
+elseif locale == "frFR" then
 --@localization(locale="frFR", format="lua_additive_table", handle-unlocalized="ignore")@
-end
-
-L = LibStub("AceLocale-3.0"):NewLocale("Big Wigs: Common Auras", "itIT")
-if L then
+elseif locale == "itIT" then
 --@localization(locale="itIT", format="lua_additive_table", handle-unlocalized="ignore")@
-end
-
-L = LibStub("AceLocale-3.0"):NewLocale("Big Wigs: Common Auras", "koKR")
-if L then
+elseif locale == "koKR" then
 --@localization(locale="koKR", format="lua_additive_table", handle-unlocalized="ignore")@
-end
-
-L = LibStub("AceLocale-3.0"):NewLocale("Big Wigs: Common Auras", "ptBR")
-if L then
+elseif locale == "ptBR" then
 --@localization(locale="ptBR", format="lua_additive_table", handle-unlocalized="ignore")@
-end
-
-L = LibStub("AceLocale-3.0"):NewLocale("Big Wigs: Common Auras", "ruRU")
-if L then
+elseif locale == "ruRU" then
 --@localization(locale="ruRU", format="lua_additive_table", handle-unlocalized="ignore")@
-end
-
-L = LibStub("AceLocale-3.0"):NewLocale("Big Wigs: Common Auras", "zhCN")
-if L then
+elseif locale == "zhCN" then
 --@localization(locale="zhCN", format="lua_additive_table", handle-unlocalized="ignore")@
-end
-
-L = LibStub("AceLocale-3.0"):NewLocale("Big Wigs: Common Auras", "zhTW")
-if L then
+elseif locale == "zhTW" then
 --@localization(locale="zhTW", format="lua_additive_table", handle-unlocalized="ignore")@
 end
 

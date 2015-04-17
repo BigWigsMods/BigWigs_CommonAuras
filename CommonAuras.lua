@@ -10,21 +10,24 @@ if not mod then return end
 -- Localization
 --
 
-local L = LibStub("AceLocale-3.0"):NewLocale("Big Wigs: Common Auras", "enUS", true)
-if L then
-	L["Common Auras"] = true
-	L["Out of combat"] = true
-	L["Group"] = true
-	L["Self"] = true
-	L["Healer"] = true
+local L
+do
+	local n
+	n, L = ...
+
+	L["Common Auras"] = "Common Auras"
+	L["Out of combat"] = "Out of combat"
+	L["Group"] = "Group"
+	L["Self"] = "Self"
+	L["Healer"] = "Healer"
 	L.TANK_desc = "Some abilities are only important for tanks. Set this option to only see messages and bars for players with their assigned role set to Tank."
-	L["Messages"] = true
-	L["Colors"] = true
-	L["Normal bar"] = true
-	L["Emphasized bar"] = true
-	L["Bar background"] = true
-	L["Bar text"] = true
-	L["Bar text shadow"] = true
+	L["Messages"] = "Messages"
+	L["Colors"] = "Colors"
+	L["Normal bar"] = "Normal bar"
+	L["Emphasized bar"] = "Emphasized bar"
+	L["Bar background"] = "Bar background"
+	L["Bar text"] = "Bar text"
+	L["Bar text shadow"] = "Bar text shadow"
 
 	L.usedon_cast = "%s: %s on %s"
 	L.used_cast = "%s used %s"
@@ -49,7 +52,6 @@ if L then
 	L.rebirth_desc = "Toggle showing combat resurrections."
 	L.rebirth_icon = 20484
 end
-L = LibStub("AceLocale-3.0"):GetLocale("Big Wigs: Common Auras")
 
 function mod:GetLocale() return L end
 
@@ -225,7 +227,7 @@ local function GetOptions()
 			args = {
 				master = {
 					type = "toggle",
-					name = ("|cfffed000%s|r"):format(isSpell and GetSpellInfo(key) or L[key] or "???"),
+					name = ("|cfffed000%s|r"):format(isSpell and GetSpellInfo(key) or L[key] or key),
 					desc = isSpell and GetSpellDescription(key) or L[key.."_desc"], descStyle = "inline",
 					image = GetSpellTexture(isSpell and key or L[key.."_icon"]),
 					get = masterGet,
