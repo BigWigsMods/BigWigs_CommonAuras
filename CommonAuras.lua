@@ -74,6 +74,7 @@ local toggleOptions = {
 	33206, -- Pain Suppression
 	62618, -- Power Word: Barrier
 	98008, -- Spirit Link Totem
+	108280, -- Healing Tide Totem
 }
 local toggleDefaults = {}
 for _, key in next, toggleOptions do
@@ -360,6 +361,7 @@ function mod:OnRegister()
 		[740] = "Tranquility",
 		[31821] = "DevotionAura",
 		[98008] = "SpiritLink",
+		[108280] = "HealingTide",
 		[116849] = "LifeCocoon",
 		[115310] = "Revival",
 	}
@@ -478,6 +480,7 @@ colors = {
 	[33206] = yellow, -- Pain Suppression
 	[2825] = red, -- Bloodlust
 	[98008] = orange, -- Spirit Link Totem
+	[108280] = orange, -- Healing Tide Totem
 	[114192] = orange, -- Mocking Banner
 	[114030] = orange, -- Vigilance
 }
@@ -766,6 +769,11 @@ end
 function mod:SpiritLink(_, spellId, nick, spellName)
 	message(spellId, L.used_cast:format(nick, spellName))
 	bar(spellId, 6, nick, spellName)
+end
+
+function mod:HealingTide(_, spellId, nick, spellName)
+	message(spellId, L.used_cast:format(nick, spellName))
+	bar(spellId, 10, nick, spellName)
 end
 
 -- Warlock
