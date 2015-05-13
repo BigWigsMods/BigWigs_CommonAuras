@@ -420,15 +420,6 @@ function mod:OnRegister()
 	end
 end
 
-local function COMBAT_LOG_EVENT_UNFILTERED(_, _, _, event, _, _, source, _, _, _, player, _, _, spellId, spellName)
-	local f = combatLogMap[event] and combatLogMap[event][spellId] or nil
-	if f and player then
-		mod[f](mod, player:gsub("%-.+", "*"), spellId, source:gsub("%-.+", "*"), spellName)
-	elseif f then
-		mod[f](mod, player, spellId, source:gsub("%-.+", "*"), spellName)
-	end
-end
-
 function mod:OnPluginEnable()
 	if self.resetMessage then
 		print("|cFF33FF99Big Wigs|r: Common Auras has been updated to show in the Big Wigs settings panel! Spells now default to being disabled which, unfortunately, means your settings have been reset :(")
@@ -437,8 +428,6 @@ function mod:OnPluginEnable()
 	cModule = BigWigs:GetPlugin("Colors")
 	self:RegisterEvent("PLAYER_REGEN_DISABLED")
 
-	-- Dedicated handler for efficiency
-	CAFrame:SetScript("OnEvent", COMBAT_LOG_EVENT_UNFILTERED)
 	CAFrame:RegisterEvent("COMBAT_LOG_EVENT_UNFILTERED")
 end
 
@@ -528,6 +517,16 @@ end
 --------------------------------------------------------------------------------
 -- Event Handlers
 --
+
+-- Dedicated COMBAT_LOG_EVENT_UNFILTERED handler for efficiency
+CAFrame:SetScript("OnEvent", function(_, _, _, event, _, _, source, _, _, _, player, _, _, spellId, spellName)
+	local f = combatLogMap[event] and combatLogMap[event][spellId] or nil
+	if f and player then
+		mod[f](mod, player:gsub("%-.+", "*"), spellId, source:gsub("%-.+", "*"), spellName)
+	elseif f then
+		mod[f](mod, player, spellId, source:gsub("%-.+", "*"), spellName)
+	end
+end)
 
 -- General
 
