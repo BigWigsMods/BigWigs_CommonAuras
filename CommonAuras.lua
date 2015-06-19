@@ -11,11 +11,7 @@ local CAFrame = CreateFrame("Frame")
 -- Localization
 --
 
-local L
-do
-	local n
-	n, L = ...
-end
+local addonName, L = ...
 
 function mod:GetLocale() return L end
 
@@ -74,10 +70,10 @@ local toggleOptions = {
 	47788, -- Guardian Spirit
 	33206, -- Pain Suppression
 	62618, -- Power Word: Barrier
-	98008, -- Spirit Link Totem
 	108280, -- Healing Tide Totem
+	98008, -- Spirit Link Totem
 }
-local toggleDefaults = {}
+local toggleDefaults = { enabled = true }
 for _, key in next, toggleOptions do
 	toggleDefaults[key] = 0
 end
@@ -86,8 +82,12 @@ mod.defaultDB = toggleDefaults
 
 local C = BigWigs.C
 local bit_band = bit.band
-local cModule = nil
 local colors = nil -- key to message color map
+
+-- for emphasized options
+function mod:CheckOption(key, flag)
+	return self.db.profile[key] and bit_band(self.db.profile[key], C[flag]) == C[flag]
+end
 
 local options = nil
 local function GetOptions()
@@ -99,12 +99,30 @@ local function GetOptions()
 		name = L["Common Auras"],
 		type = "group",
 		childGroups = "tab",
-		args = {},
+		args = {
+			header = {
+				type = "description",
+				name = GetAddOnMetadata(addonName, "Notes") .. "\n",
+				fontSize = "medium",
+				order = 0,
+			},
+			enabled = {
+				type = "toggle",
+				name = ENABLE,
+				get = function() return mod.db.profile.enabled end,
+				set = function(_, value)
+					mod.db.profile.enabled = value
+					mod:Disable()
+					mod:Enable()
+				end,
+				order = 1,
+			},
+		},
 	}
 
 	local function masterGet(info)
 		local key = info[#info-1]
-		if type(mod.db.profile[key]) ~= "number" then 
+		if type(mod.db.profile[key]) ~= "number" then
 			mod.db.profile[key] = 0
 		end
 		return mod.db.profile[key] > 0
@@ -138,6 +156,7 @@ local function GetOptions()
 		return value == 0
 	end
 
+	local cModule = BigWigs:GetPlugin("Colors")
 	local function barColorGet(info)
 		local option = info[#info]
 		local key = info[#info-1]
@@ -337,6 +356,7 @@ function mod:OnRegister()
 		[80353] = "Bloodlust", -- Time Warp
 		[90355] = "Bloodlust", -- Ancient Hysteria
 		[160452] = "Bloodlust", -- Netherwinds
+		[178207] = "Bloodlust", -- Leatherworking: Drums of Fury
 		-- Tank
 		[871] = "ShieldWall",
 		[12975] = "LastStand",
@@ -425,7 +445,6 @@ function mod:OnPluginEnable()
 		print("|cFF33FF99Big Wigs|r: Common Auras has been updated to show in the Big Wigs settings panel! Spells now default to being disabled which, unfortunately, means your settings have been reset :(")
 	end
 
-	cModule = BigWigs:GetPlugin("Colors")
 	self:RegisterEvent("PLAYER_REGEN_DISABLED")
 
 	CAFrame:RegisterEvent("COMBAT_LOG_EVENT_UNFILTERED")
@@ -466,8 +485,8 @@ colors = {
 	[47788] = yellow, -- Guardian Spirit
 	[33206] = yellow, -- Pain Suppression
 	[2825] = red, -- Bloodlust
+	[108280] = green, -- Healing Tide Totem
 	[98008] = orange, -- Spirit Link Totem
-	[108280] = orange, -- Healing Tide Totem
 	[114192] = orange, -- Mocking Banner
 	[114030] = orange, -- Vigilance
 }
