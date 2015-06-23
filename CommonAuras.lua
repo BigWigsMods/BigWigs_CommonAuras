@@ -33,8 +33,6 @@ local toggleOptions = {
 	108199, -- Gorefiend's Grasp
 	106898, -- Stampeding Roar
 	"rebirth",
-	172106, -- Aspect of the Fox
-	159916, -- Amplify Magic
 	6940, -- Hand of Sacrifice
 	114039, -- Hand of Purity
 	76577, -- Smoke Bomb
@@ -343,13 +341,11 @@ function mod:OnRegister()
 		[97462] = "RallyingCry",
 		[114030] = "Vigilance",
 		[106898] = "StampedingRoar",
-		[172106] = "AspectOfTheFox",
 		[6940] = "HandOfSacrifice",
 		[114039] = "HandOfPurity",
 		[108199] = "GorefiendsGrasp",
 		[51052] = "AntiMagicZone",
 		[76577] = "SmokeBomb",
-		[159916] = "AmplifyMagic",
 		-- DPS
 		[2825] = "Bloodlust", -- Bloodlust
 		[32182] = "Bloodlust", -- Heroism
@@ -476,7 +472,6 @@ colors = {
 	[106898] = green, -- Stampeding Roar
 	[740] = green, -- Tranquility
 	rebirth = green,
-	[172106] = green, -- Aspect of the Fox
 	[116849] = yellow, -- Life Cocoon
 	[115310] = green, -- Revival
 	[6940] = orange, -- Hand of Sacrifice
@@ -633,19 +628,7 @@ function mod:TranquilityOff(_, spellId, nick, spellName)
 	stopbar(spellName, nick, spellName)
 end
 
--- Hunter
-
-function mod:AspectOfTheFox(_, spellId, nick, spellName)
-	message(spellId, L.used_cast:format(nick, spellName))
-	bar(spellId, 6, nick, spellName)
-end
-
 -- Mage
-
-function mod:AmplifyMagic(_, spellId, nick, spellName)
-	message(spellId, L.used_cast:format(nick, spellName))
-	bar(spellId, 6, nick, spellName)
-end
 
 function mod:Portals(_, spellId, nick, spellName)
 	message("portal", L.portal_cast:format(nick, spellName), nil, spellId)
