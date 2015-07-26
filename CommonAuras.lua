@@ -381,6 +381,8 @@ function mod:OnRegister()
 		[108280] = "HealingTide",
 		[116849] = "LifeCocoon",
 		[115310] = "Revival",
+		-- Reincarnation
+		[21169] = "Reincarnation",
 	}
 	combatLogMap.SPELL_AURA_REMOVED = {
 		[740] = "TranquilityOff",
@@ -569,6 +571,10 @@ end
 
 function mod:Rebirth(target, spellId, nick, spellName)
 	message("rebirth", L.usedon_cast:format(nick, spellName, target), nil, spellId)
+end
+
+function mod:Reincarnation(_, spellId, nick, spellName)
+	message("rebirth", L.used_cast:format(nick, spellName), nil, spellId)
 end
 
 -- Deathknight
