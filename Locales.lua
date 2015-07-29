@@ -39,6 +39,18 @@ L.rebirth = "Rebirth"
 L.rebirth_desc = "Toggle showing combat resurrections."
 L.rebirth_icon = 20484
 
+L.ring_tank = ("%s %s"):format(GetSpellInfo(187613), INLINE_TANK_ICON) -- "Sanctus (Healer)"
+L.ring_tank_desc = GetSpellDescription(187613)
+L.ring_tank_icon = 187613
+
+L.ring_healer = ("%s %s"):format(GetSpellInfo(187612), INLINE_HEALER_ICON) -- "Etheralus (Healer)"
+L.ring_healer_desc = GetSpellDescription(187612)
+L.ring_healer_icon = 187612
+
+L.ring_damager =("%s/ %s / %s %s"):format(GetSpellInfo(187611), GetSpellInfo(187614), GetSpellInfo(187615), INLINE_DAMAGER_ICON) -- "Nithramus / Thorasus / Maalus (Damager)"
+L.ring_damager_desc = GetSpellDescription(187611)
+L.ring_damager_icon = 187611
+
 local locale = GetLocale()
 if locale == "deDE" then
 --@localization(locale="deDE", format="lua_additive_table", handle-unlocalized="ignore")@

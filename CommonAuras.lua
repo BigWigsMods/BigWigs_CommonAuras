@@ -29,6 +29,9 @@ local toggleOptions = {
 	698, -- Ritual of Summoning
 
 	--[[ Group ]]--
+	"ring_tank",    -- 6.2 Legendary Rings
+	"ring_healer",  -- 6.2 Legendary Rings
+	"ring_damager", -- 6.2 Legendary Rings
 	51052, -- Anti-Magic Zone
 	108199, -- Gorefiend's Grasp
 	106898, -- Stampeding Roar
@@ -178,7 +181,7 @@ local function GetOptions()
 
 	local optionHeaders = {
 		feast = L["Out of combat"],
-		[51052] = L["Group"],
+		ring_tank = L["Group"],
 		[48792] = L["Self"],
 		[102342] = L["Healer"],
 	}
@@ -338,6 +341,11 @@ function mod:OnRegister()
 		[29893] = "Soulwell", -- Create Soulwell
 		[43987] = "Refreshment", -- Conjure Refreshment Table
 		-- Group
+		-- [187611] = "RingDamager", -- Nithramus (int dps)
+		-- [187612] = "RingHealer", -- Etheralus (healer)
+		-- [187613] = "RingTank", -- Sanctus (tank)
+		-- [187614] = "RingDamager", -- Thorasus (str dps)
+		-- [187615] = "RingDamager", -- Maalus (agi dps)
 		[97462] = "RallyingCry",
 		[114030] = "Vigilance",
 		[106898] = "StampedingRoar",
@@ -384,6 +392,13 @@ function mod:OnRegister()
 		-- Reincarnation
 		[21169] = "Reincarnation",
 	}
+	combatLogMap.SPELL_AURA_APPLIED = {
+		[187616] = "RingDamager", -- Nithramus (int dps)
+		[187618] = "RingHealer", -- Etheralus (healer)
+		[187617] = "RingTank", -- Sanctus (tank)
+		[187619] = "RingDamager", -- Thorasus (str dps)
+		[187620] = "RingDamager", -- Maalus (agi dps)
+	}
 	combatLogMap.SPELL_AURA_REMOVED = {
 		[740] = "TranquilityOff",
 		[64843] = "DivineHymnOff",
@@ -391,6 +406,11 @@ function mod:OnRegister()
 		[115176] = "ZenMeditationOff",
 		[116849] = "LifeCocoonOff",
 		[122278] = "DampenHarmOff",
+		[187616] = "RingRemoved", -- Nithramus (int dps)
+		[187618] = "RingRemoved", -- Etheralus (healer)
+		[187617] = "RingRemoved", -- Sanctus (tank)
+		[187619] = "RingRemoved", -- Thorasus (str dps)
+		[187620] = "RingRemoved", -- Maalus (agi dps)
 	}
 	combatLogMap.SPELL_CREATE = {
 		[11419] = "Portals", -- Darnassus
@@ -486,6 +506,9 @@ colors = {
 	[98008] = orange, -- Spirit Link Totem
 	[114192] = orange, -- Mocking Banner
 	[114030] = orange, -- Vigilance
+	ring_tank = orange,
+	ring_healer = green,
+	ring_damager = red,
 }
 
 local function checkFlag(key, flag, player)
@@ -545,6 +568,41 @@ CAFrame:SetScript("OnEvent", function(_, _, _, event, _, _, source, _, _, _, pla
 end)
 
 -- General
+
+do
+	-- If wearing a ring for the wrong role (dps wearing healer ring),
+	-- you can use it but don't gain the effect and it doesn't go on cd :(
+	-- that's the reason for using AURA_APPLIED instead of CAST_SUCCESS
+
+	local caster = {}
+	function mod:RingTank(_, spellId, nick, spellName)
+		if not caster[nick] then
+			caster[nick] = true
+			message("ring_tank", L.used_cast:format(nick, spellName), nil, spellId)
+			bar("ring_tank", 15, nick, spellName, spellId)
+		end
+	end
+
+	function mod:RingHealer(_, spellId, nick, spellName)
+		if not caster[nick] then
+			caster[nick] = true
+			message("ring_healer", L.used_cast:format(nick, spellName), nil, spellId)
+			bar("ring_healer", 15, nick, spellName, spellId)
+		end
+	end
+
+	function mod:RingDamager(_, spellId, nick, spellName)
+		if not caster[nick] then
+			caster[nick] = true
+			message("ring_damager", L.used_cast:format(nick, spellName), nil, spellId)
+			bar("ring_damager", 15, nick, spellName, spellId)
+		end
+	end
+
+	function mod:RingRemoved(_, _, nick)
+		caster[nick] = nil
+	end
+end
 
 do
 	local feast = GetSpellInfo(66477)
