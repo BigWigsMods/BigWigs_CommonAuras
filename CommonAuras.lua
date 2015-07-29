@@ -29,9 +29,6 @@ local toggleOptions = {
 	698, -- Ritual of Summoning
 
 	--[[ Group ]]--
-	"ring_tank",    -- 6.2 Legendary Rings
-	"ring_healer",  -- 6.2 Legendary Rings
-	"ring_damager", -- 6.2 Legendary Rings
 	51052, -- Anti-Magic Zone
 	108199, -- Gorefiend's Grasp
 	106898, -- Stampeding Roar
@@ -73,6 +70,11 @@ local toggleOptions = {
 	62618, -- Power Word: Barrier
 	108280, -- Healing Tide Totem
 	98008, -- Spirit Link Totem
+	
+	--[[ Special ]]--
+	"ring_tank",    -- 6.2 Legendary Rings
+	"ring_healer",  -- 6.2 Legendary Rings
+	"ring_damager", -- 6.2 Legendary Rings
 }
 local toggleDefaults = { enabled = true }
 for _, key in next, toggleOptions do
@@ -181,9 +183,10 @@ local function GetOptions()
 
 	local optionHeaders = {
 		feast = L["Out of combat"],
-		ring_tank = L["Group"],
+		[51052] = L["Group"],
 		[48792] = L["Self"],
 		[102342] = L["Healer"],
+		ring_tank = L["Legendary Rings"],
 	}
 	local bitflags = {"MESSAGE", "BAR", "EMPHASIZE"}
 	local parentGroup = nil

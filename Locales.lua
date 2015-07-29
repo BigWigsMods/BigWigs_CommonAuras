@@ -39,6 +39,7 @@ L.rebirth = "Rebirth"
 L.rebirth_desc = "Toggle showing combat resurrections."
 L.rebirth_icon = 20484
 
+L["Legendary Rings"] = "Legendary Rings"
 L.ring_tank = ("%s %s"):format(GetSpellInfo(187613), INLINE_TANK_ICON) -- "Sanctus (Healer)"
 L.ring_tank_desc = GetSpellDescription(187613)
 L.ring_tank_icon = 187613
