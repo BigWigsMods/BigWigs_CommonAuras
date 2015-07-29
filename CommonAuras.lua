@@ -409,11 +409,6 @@ function mod:OnRegister()
 		[115176] = "ZenMeditationOff",
 		[116849] = "LifeCocoonOff",
 		[122278] = "DampenHarmOff",
-		[187616] = "RingRemoved", -- Nithramus (int dps)
-		[187618] = "RingRemoved", -- Etheralus (healer)
-		[187617] = "RingRemoved", -- Sanctus (tank)
-		[187619] = "RingRemoved", -- Thorasus (str dps)
-		[187620] = "RingRemoved", -- Maalus (agi dps)
 	}
 	combatLogMap.SPELL_CREATE = {
 		[11419] = "Portals", -- Darnassus
@@ -572,38 +567,40 @@ end)
 
 -- General
 
+-- If wearing a ring for the wrong role (dps wearing healer ring),
+-- you can use it but don't gain the effect and it doesn't go on cd :(
+-- that's the reason for using AURA_APPLIED instead of CAST_SUCCESS
 do
-	-- If wearing a ring for the wrong role (dps wearing healer ring),
-	-- you can use it but don't gain the effect and it doesn't go on cd :(
-	-- that's the reason for using AURA_APPLIED instead of CAST_SUCCESS
-
-	local caster = {}
+	local prev = 0
 	function mod:RingTank(_, spellId, nick, spellName)
-		if not caster[nick] then
-			caster[nick] = true
+		local t = GetTime()
+		if t-prev > 20 then
+			prev = t
 			message("ring_tank", L.used_cast:format(nick, spellName), nil, spellId)
 			bar("ring_tank", 15, nick, spellName, spellId)
 		end
 	end
-
+end
+do
+	local prev = 0
 	function mod:RingHealer(_, spellId, nick, spellName)
-		if not caster[nick] then
-			caster[nick] = true
+		local t = GetTime()
+		if t-prev > 20 then
+			prev = t
 			message("ring_healer", L.used_cast:format(nick, spellName), nil, spellId)
 			bar("ring_healer", 15, nick, spellName, spellId)
 		end
 	end
-
+end
+do
+	local prev = 0
 	function mod:RingDamager(_, spellId, nick, spellName)
-		if not caster[nick] then
-			caster[nick] = true
+		local t = GetTime()
+		if t-prev > 20 then
+			prev = t
 			message("ring_damager", L.used_cast:format(nick, spellName), nil, spellId)
 			bar("ring_damager", 15, nick, spellName, spellId)
 		end
-	end
-
-	function mod:RingRemoved(_, _, nick)
-		caster[nick] = nil
 	end
 end
 
