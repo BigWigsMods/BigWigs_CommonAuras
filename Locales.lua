@@ -1,6 +1,6 @@
 -- update at http://www.wowace.com/addons/big-wigs_common-auras/localization/
 
-local n, L = ...
+local _, L = ...
 
 L["Common Auras"] = "Common Auras"
 L["Out of combat"] = "Out of combat"

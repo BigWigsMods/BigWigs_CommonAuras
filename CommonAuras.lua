@@ -485,7 +485,6 @@ local orange = "Urgent"    -- damaging cds
 local yellow = "Attention" -- targeted cds
 local red = "Important"    -- dps cds
 local blue = "Personal"    -- everything else
-local cyan = "Neutral"     -- not used
 
 colors = {
 	[102342] = yellow, -- Ironbark
@@ -688,7 +687,7 @@ function mod:Tranquility(_, spellId, nick, spellName)
 	bar(spellId, 8, nick, spellName)
 end
 
-function mod:TranquilityOff(_, spellId, nick, spellName)
+function mod:TranquilityOff(_, _, nick, spellName)
 	stopbar(spellName, nick, spellName)
 end
 
@@ -710,7 +709,7 @@ function mod:DampenHarm(_, spellId, nick, spellName)
 	bar(spellId, 45, nick, spellName)
 end
 
-function mod:DampenHarmOff(_, spellId, nick, spellName)
+function mod:DampenHarmOff(_, _, nick, spellName)
 	stopbar(spellName, nick) -- removed on melees
 end
 
@@ -729,7 +728,7 @@ function mod:LifeCocoon(target, spellId, nick, spellName)
 	bar(spellId, 12, target, spellName)
 end
 
-function mod:LifeCocoonOff(target, spellId, nick, spellName)
+function mod:LifeCocoonOff(target, _, _, spellName)
 	stopbar(spellName, target)
 end
 
@@ -742,7 +741,7 @@ function mod:ZenMeditation(_, spellId, nick, spellName)
 	bar(spellId, 8, nick, spellName)
 end
 
-function mod:ZenMeditationOff(_, spellId, nick, spellName)
+function mod:ZenMeditationOff(_, _, nick, spellName)
 	stopbar(spellName, nick) -- removed on melee
 end
 
@@ -785,7 +784,7 @@ function mod:DivineHymn(_, spellId, nick, spellName)
 	bar(spellId, 8, nick, spellName)
 end
 
-function mod:DivineHymnOff(_, spellId, nick, spellName)
+function mod:DivineHymnOff(_, _, nick, spellName)
 	stopbar(spellName, nick, spellName)
 end
 
@@ -794,7 +793,7 @@ function mod:GuardianSpirit(target, spellId, nick, spellName)
 	bar(spellId, 10, target, spellName)
 end
 
-function mod:GuardianSpiritOff(target, spellId, nick, spellName)
+function mod:GuardianSpiritOff(_, _, nick, spellName)
 	stopbar(spellName, nick, spellName) -- removed on absorbed fatal blow
 end
 
