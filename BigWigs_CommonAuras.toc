@@ -1,4 +1,4 @@
-## Interface: 60200
+## Interface: 70000
 
 ## Title: Big Wigs |cffff0000+|r|cffffffffCommon Auras|r
 ## Title-deDE: Big Wigs |cffff0000+|r|cffffffff@localization(locale="deDE", key="Common Auras")@|r
