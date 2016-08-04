@@ -27,6 +27,7 @@
 ## Author: Funkydude, Nebula169
 ## Version: @project-version@
 ## X-Category: Raid
+## X-License: All Rights Reserved: You are free to fork and modify on GitHub, please ask us about anything else.
 ## X-Curse-Project-ID: big-wigs_common-auras
 ## X-WoWI-ID: 23611
 ## Dependencies: BigWigs
