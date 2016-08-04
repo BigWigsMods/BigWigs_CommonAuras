@@ -178,7 +178,7 @@ local function GetOptions()
 
 	local optionHeaders = {
 		feast = L["Out of combat"],
-		[51052] = L["Group"],
+		[108199] = L["Group"],
 		[48792] = L["Self"],
 		[102342] = L["Healer"],
 		ring_tank = L["Legendary Rings"],
