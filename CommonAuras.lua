@@ -29,21 +29,15 @@ local toggleOptions = {
 	698, -- Ritual of Summoning
 
 	--[[ Group ]]--
-	51052, -- Anti-Magic Zone
 	108199, -- Gorefiend's Grasp
 	106898, -- Stampeding Roar
 	"rebirth",
-	6940, -- Hand of Sacrifice
-	114039, -- Hand of Purity
-	76577, -- Smoke Bomb
+	6940, -- Blessing of Sacrifice
 	2825, -- Bloodlust
-	114192, -- Mocking Banner
-	97462, -- Rallying Cry
-	114030, -- Vigilance
+	97462, -- Commanding Shout
 
 	--[[ Self ]]--
 	48792, -- Icebound Fortitude
-	48982, -- Rune Tap
 	55233, -- Vampiric Blood
 	22812, -- Barkskin
 	61336, -- Survival Instincts
@@ -53,6 +47,7 @@ local toggleOptions = {
 	115176, -- Zen Meditation
 	31850, -- Ardent Defender
 	498, -- Divine Protection
+	642, -- Divine Shield
 	86659, -- Guardian of Ancient Kings
 	1160, -- Demoralizing Shout
 	12975, -- Last Stand
@@ -63,7 +58,7 @@ local toggleOptions = {
 	740, -- Tranquility
 	116849, -- Life Cocoon
 	115310, -- Revival
-	31821, -- Devotion Aura
+	31821, -- Aura Mastery
 	64843, -- Divine Hymn
 	47788, -- Guardian Spirit
 	33206, -- Pain Suppression
@@ -349,14 +344,10 @@ function mod:OnRegister()
 		-- [187613] = "RingTank", -- Sanctus (tank)
 		-- [187614] = "RingDamager", -- Thorasus (str dps)
 		-- [187615] = "RingDamager", -- Maalus (agi dps)
-		[97462] = "RallyingCry",
-		[114030] = "Vigilance",
+		[97462] = "CommandingShout",
 		[106898] = "StampedingRoar",
-		[6940] = "HandOfSacrifice",
-		[114039] = "HandOfPurity",
+		[6940] = "BlessingOfSacrifice",
 		[108199] = "GorefiendsGrasp",
-		[51052] = "AntiMagicZone",
-		[76577] = "SmokeBomb",
 		-- DPS
 		[2825] = "Bloodlust", -- Bloodlust
 		[32182] = "Bloodlust", -- Heroism
@@ -371,8 +362,8 @@ function mod:OnRegister()
 		[31850] = "ArdentDefender",
 		[86659] = "GuardianOfAncientKings",
 		[498] = "DivineProtection",
+		[642] = "DivineShield",
 		[48792] = "IceboundFortitude",
-		[48982] = "RuneTap",
 		[55233] = "VampiricBlood",
 		[22812] = "Barkskin",
 		[61336] = "SurvivalInstincts",
@@ -387,7 +378,7 @@ function mod:OnRegister()
 		[64843] = "DivineHymn",
 		[102342] = "Ironbark",
 		[740] = "Tranquility",
-		[31821] = "DevotionAura",
+		[31821] = "AuraMastery",
 		[98008] = "SpiritLink",
 		[108280] = "HealingTide",
 		[116849] = "LifeCocoon",
@@ -439,12 +430,9 @@ function mod:OnRegister()
 		[159931] = "Rebirth", -- Gift of Chi-Ji (Hunter pet)
 		[159956] = "Rebirth", -- Dust of Life (Hunter pet)
 	}
-	combatLogMap.SPELL_SUMMON = {
-		[114192] = "MockingBanner",
-	}
 
 	-- XXX temp db reset
-	local ns = BigWigs3DB.namespaces["BigWigs_Plugins_Common Auras"]
+	local ns = _G.BigWigs3DB.namespaces["BigWigs_Plugins_Common Auras"]
 	if not ns.reset then
 		if ns.profiles then
 			for profile, db in next, ns.profiles do
@@ -493,16 +481,13 @@ colors = {
 	rebirth = green,
 	[116849] = yellow, -- Life Cocoon
 	[115310] = green, -- Revival
-	[6940] = orange, -- Hand of Sacrifice
-	[114039] = yellow, -- Hand of Purity
+	[6940] = orange, -- Blessing of Sacrifice
 	[64843] = green, -- Divine Hymn
 	[47788] = yellow, -- Guardian Spirit
 	[33206] = yellow, -- Pain Suppression
 	[2825] = red, -- Bloodlust
 	[108280] = green, -- Healing Tide Totem
 	[98008] = orange, -- Spirit Link Totem
-	[114192] = orange, -- Mocking Banner
-	[114030] = orange, -- Vigilance
 	ring_tank = orange,
 	ring_healer = green,
 	ring_damager = red,
@@ -636,11 +621,6 @@ end
 
 -- Deathknight
 
-function mod:AntiMagicZone(_, spellId, nick, spellName)
-	message(spellId, L.used_cast:format(nick, spellName))
-	bar(spellId, 3, nick, spellName)
-end
-
 function mod:GorefiendsGrasp(_, spellId, nick, spellName)
 	message(spellId, L.used_cast:format(nick, spellName))
 end
@@ -648,11 +628,6 @@ end
 function mod:IceboundFortitude(_, spellId, nick, spellName)
 	message(spellId, L.used_cast:format(nick, spellName), nick)
 	bar(spellId, 8, nick, spellName)
-end
-
-function mod:RuneTap(_, spellId, nick, spellName)
-	message(spellId, L.used_cast:format(nick, spellName), nick)
-	bar(spellId, 3, nick, spellName)
 end
 
 function mod:VampiricBlood(_, spellId, nick, spellName)
@@ -752,7 +727,7 @@ function mod:ArdentDefender(_, spellId, nick, spellName)
 	bar(spellId, 10, nick, spellName)
 end
 
-function mod:DevotionAura(_, spellId, nick, spellName)
+function mod:AuraMastery(_, spellId, nick, spellName)
 	message(spellId, L.used_cast:format(nick, spellName))
 	bar(spellId, 6, nick, spellName)
 end
@@ -762,19 +737,19 @@ function mod:DivineProtection(_, spellId, nick, spellName)
 	bar(spellId, 8, nick, spellName)
 end
 
+function mod:DivineShield(_, spellId, nick, spellName)
+	message(spellId, L.used_cast:format(nick, spellName), nick)
+	bar(spellId, 8, nick, spellName)
+end
+
 function mod:GuardianOfAncientKings(_, spellId, nick, spellName)
 	message(spellId, L.used_cast:format(nick, spellName), nick)
 	bar(spellId, 8, nick, spellName)
 end
 
-function mod:HandOfSacrifice(target, spellId, nick, spellName)
+function mod:BlessingOfSacrifice(target, spellId, nick, spellName)
 	message(spellId, L.usedon_cast:format(nick, spellName, target))
 	bar(spellId, 12, target, spellName)
-end
-
-function mod:HandOfPurity(target, spellId, nick, spellName)
-	message(spellId, L.usedon_cast:format(nick, spellName, target))
-	bar(spellId, 6, target, spellName)
 end
 
 -- Priest
@@ -805,13 +780,6 @@ end
 function mod:PowerWordBarrier(_, spellId, nick, spellName)
 	message(spellId, L.used_cast:format(nick, spellName))
 	bar(spellId, 10, nick, spellName)
-end
-
--- Rogue
-
-function mod:SmokeBomb(_, spellId, nick, spellName)
-	message(spellId, L.used_cast:format(nick, spellName))
-	bar(spellId, 5, nick, spellName)
 end
 
 -- Shaman
@@ -860,12 +828,7 @@ function mod:LastStand(_, spellId, nick, spellName)
 	bar(spellId, 15, nick, spellName)
 end
 
-function mod:MockingBanner(_, spellId, nick, spellName)
-	message(spellId, L.used_cast:format(nick, spellName))
-	bar(spellId, 30, nick, spellName)
-end
-
-function mod:RallyingCry(_, spellId, nick, spellName)
+function mod:CommandingShout(_, spellId, nick, spellName)
 	message(spellId, L.used_cast:format(nick, spellName))
 	bar(spellId, 10, nick, spellName)
 end
@@ -874,9 +837,3 @@ function mod:ShieldWall(_, spellId, nick, spellName)
 	message(spellId, L.used_cast:format(nick, spellName), nick)
 	bar(spellId, 8, nick, spellName)
 end
-
-function mod:Vigilance(target, spellId, nick, spellName)
-	message(spellId, L.usedon_cast:format(nick, spellName, target))
-	bar(spellId, 12, target, spellName)
-end
-
