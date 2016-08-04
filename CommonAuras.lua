@@ -30,6 +30,8 @@ local toggleOptions = {
 
 	--[[ Group ]]--
 	108199, -- Gorefiend's Grasp
+	196718, -- Darkness
+	207810, -- Nether Bond
 	106898, -- Stampeding Roar
 	"rebirth",
 	204150, -- Aegis of Light
@@ -43,6 +45,8 @@ local toggleOptions = {
 	--[[ Self ]]--
 	48792, -- Icebound Fortitude
 	55233, -- Vampiric Blood
+	204021, -- Fiery Brand
+	187827, -- Metamorphosis
 	22812, -- Barkskin
 	61336, -- Survival Instincts
 	122278, -- Dampen Harm
@@ -356,6 +360,8 @@ function mod:OnRegister()
 		[108199] = "GorefiendsGrasp",
 		[204150] = "AegisOfLight",
 		[192077] = "WindRushTotem",
+		[196718] = "Darkness",
+		[207810] = "Nether Bond",
 		-- DPS
 		[2825] = "Bloodlust", -- Bloodlust
 		[32182] = "Bloodlust", -- Heroism
@@ -379,6 +385,8 @@ function mod:OnRegister()
 		[115176] = "ZenMeditation",
 		[122278] = "DampenHarm",
 		[122783] = "DiffuseMagic",
+		[187827] = "Metamorphosis",
+		[204021] = "FieryBrand",
 		-- Healer
 		[33206] = "PainSuppression",
 		[62618] = "PowerWordBarrier",
@@ -484,6 +492,7 @@ local red = "Important"    -- dps cds
 local blue = "Personal"    -- everything else
 
 colors = {
+	[207810] = orange, -- Nether Bond
 	[102342] = yellow, -- Ironbark
 	[106898] = green, -- Stampeding Roar
 	[740] = green, -- Tranquility
@@ -628,7 +637,7 @@ function mod:Reincarnation(_, spellId, nick, spellName)
 	message("rebirth", L.used_cast:format(nick, spellName), nil, spellId)
 end
 
--- Deathknight
+-- Death Knight
 
 function mod:GorefiendsGrasp(_, spellId, nick, spellName)
 	message(spellId, L.used_cast:format(nick, spellName))
@@ -642,6 +651,28 @@ end
 function mod:VampiricBlood(_, spellId, nick, spellName)
 	message(spellId, L.used_cast:format(nick, spellName), nick)
 	bar(spellId, 10, nick, spellName)
+end
+
+-- Demon Hunter
+
+function mod:Darkness(_, spellId, nick, spellName)
+	message(spellId, L.used_cast:format(nick, spellName), nick)
+	bar(spellId, 8, nick, spellName)
+end
+
+function mod:FieryBrand(target, spellId, nick, spellName)
+	message(spellId, L.usedon_cast:format(nick, spellName, target))
+	bar(spellId, 8, target, spellName)
+end
+
+function mod:NetherBond(target, spellId, nick, spellName)
+	message(spellId, L.usedon_cast:format(nick, spellName, target))
+	bar(spellId, 15, target, spellName)
+end
+
+function mod:Metamorphosis(_, spellId, nick, spellName)
+	message(spellId, L.used_cast:format(nick, spellName), nick)
+	bar(spellId, 15, nick, spellName)
 end
 
 -- Druid
