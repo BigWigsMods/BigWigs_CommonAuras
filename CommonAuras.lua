@@ -32,8 +32,12 @@ local toggleOptions = {
 	108199, -- Gorefiend's Grasp
 	106898, -- Stampeding Roar
 	"rebirth",
+	204150, -- Aegis of Light
+	1022, -- Blessing of Protection
+	204018, -- Blessing of Spellwarding
 	6940, -- Blessing of Sacrifice
 	2825, -- Bloodlust
+	192077, -- Wind Rush Totem
 	97462, -- Commanding Shout
 
 	--[[ Self ]]--
@@ -346,8 +350,12 @@ function mod:OnRegister()
 		-- [187615] = "RingDamager", -- Maalus (agi dps)
 		[97462] = "CommandingShout",
 		[106898] = "StampedingRoar",
+		[1022] = "BlessinOfProtection",
+		[204018] ="BlessingOfSpellwarding",
 		[6940] = "BlessingOfSacrifice",
 		[108199] = "GorefiendsGrasp",
+		[204150] = "AegisOfLight",
+		[192077] = "WindRushTotem",
 		-- DPS
 		[2825] = "Bloodlust", -- Bloodlust
 		[32182] = "Bloodlust", -- Heroism
@@ -400,6 +408,7 @@ function mod:OnRegister()
 		[115176] = "ZenMeditationOff",
 		[116849] = "LifeCocoonOff",
 		[122278] = "DampenHarmOff",
+		[204150] = "AegisOfLightOff",
 	}
 	combatLogMap.SPELL_CREATE = {
 		[11419] = "Portals", -- Darnassus
@@ -663,7 +672,7 @@ function mod:Tranquility(_, spellId, nick, spellName)
 end
 
 function mod:TranquilityOff(_, _, nick, spellName)
-	stopbar(spellName, nick, spellName)
+	stopbar(spellName, nick)
 end
 
 -- Mage
@@ -722,6 +731,15 @@ end
 
 -- Paladin
 
+function mod:AegisOfLight(_, spellId, nick, spellName)
+	message(spellId, L.used_cast:format(nick, spellName), nick)
+	bar(spellId, 6, nick, spellName)
+end
+
+function mod:AegisOfLightOff(_, spellId, nick, spellName)
+	stopbar(spellName, nick)
+end
+
 function mod:ArdentDefender(_, spellId, nick, spellName)
 	message(spellId, L.used_cast:format(nick, spellName), nick)
 	bar(spellId, 10, nick, spellName)
@@ -747,6 +765,16 @@ function mod:GuardianOfAncientKings(_, spellId, nick, spellName)
 	bar(spellId, 8, nick, spellName)
 end
 
+function mod:BlessinOfProtection(target, spellId, nick, spellName)
+	message(spellId, L.usedon_cast:format(nick, spellName, target))
+	bar(spellId, 10, target, spellName)
+end
+
+function mod:BlessingOfSpellwarding(target, spellId, nick, spellName)
+	message(spellId, L.usedon_cast:format(nick, spellName, target))
+	bar(spellId, 10, target, spellName)
+end
+
 function mod:BlessingOfSacrifice(target, spellId, nick, spellName)
 	message(spellId, L.usedon_cast:format(nick, spellName, target))
 	bar(spellId, 12, target, spellName)
@@ -760,7 +788,7 @@ function mod:DivineHymn(_, spellId, nick, spellName)
 end
 
 function mod:DivineHymnOff(_, _, nick, spellName)
-	stopbar(spellName, nick, spellName)
+	stopbar(spellName, nick)
 end
 
 function mod:GuardianSpirit(target, spellId, nick, spellName)
@@ -769,12 +797,12 @@ function mod:GuardianSpirit(target, spellId, nick, spellName)
 end
 
 function mod:GuardianSpiritOff(_, _, nick, spellName)
-	stopbar(spellName, nick, spellName) -- removed on absorbed fatal blow
+	stopbar(spellName, nick) -- removed on absorbed fatal blow
 end
 
 function mod:PainSuppression(target, spellId, nick, spellName)
 	message(spellId, L.usedon_cast:format(nick, spellName, target))
-	bar(spellId, 8, target, spellName)
+	bar(spellId, 8, target)
 end
 
 function mod:PowerWordBarrier(_, spellId, nick, spellName)
@@ -802,6 +830,11 @@ function mod:SpiritLink(_, spellId, nick, spellName)
 end
 
 function mod:HealingTide(_, spellId, nick, spellName)
+	message(spellId, L.used_cast:format(nick, spellName))
+	bar(spellId, 10, nick, spellName)
+end
+
+function mod:WindRushTotem(_, spellId, nick, spellName)
 	message(spellId, L.used_cast:format(nick, spellName))
 	bar(spellId, 10, nick, spellName)
 end
