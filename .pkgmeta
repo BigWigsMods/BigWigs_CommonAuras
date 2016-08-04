@@ -1,4 +1,5 @@
 package-as: BigWigs_CommonAuras
 
 ignore:
+  - .travis.yml
   - README.md
