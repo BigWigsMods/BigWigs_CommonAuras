@@ -26,6 +26,8 @@
 
 ## Author: Funkydude, Nebula169
 ## X-Category: Raid
+## X-Curse-Project-ID: big-wigs_common-auras
+## X-WoWI-ID: 23611
 ## Dependencies: BigWigs
 
 ## LoadOnDemand: 1
