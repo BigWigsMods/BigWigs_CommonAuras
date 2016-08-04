@@ -1,16 +1,16 @@
 ## Interface: 70000
 
-## Title: Big Wigs |cffff0000+|r|cffffffffCommon Auras|r
-## Title-deDE: Big Wigs |cffff0000+|r|cffffffffHäufige Auren|r
-## Title-esES: Big Wigs |cffff0000+|r|cffffffffAuras Comunes|r
-## Title-esMX: Big Wigs |cffff0000+|r|cffffffffAuras Comunes|r
-## Title-frFR: Big Wigs |cffff0000+|r|cffffffffAuras Habituelles|r
-## Title-itIT: Big Wigs |cffff0000+|r|cffffffffAuree Comuni|r
-## Title-koKR: Big Wigs |cffff0000+|r|cffffffff공통 버프|r
-## Title-ptBR: Big Wigs |cffff0000+|r|cffffffffAuras Comunes|r
-## Title-ruRU: Big Wigs |cffff0000+|r|cffffffffОсновные ауры|r
-## Title-zhCN: Big Wigs |cffff0000+|r|cffffffff普通光环|r
-## Title-zhTW: Big Wigs |cffff0000+|r|cffffffff共同光環|r
+## Title: BigWigs |cffff0000+|r|cffffffffCommon Auras|r
+## Title-deDE: BigWigs |cffff0000+|r|cffffffffHäufige Auren|r
+## Title-esES: BigWigs |cffff0000+|r|cffffffffAuras Comunes|r
+## Title-esMX: BigWigs |cffff0000+|r|cffffffffAuras Comunes|r
+## Title-frFR: BigWigs |cffff0000+|r|cffffffffAuras Habituelles|r
+## Title-itIT: BigWigs |cffff0000+|r|cffffffffAuree Comuni|r
+## Title-koKR: BigWigs |cffff0000+|r|cffffffff공통 버프|r
+## Title-ptBR: BigWigs |cffff0000+|r|cffffffffAuras Comunes|r
+## Title-ruRU: BigWigs |cffff0000+|r|cffffffffОсновные ауры|r
+## Title-zhCN: BigWigs |cffff0000+|r|cffffffff普通光环|r
+## Title-zhTW: BigWigs |cffff0000+|r|cffffffff共同光環|r
 
 ## Notes: Notifies you about common raid cooldowns.
 ## Notes-deDE: Benachrichtigt dich über häufige Schlachtzugsabklingzeiten.
