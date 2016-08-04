@@ -25,6 +25,7 @@
 ## Notes-zhTW: Notifies you about common raid cooldowns.
 
 ## Author: Funkydude, Nebula169
+## Version: @project-version@
 ## X-Category: Raid
 ## X-Curse-Project-ID: big-wigs_common-auras
 ## X-WoWI-ID: 23611
