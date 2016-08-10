@@ -1,4 +1,5 @@
 package-as: BigWigs_CommonAuras
+wowi-archive-previous: no
 
 ignore:
   - .travis.yml
