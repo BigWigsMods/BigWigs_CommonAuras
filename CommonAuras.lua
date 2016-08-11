@@ -660,9 +660,9 @@ function mod:Darkness(_, spellId, nick, spellName)
 	bar(spellId, 8, nick, spellName)
 end
 
-function mod:FieryBrand(target, spellId, nick, spellName)
-	message(spellId, L.usedon_cast:format(nick, spellName, target))
-	bar(spellId, 8, target, spellName)
+function mod:FieryBrand(_, spellId, nick, spellName)
+	message(spellId, L.used_cast:format(nick, spellName))
+	bar(spellId, 8, nick, spellName)
 end
 
 function mod:NetherBond(target, spellId, nick, spellName)
