@@ -447,25 +447,9 @@ function mod:OnRegister()
 		[159931] = "Rebirth", -- Gift of Chi-Ji (Hunter pet)
 		[159956] = "Rebirth", -- Dust of Life (Hunter pet)
 	}
-
-	-- XXX temp db reset
-	local ns = _G.BigWigs3DB.namespaces["BigWigs_Plugins_Common Auras"]
-	if not ns.reset then
-		if ns.profiles then
-			for profile, db in next, ns.profiles do
-				wipe(db)
-			end
-			self.resetMessage = true
-		end
-		ns.reset = true
-	end
 end
 
 function mod:OnPluginEnable()
-	if self.resetMessage then
-		print("|cFF33FF99Big Wigs|r: Common Auras has been updated to show in the Big Wigs settings panel! Spells now default to being disabled which, unfortunately, means your settings have been reset :(")
-	end
-
 	self:RegisterEvent("PLAYER_REGEN_DISABLED")
 
 	CAFrame:RegisterEvent("COMBAT_LOG_EVENT_UNFILTERED")
