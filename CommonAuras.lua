@@ -23,6 +23,7 @@ local toggleOptions = {
 	--[[ Out of combat ]]--
 	"feast",
 	"repair",
+	226234, -- Codex of the Tranquil Mind
 	43987, -- Conjure Refreshment Table
 	"portal",
 	29893, -- Create Soulwell
@@ -73,7 +74,7 @@ local toggleOptions = {
 	62618, -- Power Word: Barrier
 	108280, -- Healing Tide Totem
 	98008, -- Spirit Link Totem
-	
+
 	--[[ Special ]]--
 	"ring_tank",    -- 6.2 Legendary Rings
 	"ring_healer",  -- 6.2 Legendary Rings
@@ -451,6 +452,7 @@ end
 
 function mod:OnPluginEnable()
 	self:RegisterEvent("PLAYER_REGEN_DISABLED")
+	self:RegisterEvent("UNIT_SPELLCAST_SUCCEEDED") -- for tracking Codex casts
 
 	CAFrame:RegisterEvent("COMBAT_LOG_EVENT_UNFILTERED")
 end
@@ -466,6 +468,7 @@ local nonCombat = { -- Map of spells to only show out of combat.
 	[698] = true, -- Rital of Summoning
 	[29893] = true, -- Create Soulwell
 	[43987] = true, -- Conjure Refreshment Table
+	[226234] = true, -- Codex of the Tranquil Mind
 }
 local firedNonCombat = {} -- Bars that we fired that should be hidden on combat.
 
@@ -553,9 +556,19 @@ end)
 
 -- General
 
+-- Codex handling. There are no CLEU events for this, unfortunately
+function mod:UNIT_SPELLCAST_SUCCEEDED(_, unit, spellName, _, _, spellId)
+	if spellId == 227564 then -- XXX 226234 for Tranquil Mind (100+)
+		local nick = self:UnitName(unit, true)
+		message(226234, L.used_cast:format(nick, spellName))
+		bar(226234, 300, nick, L["Codex"])
+	end
+end
+
 -- If wearing a ring for the wrong role (dps wearing healer ring),
 -- you can use it but don't gain the effect and it doesn't go on cd :(
 -- that's the reason for using AURA_APPLIED instead of CAST_SUCCESS
+
 do
 	local prev = 0
 	function mod:RingTank(_, spellId, nick, spellName)

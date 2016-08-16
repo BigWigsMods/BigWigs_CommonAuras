@@ -15,6 +15,7 @@ L["Emphasized bar"] = "Emphasized bar"
 L["Bar background"] = "Bar background"
 L["Bar text"] = "Bar text"
 L["Bar text shadow"] = "Bar text shadow"
+L["Codex"] = "Codex"
 
 L.usedon_cast = "%s: %s on %s"
 L.used_cast = "%s used %s"
@@ -72,4 +73,3 @@ elseif locale == "zhCN" then
 elseif locale == "zhTW" then
 --@localization(locale="zhTW", format="lua_additive_table", handle-unlocalized="ignore")@
 end
-
