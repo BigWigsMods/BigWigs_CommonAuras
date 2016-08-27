@@ -707,7 +707,7 @@ end
 
 function mod:Portals(_, spellId, nick, spellName)
 	message("portal", L.portal_cast:format(nick, spellName), nil, spellId)
-	bar("portal", 65, L.portal_bar:format(spellName, nick), nick, spellName, spellId)
+	bar("portal", 65, nick, spellName, spellId)
 end
 
 function mod:Refreshment(_, spellId, nick, spellName)
