@@ -451,6 +451,8 @@ function mod:OnRegister()
 end
 
 function mod:OnPluginEnable()
+	self:RegisterMessage("BigWigs_OnBossDisable")
+	self:RegisterMessage("BigWigs_OnBossReboot", "BigWigs_OnBossDisable")
 	self:RegisterEvent("PLAYER_REGEN_DISABLED")
 	self:RegisterEvent("UNIT_SPELLCAST_SUCCEEDED") -- for tracking Codex casts
 
@@ -538,6 +540,10 @@ function mod:PLAYER_REGEN_DISABLED()
 		stopbar(text, player)
 	end
 	wipe(firedNonCombat)
+end
+
+function mod:BigWigs_OnBossDisable()
+	self:SendMessage("BigWigs_StopBars", self)
 end
 
 --------------------------------------------------------------------------------
