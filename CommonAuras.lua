@@ -74,11 +74,6 @@ local toggleOptions = {
 	62618, -- Power Word: Barrier
 	108280, -- Healing Tide Totem
 	98008, -- Spirit Link Totem
-
-	--[[ Special ]]--
-	"ring_tank",    -- 6.2 Legendary Rings
-	"ring_healer",  -- 6.2 Legendary Rings
-	"ring_damager", -- 6.2 Legendary Rings
 }
 local toggleDefaults = { enabled = true }
 for _, key in next, toggleOptions do
@@ -190,7 +185,6 @@ local function GetOptions()
 		[108199] = L["Group"],
 		[48792] = L["Self"],
 		[102342] = L["Healer"],
-		ring_tank = L["Legendary Rings"],
 	}
 	local bitflags = {"MESSAGE", "BAR", "EMPHASIZE"}
 	local parentGroup = nil
@@ -348,11 +342,6 @@ function mod:OnRegister()
 		[29893] = "Soulwell", -- Create Soulwell
 		[43987] = "Refreshment", -- Conjure Refreshment Table
 		-- Group
-		-- [187611] = "RingDamager", -- Nithramus (int dps)
-		-- [187612] = "RingHealer", -- Etheralus (healer)
-		-- [187613] = "RingTank", -- Sanctus (tank)
-		-- [187614] = "RingDamager", -- Thorasus (str dps)
-		-- [187615] = "RingDamager", -- Maalus (agi dps)
 		[97462] = "CommandingShout",
 		[106898] = "StampedingRoar",
 		[1022] = "BlessinOfProtection",
@@ -402,13 +391,6 @@ function mod:OnRegister()
 		[115310] = "Revival",
 		-- Reincarnation
 		[21169] = "Reincarnation",
-	}
-	combatLogMap.SPELL_AURA_APPLIED = {
-		[187616] = "RingDamager", -- Nithramus (int dps)
-		[187618] = "RingHealer", -- Etheralus (healer)
-		[187617] = "RingTank", -- Sanctus (tank)
-		[187619] = "RingDamager", -- Thorasus (str dps)
-		[187620] = "RingDamager", -- Maalus (agi dps)
 	}
 	combatLogMap.SPELL_AURA_REMOVED = {
 		[740] = "TranquilityOff",
@@ -495,9 +477,6 @@ colors = {
 	[2825] = red, -- Bloodlust
 	[108280] = green, -- Healing Tide Totem
 	[98008] = orange, -- Spirit Link Totem
-	ring_tank = orange,
-	ring_healer = green,
-	ring_damager = red,
 }
 
 local function checkFlag(key, flag, player)
@@ -568,44 +547,6 @@ function mod:UNIT_SPELLCAST_SUCCEEDED(_, unit, spellName, _, _, spellId)
 		local nick = self:UnitName(unit, true)
 		message(226234, L.used_cast:format(nick, spellName))
 		bar(226234, 300, nick, L["Codex"])
-	end
-end
-
--- If wearing a ring for the wrong role (dps wearing healer ring),
--- you can use it but don't gain the effect and it doesn't go on cd :(
--- that's the reason for using AURA_APPLIED instead of CAST_SUCCESS
-
-do
-	local prev = 0
-	function mod:RingTank(_, spellId, nick, spellName)
-		local t = GetTime()
-		if t-prev > 20 then
-			prev = t
-			message("ring_tank", L.used_cast:format(nick, spellName), nil, spellId)
-			bar("ring_tank", 15, nick, spellName, spellId)
-		end
-	end
-end
-do
-	local prev = 0
-	function mod:RingHealer(_, spellId, nick, spellName)
-		local t = GetTime()
-		if t-prev > 20 then
-			prev = t
-			message("ring_healer", L.used_cast:format(nick, spellName), nil, spellId)
-			bar("ring_healer", 15, nick, spellName, spellId)
-		end
-	end
-end
-do
-	local prev = 0
-	function mod:RingDamager(_, spellId, nick, spellName)
-		local t = GetTime()
-		if t-prev > 20 then
-			prev = t
-			message("ring_damager", L.used_cast:format(nick, spellName), nil, spellId)
-			bar("ring_damager", 15, nick, spellName, spellId)
-		end
 	end
 end
 
