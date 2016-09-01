@@ -13,6 +13,7 @@ local CAFrame = CreateFrame("Frame")
 
 local addonName, L = ...
 
+local PL = LibStub("AceLocale-3.0"):GetLocale("BigWigs: Plugins")
 function mod:GetLocale() return L end
 
 --------------------------------------------------------------------------------
@@ -98,7 +99,7 @@ local function GetOptions()
 	end
 
 	options = {
-		name = L["Common Auras"],
+		name = L.commonAuras,
 		type = "group",
 		childGroups = "tab",
 		args = {
@@ -181,10 +182,10 @@ local function GetOptions()
 	end
 
 	local optionHeaders = {
-		feast = L["Out of combat"],
-		[108199] = L["Group"],
-		[48792] = L["Self"],
-		[102342] = L["Healer"],
+		feast = L.outOfCombat,
+		[108199] = L.group,
+		[48792] = L.self,
+		[102342] = L.healer,
 	}
 	local bitflags = {"MESSAGE", "BAR", "EMPHASIZE"}
 	local parentGroup = nil
@@ -232,12 +233,12 @@ local function GetOptions()
 				--
 				sep2 = {
 					type = "header",
-					name = L["Colors"],
+					name = PL.colors,
 					order = 20,
 					hidden = hidden,
 				},
 				messages = {
-					name = L["Messages"],
+					name = PL.messages,
 					type = "color",
 					get = messageColorGet,
 					set = messageColorSet,
@@ -245,7 +246,7 @@ local function GetOptions()
 					order = 21,
 				},
 				barColor = {
-					name = L["Normal bar"],
+					name = PL.regularBars,
 					type = "color", hasAlpha = true,
 					get = barColorGet,
 					set = barColorSet,
@@ -253,7 +254,7 @@ local function GetOptions()
 					order = 22,
 				},
 				barEmphasized = {
-					name = L["Emphasized bar"],
+					name = PL.emphasizedBars,
 					type = "color", hasAlpha = true,
 					get = barColorGet,
 					set = barColorSet,
@@ -261,7 +262,7 @@ local function GetOptions()
 					order = 23,
 				},
 				barBackground = {
-					name = L["Bar background"],
+					name = L.barBackground,
 					type = "color", hasAlpha = true,
 					get = barColorGet,
 					set = barColorSet,
@@ -269,7 +270,7 @@ local function GetOptions()
 					order = 24,
 				},
 				barText = {
-					name = L["Bar text"],
+					name = L.barText,
 					type = "color", hasAlpha = true,
 					get = barColorGet,
 					set = barColorSet,
@@ -277,7 +278,7 @@ local function GetOptions()
 					order = 25,
 				},
 				barTextShadow = {
-					name = L["Bar text shadow"],
+					name = L.barTextShadow,
 					type = "color", hasAlpha = true,
 					get = barColorGet,
 					set = barColorSet,
@@ -315,7 +316,7 @@ end
 
 mod.subPanelOptions = {
 	key = "Common Auras",
-	name = L["Common Auras"],
+	name = L.commonAuras,
 	options = GetOptions,
 }
 
@@ -549,7 +550,7 @@ do
 			prev = castGUID
 			local nick = self:UnitName(unit, true)
 			message(spellId, L.used_cast:format(nick, spellName))
-			bar(spellId, 300, nick, L["Codex"])
+			bar(spellId, 300, nick, L.codex)
 		end
 	end
 end
