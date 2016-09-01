@@ -542,11 +542,15 @@ end)
 -- General
 
 -- Codex handling. There are no CLEU events for this, unfortunately
-function mod:UNIT_SPELLCAST_SUCCEEDED(_, unit, spellName, _, _, spellId)
-	if spellId == 227564 then -- XXX 226234 for Tranquil Mind (100+)
-		local nick = self:UnitName(unit, true)
-		message(226234, L.used_cast:format(nick, spellName))
-		bar(226234, 300, nick, L["Codex"])
+do
+	local prev = ""
+	function mod:UNIT_SPELLCAST_SUCCEEDED(_, unit, spellName, _, castGUID, spellId)
+		if spellId == 226234 and castGUID ~= prev then
+			prev = castGUID
+			local nick = self:UnitName(unit, true)
+			message(spellId, L.used_cast:format(nick, spellName))
+			bar(spellId, 300, nick, L["Codex"])
+		end
 	end
 end
 
@@ -845,3 +849,4 @@ function mod:ShieldWall(_, spellId, nick, spellName)
 	message(spellId, L.used_cast:format(nick, spellName), nick)
 	bar(spellId, 8, nick, spellName)
 end
+
