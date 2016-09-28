@@ -523,7 +523,10 @@ function mod:PLAYER_REGEN_DISABLED()
 end
 
 function mod:BigWigs_OnBossWin()
-	self:SendMessage("BigWigs_StopBars", self)
+	local _, zoneType = GetInstanceInfo()
+	if zoneType == "raid" then
+		self:SendMessage("BigWigs_StopBars", self)
+	end
 end
 
 --------------------------------------------------------------------------------
