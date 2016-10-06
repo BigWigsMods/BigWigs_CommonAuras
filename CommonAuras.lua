@@ -24,7 +24,7 @@ local toggleOptions = {
 	--[[ Out of combat ]]--
 	"feast",
 	"repair",
-	226234, -- Codex of the Tranquil Mind
+	226241, -- Codex of the Tranquil Mind
 	43987, -- Conjure Refreshment Table
 	"portal",
 	29893, -- Create Soulwell
@@ -453,7 +453,7 @@ local nonCombat = { -- Map of spells to only show out of combat.
 	[698] = true, -- Rital of Summoning
 	[29893] = true, -- Create Soulwell
 	[43987] = true, -- Conjure Refreshment Table
-	[226234] = true, -- Codex of the Tranquil Mind
+	[226241] = true, -- Codex of the Tranquil Mind
 }
 local firedNonCombat = {} -- Bars that we fired that should be hidden on combat.
 
