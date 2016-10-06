@@ -327,6 +327,12 @@ mod.subPanelOptions = {
 local combatLogMap = {}
 
 function mod:OnRegister()
+	combatLogMap.SPELL_SUMMON = {
+		-- Reaves (Pylon doesn't have a _SUCCESS, so we'll just use _SUMMON for all of them)
+		[200205] = "AutoHammer", -- Auto-Hammer Mode
+		[200211] = "Pylon", -- Failure Detection Mode
+		[200216] = "ReavesFeast", -- Snack Distribution Mode (+225 versatility)
+	}
 	combatLogMap.SPELL_CAST_START = {
 		[201351] = "Feasts", -- Hearty Feast (+150 primary stat)
 		[201352] = "Feasts", -- Lavish Suramar Feast (+200 primary stat)
@@ -338,10 +344,11 @@ function mod:OnRegister()
 		[54711] = "Repair", -- Scrapbot
 		[67826] = "Repair", -- Jeeves
 		[157066] = "Repair", -- Walter
+		[199109] = "AutoHammer", -- Auto-Hammer
+		[199115] = "Pylon", -- Failure Detection Pylon
 		[698] = "SummoningStone", -- Ritual of Summoning
 		[29893] = "Soulwell", -- Create Soulwell
 		[43987] = "Refreshment", -- Conjure Refreshment Table
-		[200215] = "Feasts", -- Reaves: Snack Distribution Mode (+225 versatility)
 		-- Group
 		[97462] = "CommandingShout",
 		[106898] = "StampedingRoar",
@@ -564,6 +571,11 @@ do
 		message("feast", L.feast_cast:format(nick, spellName), nil, spellId)
 		bar("feast", 180, nick, feast, spellId)
 	end
+
+	function mod:ReavesFeast(_, spellId, nick, spellName)
+		message("feast", L.used_cast:format(nick, spellName), nil, spellId)
+		bar("feast", 180, nick, feast, spellId)
+	end
 end
 
 do
@@ -578,6 +590,21 @@ do
 	function mod:Repair(_, spellId, nick, spellName)
 		message("repair", L.used_cast:format(nick, spellName), nil, spellId)
 		bar("repair", durations[spellId], nick, spellName, spellId)
+	end
+end
+
+do
+	local hammer = GetSpellInfo(199109)
+	function mod:AutoHammer(_, spellId, nick, spellName)
+		message("repair", L.used_cast:format(nick, hammer), nil, spellId)
+		bar("repair", 660, nick, hammer, spellId) -- 11min
+	end
+end
+
+do
+	local pylon = GetSpellInfo(199115)
+	function mod:Pylon(_, spellId, nick, spellName)
+		message("rebirth", L.used_cast:format(nick, pylon), nil, spellId)
 	end
 end
 
