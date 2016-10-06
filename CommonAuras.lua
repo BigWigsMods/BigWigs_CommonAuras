@@ -352,7 +352,7 @@ function mod:OnRegister()
 		[204150] = "AegisOfLight",
 		[192077] = "WindRushTotem",
 		[196718] = "Darkness",
-		[207810] = "Nether Bond",
+		[207810] = "NetherBond",
 		-- DPS
 		[2825] = "Bloodlust", -- Bloodlust
 		[32182] = "Bloodlust", -- Heroism
