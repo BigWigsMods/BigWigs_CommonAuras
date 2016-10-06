@@ -328,9 +328,8 @@ local combatLogMap = {}
 
 function mod:OnRegister()
 	combatLogMap.SPELL_CAST_START = {
-		[160740] = "Feasts", -- Feast of Blood (+75)
-		[160914] = "Feasts", -- Feast of the Waters (+75)
-		[175215] = "Feasts", -- Savage Feast (+100)
+		[201351] = "Feasts", -- Hearty Feast (+150 primary stat)
+		[201352] = "Feasts", -- Lavish Suramar Feast (+200 primary stat)
 	}
 	combatLogMap.SPELL_CAST_SUCCESS = {
 		-- OOC
@@ -342,6 +341,7 @@ function mod:OnRegister()
 		[698] = "SummoningStone", -- Ritual of Summoning
 		[29893] = "Soulwell", -- Create Soulwell
 		[43987] = "Refreshment", -- Conjure Refreshment Table
+		[200215] = "Feasts", -- Reaves: Snack Distribution Mode (+225 versatility)
 		-- Group
 		[97462] = "CommandingShout",
 		[106898] = "StampedingRoar",
