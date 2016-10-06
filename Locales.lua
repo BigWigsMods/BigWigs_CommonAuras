@@ -17,7 +17,7 @@ L.used_cast = "%s used %s"
 L.ritual_cast = "%s wants to perform a %s!"
 
 L.portal = "Portal"
-L.portal_desc = "Toggle showing of mage portals."
+L.portal_desc = "Toggle showing mage portals."
 L.portal_icon = 53142
 L.portal_cast = "%s opened a %s!" --Player opened a Portal: Destination
 L.portal_bar = "%s (%s)"
