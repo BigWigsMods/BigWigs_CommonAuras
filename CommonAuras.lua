@@ -13,7 +13,7 @@ local CAFrame = CreateFrame("Frame")
 
 local addonName, L = ...
 
-local PL = LibStub("AceLocale-3.0"):GetLocale("BigWigs: Plugins")
+local PL = BigWigsAPI:GetLocale("BigWigs: Plugins")
 function mod:GetLocale() return L end
 
 --------------------------------------------------------------------------------
