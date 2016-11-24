@@ -785,7 +785,7 @@ end
 
 function mod:PainSuppression(target, spellId, nick, spellName)
 	message(spellId, L.usedon_cast:format(nick, spellName, target))
-	bar(spellId, 8, target)
+	bar(spellId, 8, target, spellName)
 end
 
 function mod:PowerWordBarrier(_, spellId, nick, spellName)
