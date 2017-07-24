@@ -6,7 +6,7 @@
 ## Title-esMX: BigWigs |cffff0000+|r|cffffffffAuras Comunes|r
 ## Title-frFR: BigWigs |cffff0000+|r|cffffffffAuras Habituelles|r
 ## Title-itIT: BigWigs |cffff0000+|r|cffffffffAuree Comuni|r
-## Title-koKR: BigWigs |cffff0000+|r|cffffffff공통 버프|r
+## Title-koKR: BigWigs |cffff0000+|r|cffffffff공용 효과|r
 ## Title-ptBR: BigWigs |cffff0000+|r|cffffffffAuras Comunes|r
 ## Title-ruRU: BigWigs |cffff0000+|r|cffffffffОсновные ауры|r
 ## Title-zhCN: BigWigs |cffff0000+|r|cffffffff普通光环|r
@@ -18,7 +18,7 @@
 ## Notes-esMX: Notifies you about common raid cooldowns.
 ## Notes-frFR: Prévient le raid lors de l'utilisation de certains buffs & débuffs habituels.
 ## Notes-itIT: Avvisa l'incursione di certi benefici e malefici comuni.
-## Notes-koKR: Notifies you about common raid cooldowns.
+## Notes-koKR: 당신에게 공용 공격대 생존기에 대해 알립니다.
 ## Notes-ptBR: Notifies you about common raid cooldowns.
 ## Notes-ruRU: Предупреждает рейд об основных положительных и отрицательных эффектах.
 ## Notes-zhCN: 显示团队通用的增益效果与负面影响。
