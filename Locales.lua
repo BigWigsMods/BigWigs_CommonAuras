@@ -157,7 +157,7 @@ elseif locale == "itIT" then
 	L.rebirth = "Resurrezione"
 	L.rebirth_desc = "Avvisa quando viene utilizzata un'abilità di Resurrezione in combattimento."
 elseif locale == "koKR" then
-        L.commonAuras = "공용 효과"
+	L.commonAuras = "공용 효과"
 	L.outOfCombat = "비 전투 중"
 	L.group = "파티"
 	L.self = "자신"
