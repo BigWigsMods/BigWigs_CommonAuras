@@ -188,8 +188,8 @@ local function GetOptions()
 		[102342] = L.healer,
 	}
 	local bitflags = {"MESSAGE", "BAR", "EMPHASIZE"}
-	local parentGroup = nil
-	local isTankCD = nil
+	local parentGroup
+	local isTankCD = false
 	for index, key in ipairs(toggleOptions) do
 		if optionHeaders[key] then
 			local header = optionHeaders[key]
@@ -880,4 +880,3 @@ function mod:ShieldWall(_, spellId, nick, spellName)
 	message(spellId, L.used_cast:format(nick, spellName), nick)
 	bar(spellId, 8, nick, spellName)
 end
-
