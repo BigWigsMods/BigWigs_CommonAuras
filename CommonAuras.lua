@@ -33,7 +33,6 @@ local toggleOptions = {
 	--[[ Group ]]--
 	108199, -- Gorefiend's Grasp
 	196718, -- Darkness
-	207810, -- Nether Bond
 	106898, -- Stampeding Roar
 	"rebirth",
 	204150, -- Aegis of Light
@@ -359,7 +358,6 @@ function mod:OnRegister()
 		[204150] = "AegisOfLight",
 		[192077] = "WindRushTotem",
 		[196718] = "Darkness",
-		[207810] = "NetherBond",
 		-- DPS
 		[2825] = "Bloodlust", -- Bloodlust
 		[32182] = "Bloodlust", -- Heroism
@@ -471,7 +469,6 @@ local red = "Important"    -- dps cds
 local blue = "Personal"    -- everything else
 
 colors = {
-	[207810] = orange, -- Nether Bond
 	[102342] = yellow, -- Ironbark
 	[106898] = green, -- Stampeding Roar
 	[740] = green, -- Tranquility
@@ -642,11 +639,6 @@ end
 function mod:FieryBrand(_, spellId, nick, spellName)
 	message(spellId, L.used_cast:format(nick, spellName))
 	bar(spellId, 8, nick, spellName)
-end
-
-function mod:NetherBond(target, spellId, nick, spellName)
-	message(spellId, L.usedon_cast:format(nick, spellName, target))
-	bar(spellId, 15, target, spellName)
 end
 
 function mod:Metamorphosis(_, spellId, nick, spellName)
