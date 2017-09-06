@@ -365,6 +365,7 @@ function mod:OnRegister()
 		[90355] = "Bloodlust", -- Ancient Hysteria
 		[160452] = "Bloodlust", -- Netherwinds
 		[178207] = "Bloodlust", -- Leatherworking: Drums of Fury
+		[230935] = "Bloodlust", -- Leatherworking: Drums of the Mountain
 		-- Tank
 		[871] = "ShieldWall",
 		[12975] = "LastStand",
