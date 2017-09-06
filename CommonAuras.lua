@@ -333,8 +333,8 @@ function mod:OnRegister()
 		[200216] = "ReavesFeast", -- Snack Distribution Mode (+225 versatility)
 	}
 	combatLogMap.SPELL_CAST_START = {
-		[201351] = "Feasts", -- Hearty Feast (+150 primary stat)
-		[201352] = "Feasts", -- Lavish Suramar Feast (+200 primary stat)
+		[201351] = "Feasts", -- Hearty Feast (+400 primary stat)
+		[201352] = "Feasts", -- Lavish Suramar Feast (+500 primary stat)
 	}
 	combatLogMap.SPELL_CAST_SUCCESS = {
 		-- OOC
@@ -420,13 +420,14 @@ function mod:OnRegister()
 		[11418] = "Portals", -- Undercity
 		[49360] = "Portals", -- Theramore
 		[49361] = "Portals", -- Stonard
-		[53142] = "Portals", -- Dalaran
+		[53142] = "Portals", -- Dalaran - Northrend
 		[88345] = "Portals", -- Tol Barad (Alliance)
 		[88346] = "Portals", -- Tol Barad (Horde)
 		[132620] = "Portals", -- Vale of Eternal Blossoms (Alliance)
 		[132626] = "Portals", -- Vale of Eternal Blossoms (Horde)
 		[176246] = "Portals", -- Stormshield (Alliance)
 		[176244] = "Portals", -- Warspear (Horde)
+		[224871] = "Portals", -- Dalaran - Broken Isles
 	}
 	combatLogMap.SPELL_RESURRECT = {
 		[20484] = "Rebirth", -- Rebirth
