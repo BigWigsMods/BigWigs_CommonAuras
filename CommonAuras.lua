@@ -49,6 +49,7 @@ local toggleOptions = {
 	204021, -- Fiery Brand
 	187827, -- Metamorphosis
 	22812, -- Barkskin
+	200851, -- Rage of the Sleeper (Artifact ability)
 	61336, -- Survival Instincts
 	122278, -- Dampen Harm
 	122783, -- Diffuse Magic
@@ -377,6 +378,7 @@ function mod:OnRegister()
 		[48792] = "IceboundFortitude",
 		[55233] = "VampiricBlood",
 		[22812] = "Barkskin",
+		[200851] = "RageOfTheSleeper",
 		[61336] = "SurvivalInstincts",
 		[115203] = "FortifyingBrew",
 		[115176] = "ZenMeditation",
@@ -657,6 +659,11 @@ end
 function mod:Ironbark(target, spellId, nick, spellName)
 	message(spellId, L.usedon_cast:format(nick, spellName, target))
 	bar(spellId, 12, target, spellName)
+end
+
+function mod:RageOfTheSleeper(_, spellId, nick, spellName)
+	message(spellId, L.used_cast:format(nick, spellName), nick)
+	bar(spellId, 10, nick, spellName)
 end
 
 function mod:StampedingRoar(_, spellId, nick, spellName)
