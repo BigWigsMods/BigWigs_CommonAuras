@@ -404,7 +404,6 @@ function mod:OnRegister()
 		[47788] = "GuardianSpiritOff",
 		[115176] = "ZenMeditationOff",
 		[116849] = "LifeCocoonOff",
-		[122278] = "DampenHarmOff",
 		[204150] = "AegisOfLightOff",
 	}
 	combatLogMap.SPELL_CREATE = {
@@ -692,11 +691,7 @@ end
 
 function mod:DampenHarm(_, spellId, nick, spellName)
 	message(spellId, L.used_cast:format(nick, spellName), nick)
-	bar(spellId, 45, nick, spellName)
-end
-
-function mod:DampenHarmOff(_, _, nick, spellName)
-	stopbar(spellName, nick) -- removed on melees
+	bar(spellId, 10, nick, spellName)
 end
 
 function mod:DiffuseMagic(_, spellId, nick, spellName)
