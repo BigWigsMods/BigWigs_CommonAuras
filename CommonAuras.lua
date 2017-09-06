@@ -33,7 +33,6 @@ local toggleOptions = {
 	--[[ Group ]]--
 	108199, -- Gorefiend's Grasp
 	196718, -- Darkness
-	207810, -- Nether Bond
 	106898, -- Stampeding Roar
 	"rebirth",
 	204150, -- Aegis of Light
@@ -51,6 +50,7 @@ local toggleOptions = {
 	187827, -- Metamorphosis
 	22812, -- Barkskin
 	61336, -- Survival Instincts
+	200851, -- Rage of the Sleeper
 	122278, -- Dampen Harm
 	122783, -- Diffuse Magic
 	115203, -- Fortifying Brew
@@ -334,8 +334,8 @@ function mod:OnRegister()
 		[200216] = "ReavesFeast", -- Snack Distribution Mode (+225 versatility)
 	}
 	combatLogMap.SPELL_CAST_START = {
-		[201351] = "Feasts", -- Hearty Feast (+150 primary stat)
-		[201352] = "Feasts", -- Lavish Suramar Feast (+200 primary stat)
+		[201351] = "Feasts", -- Hearty Feast (+400 primary stat)
+		[201352] = "Feasts", -- Lavish Suramar Feast (+500 primary stat)
 	}
 	combatLogMap.SPELL_CAST_SUCCESS = {
 		-- OOC
@@ -359,7 +359,6 @@ function mod:OnRegister()
 		[204150] = "AegisOfLight",
 		[192077] = "WindRushTotem",
 		[196718] = "Darkness",
-		[207810] = "NetherBond",
 		-- DPS
 		[2825] = "Bloodlust", -- Bloodlust
 		[32182] = "Bloodlust", -- Heroism
@@ -367,6 +366,7 @@ function mod:OnRegister()
 		[90355] = "Bloodlust", -- Ancient Hysteria
 		[160452] = "Bloodlust", -- Netherwinds
 		[178207] = "Bloodlust", -- Leatherworking: Drums of Fury
+		[230935] = "Bloodlust", -- Leatherworking: Drums of the Mountain
 		-- Tank
 		[871] = "ShieldWall",
 		[12975] = "LastStand",
@@ -379,6 +379,7 @@ function mod:OnRegister()
 		[55233] = "VampiricBlood",
 		[22812] = "Barkskin",
 		[61336] = "SurvivalInstincts",
+		[200851] = "RageoftheSleeper",
 		[115203] = "FortifyingBrew",
 		[115176] = "ZenMeditation",
 		[122278] = "DampenHarm",
@@ -406,7 +407,6 @@ function mod:OnRegister()
 		[47788] = "GuardianSpiritOff",
 		[115176] = "ZenMeditationOff",
 		[116849] = "LifeCocoonOff",
-		[122278] = "DampenHarmOff",
 		[204150] = "AegisOfLightOff",
 	}
 	combatLogMap.SPELL_CREATE = {
@@ -422,13 +422,14 @@ function mod:OnRegister()
 		[11418] = "Portals", -- Undercity
 		[49360] = "Portals", -- Theramore
 		[49361] = "Portals", -- Stonard
-		[53142] = "Portals", -- Dalaran
+		[53142] = "Portals", -- Dalaran - Northrend
 		[88345] = "Portals", -- Tol Barad (Alliance)
 		[88346] = "Portals", -- Tol Barad (Horde)
 		[132620] = "Portals", -- Vale of Eternal Blossoms (Alliance)
 		[132626] = "Portals", -- Vale of Eternal Blossoms (Horde)
 		[176246] = "Portals", -- Stormshield (Alliance)
 		[176244] = "Portals", -- Warspear (Horde)
+		[224871] = "Portals", -- Dalaran - Broken Isles
 	}
 	combatLogMap.SPELL_RESURRECT = {
 		[20484] = "Rebirth", -- Rebirth
@@ -471,7 +472,6 @@ local red = "Important"    -- dps cds
 local blue = "Personal"    -- everything else
 
 colors = {
-	[207810] = orange, -- Nether Bond
 	[102342] = yellow, -- Ironbark
 	[106898] = green, -- Stampeding Roar
 	[740] = green, -- Tranquility
@@ -644,11 +644,6 @@ function mod:FieryBrand(_, spellId, nick, spellName)
 	bar(spellId, 8, nick, spellName)
 end
 
-function mod:NetherBond(target, spellId, nick, spellName)
-	message(spellId, L.usedon_cast:format(nick, spellName, target))
-	bar(spellId, 15, target, spellName)
-end
-
 function mod:Metamorphosis(_, spellId, nick, spellName)
 	message(spellId, L.used_cast:format(nick, spellName), nick)
 	bar(spellId, 15, nick, spellName)
@@ -676,6 +671,11 @@ function mod:SurvivalInstincts(_, spellId, nick, spellName)
 	bar(spellId, 6, nick, spellName)
 end
 
+function mod:RageoftheSleeper(_, spellId, nick, spellName)
+	message(spellId, L.used_cast:format(nick, spellName), nick)
+	bar(spellId, 10, nick, spellName)
+end
+
 function mod:Tranquility(_, spellId, nick, spellName)
 	message(spellId, L.used_cast:format(nick, spellName))
 	bar(spellId, 8, nick, spellName)
@@ -700,11 +700,7 @@ end
 
 function mod:DampenHarm(_, spellId, nick, spellName)
 	message(spellId, L.used_cast:format(nick, spellName), nick)
-	bar(spellId, 45, nick, spellName)
-end
-
-function mod:DampenHarmOff(_, _, nick, spellName)
-	stopbar(spellName, nick) -- removed on melees
+	bar(spellId, 10, nick, spellName)
 end
 
 function mod:DiffuseMagic(_, spellId, nick, spellName)
