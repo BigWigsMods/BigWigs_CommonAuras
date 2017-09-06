@@ -51,6 +51,7 @@ local toggleOptions = {
 	22812, -- Barkskin
 	200851, -- Rage of the Sleeper (Artifact ability)
 	61336, -- Survival Instincts
+	200851, -- Rage of the Sleeper
 	122278, -- Dampen Harm
 	122783, -- Diffuse Magic
 	115203, -- Fortifying Brew
@@ -380,6 +381,7 @@ function mod:OnRegister()
 		[22812] = "Barkskin",
 		[200851] = "RageOfTheSleeper",
 		[61336] = "SurvivalInstincts",
+		[200851] = "RageoftheSleeper",
 		[115203] = "FortifyingBrew",
 		[115176] = "ZenMeditation",
 		[122278] = "DampenHarm",
@@ -674,6 +676,11 @@ end
 function mod:SurvivalInstincts(_, spellId, nick, spellName)
 	message(spellId, L.used_cast:format(nick, spellName), nick)
 	bar(spellId, 6, nick, spellName)
+end
+
+function mod:RageoftheSleeper(_, spellId, nick, spellName)
+	message(spellId, L.used_cast:format(nick, spellName), nick)
+	bar(spellId, 10, nick, spellName)
 end
 
 function mod:Tranquility(_, spellId, nick, spellName)
