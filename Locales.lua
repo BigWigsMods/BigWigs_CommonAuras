@@ -247,7 +247,7 @@ elseif locale == "ruRU" then
 	L.rebirth = "Возрождение"
 	L.rebirth_desc = "Показать/Скрыть воскрешения в бою."
 elseif locale == "zhCN" then
-	L.commonAuras = "普通光环"
+	L.commonAuras = "共同光环"
 	L.outOfCombat = "脱离战斗"
 	L.group = "队伍"
 	L.self = "自身"
@@ -279,32 +279,32 @@ elseif locale == "zhCN" then
 elseif locale == "zhTW" then
 	L.commonAuras = "共同光環"
 	L.outOfCombat = "脫離戰鬥"
-	--L.group = "Group"
-	--L.self = "Self"
-	--L.healer = "Healer"
-	--L.TANK_desc = "Some abilities are only important for tanks. Set this option to only see messages and bars for players with their assigned role set to Tank."
-	--L.barBackground = "Bar background"
-	--L.barText = "Bar text"
-	--L.barTextShadow = "Bar text shadow"
+	L.group = "團隊"
+	L.self = "自身"
+	L.healer = "治療"
+	L.TANK_desc = "有些技能對坦克很重要。啟用此選項後，只在該玩家的角色職責為坦克時顯示計時條。"
+	L.barBackground = "計時條背景顏色"
+	L.barText = "計時條文字"
+	L.barTextShadow = "計時條文字陰影"
 	L.codex = "寧神聖"
 
 	L.usedon_cast = "%s：%s於%s"
 	L.used_cast = " %s使用：%s"
-	--L.ritual_cast = "%s wants to perform a %s!"
+	L.ritual_cast = "%s想要進行一次%s！"
 
 	L.portal = "傳送門"
-	L.portal_desc = "打開或關閉顯示法師傳送門時提示。"
+	L.portal_desc = "法師傳送門的開門提示。"
 	L.portal_cast = "%s施放了一道%s！"
 	L.portal_bar = "%s (%s)"
 
 	L.repair = "修理機器人"
-	L.repair_desc = "打開或關閉顯示修理機器人可用時提示。"
+	L.repair_desc = "修理機器人的可用提示。"
 
-	--L.feast = "Feasts"
-	--L.feast_desc = "Toggle showing when feasts get prepared."
-	--L.feast_cast = "%s prepared a %s!"
+	L.feast = "大餐"
+	L.feast_desc = "盛宴享用提示"
+	L.feast_cast = "%s準備了一頓%s！"
 
-	--L.rebirth = "Rebirth"
-	--L.rebirth_desc = "Toggle showing combat resurrections."
+	L.rebirth = "戰鬥復活"
+	L.rebirth_desc = "切換戰復計時"
 end
 
