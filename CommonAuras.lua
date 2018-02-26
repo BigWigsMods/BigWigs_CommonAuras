@@ -76,7 +76,7 @@ local toggleOptions = {
 	108280, -- Healing Tide Totem
 	98008, -- Spirit Link Totem
 }
-local toggleDefaults = { enabled = true }
+local toggleDefaults = { enabled = true, custom = {} }
 for _, key in next, toggleOptions do
 	toggleDefaults[key] = 0
 end
@@ -92,13 +92,8 @@ function mod:CheckOption(key, flag)
 	return self.db.profile[key] and bit_band(self.db.profile[key], C[flag]) == C[flag]
 end
 
-local options = nil
 local function GetOptions()
-	if options then
-		return options
-	end
-
-	options = {
+	local options = {
 		name = L.commonAuras,
 		type = "group",
 		childGroups = "tab",
@@ -207,8 +202,6 @@ local function GetOptions()
 		local group = {
 			name = " ",
 			type = "group",
-			get = get,
-			set = set,
 			inline = true,
 			order = index,
 			args = {
@@ -292,6 +285,8 @@ local function GetOptions()
 				type = "toggle",
 				name = BigWigs:GetOptionDetails("TANK"),
 				desc = L.TANK_desc, descStyle = "inline",
+				get = get,
+				set = set,
 				hidden = hidden,
 				order = 10,
 				width = "full",
@@ -303,6 +298,220 @@ local function GetOptions()
 				type = "toggle",
 				name = name,
 				desc = desc,
+				get = get,
+				set = set,
+				hidden = hidden,
+				order = i + 10,
+			}
+		end
+
+		parentGroup.args[key] = group
+	end
+
+	options.args["Custom"] = {
+		type = "group",
+		name = L.custom,
+		order = #toggleOptions + 10,
+		args = {
+			add = {
+				type = "input",
+				name = L.addSpell,
+				get = false,
+				set = function(info, value)
+					value = tonumber(value)
+					mod.db.profile.custom[value] = {
+						event = "SPELL_CAST_SUCCESS",
+						format = "used_cast",
+						duration = 0,
+					}
+					mod.db.profile[value] = 0
+				end,
+				validate = function(info, value)
+					value = tonumber(value)
+					if not value or not GetSpellInfo(value) then
+						return ("%s: %s"):format(L.commonAuras, L.customErrorInvalid)
+					elseif mod.db.profile[value] then
+						return ("%s: %s"):format(L.commonAuras, L.customErrorExists)
+					end
+					return true
+				end,
+				confirm = function(info, value)
+					local spell, _, texture = GetSpellInfo(value)
+					if not spell then return false end
+					local desc = GetSpellDescription(value) or ""
+					if desc ~= "" then desc = "\n" .. desc:gsub("%%", "%%%%") end
+					return ("%s\n\n|T%d:0|t|cffffd200%s|r%s"):format(L.customConfirmAdd, texture, spell, desc)
+				end,
+				order = 1,
+			},
+		},
+	}
+	parentGroup = options.args["Custom"]
+
+	local customOptions = {}
+	for key in next, mod.db.profile.custom do
+		if GetSpellInfo(key) then
+			customOptions[#customOptions+1] = key
+		else
+			mod.db.profile.custom[key] = nil
+		end
+	end
+	table.sort(customOptions, function(a, b)
+		return GetSpellInfo(a) < GetSpellInfo(b)
+	end)
+
+	local function customGet(info)
+		local option = info[#info]
+		local key = info[#info-1]
+		return mod.db.profile.custom[key][option]
+	end
+	local function customSet(info, value)
+		local option = info[#info]
+		local key = info[#info-1]
+		mod.db.profile.custom[key][option] = value
+	end
+
+	local eventValues = {
+		SPELL_CAST_START = "SPELL_CAST_START",
+		SPELL_CAST_SUCCESS = "SPELL_CAST_SUCCESS",
+		SPELL_SUMMON = "SPELL_SUMMON",
+	}
+	local source, target, spell = ("[%s]"):format(STATUS_TEXT_PLAYER), ("[%s]"):format(STATUS_TEXT_TARGET), ("[%s]"):format(STAT_CATEGORY_SPELL)
+	local formatValues = {
+		used_cast = L.used_cast:format(source, spell),
+		usedon_cast = L.usedon_cast:format(source, spell, target)
+	}
+
+	for index, key in ipairs(customOptions) do
+		local group = {
+			name = " ",
+			type = "group",
+			inline = true,
+			order = index + 10,
+			args = {
+				master = {
+					type = "toggle",
+					name = ("|cfffed000%s|r"):format((GetSpellInfo(key))),
+					desc = GetSpellDescription(key), descStyle = "inline",
+					image = GetSpellTexture(key),
+					get = masterGet,
+					set = masterSet,
+					order = 1,
+					width = "full",
+				},
+				event = {
+					type = "select",
+					name = L.event,
+					values = eventValues,
+					get = customGet,
+					set = customSet,
+					hidden = hidden,
+					order = 2,
+				},
+				duration = {
+					type = "range",
+					name = L.duration,
+					min = 0, max = 60, step = 1,
+					get = customGet,
+					set = customSet,
+					hidden = hidden,
+					order = 3,
+				},
+				format = {
+					type = "select",
+					name = L.textFormat,
+					values = formatValues,
+					get = customGet,
+					set = customSet,
+					hidden = hidden,
+					order = 4,
+				},
+				sep1 = {
+					type = "header",
+					name = "",
+					order = 10,
+					hidden = hidden,
+				},
+				--
+				-- bitflag options here
+				--
+				sep2 = {
+					type = "header",
+					name = PL.colors,
+					order = 20,
+					hidden = hidden,
+				},
+				messages = {
+					name = PL.messages,
+					type = "color",
+					get = messageColorGet,
+					set = messageColorSet,
+					hidden = hidden,
+					order = 21,
+				},
+				barColor = {
+					name = PL.regularBars,
+					type = "color", hasAlpha = true,
+					get = barColorGet,
+					set = barColorSet,
+					hidden = hidden,
+					order = 22,
+				},
+				barEmphasized = {
+					name = PL.emphasizedBars,
+					type = "color", hasAlpha = true,
+					get = barColorGet,
+					set = barColorSet,
+					hidden = hidden,
+					order = 23,
+				},
+				barBackground = {
+					name = L.barBackground,
+					type = "color", hasAlpha = true,
+					get = barColorGet,
+					set = barColorSet,
+					hidden = hidden,
+					order = 24,
+				},
+				barText = {
+					name = L.barText,
+					type = "color", hasAlpha = true,
+					get = barColorGet,
+					set = barColorSet,
+					hidden = hidden,
+					order = 25,
+				},
+				barTextShadow = {
+					name = L.barTextShadow,
+					type = "color", hasAlpha = true,
+					get = barColorGet,
+					set = barColorSet,
+					hidden = hidden,
+					order = 26,
+				},
+				delete = {
+					type = "execute",
+					name = L.remove,
+					arg = key,
+					func = function(info)
+						local value = tonumber(info.arg)
+						mod.db.profile.custom[value] = nil
+						mod.db.profile[value] = nil
+						GameTooltip:Hide()
+					end,
+					order = 30,
+				},
+			}
+		}
+
+		for i, flag in ipairs(bitflags) do
+			local name, desc = BigWigs:GetOptionDetails(flag)
+			group.args[flag] = {
+				type = "toggle",
+				name = name,
+				desc = desc,
+				get = get,
+				set = set,
 				hidden = hidden,
 				order = i + 10,
 			}
@@ -541,16 +750,32 @@ end
 --
 
 -- Dedicated COMBAT_LOG_EVENT_UNFILTERED handler for efficiency
-CAFrame:SetScript("OnEvent", function(_, _, _, event, _, _, source, _, _, _, player, _, _, spellId, spellName)
-	local f = combatLogMap[event] and combatLogMap[event][spellId] or nil
-	if f and player then
-		mod[f](mod, player:gsub("%-.+", "*"), spellId, source:gsub("%-.+", "*"), spellName)
-	elseif f then
-		mod[f](mod, player, spellId, source:gsub("%-.+", "*"), spellName)
+CAFrame:SetScript("OnEvent", function(_, _, _, event, _, _, source, _, _, _, target, _, _, spellId, spellName)
+	if not combatLogMap[event] then return end
+
+	local f = combatLogMap[event][spellId]
+	if f then
+		mod[f](mod, target and target:gsub("%-.+", "*"), spellId, source:gsub("%-.+", "*"), spellName)
+		return
+	end
+
+	f = mod.db.profile.custom[spellId]
+	if f and f.event == event then
+		-- we could end up with string.format errors so include fallback for player names
+		mod:Custom(f, target and target:gsub("%-.+", "*") or UNKNOWN, spellId, source and source:gsub("%-.+", "*") or UNKNOWN, spellName)
+		return
 	end
 end)
 
--- General
+
+-- Custom spells
+function mod:Custom(info, target, spellId, source, spellName)
+	message(spellId, L[info.format]:format(source, spellName, target))
+	if info.duration > 0 then
+		local player = info.format == "used_cast" and source or target
+		bar(spellId, info.duration, player, spellName)
+	end
+end
 
 -- Codex handling. There are no CLEU events for this, unfortunately
 do
@@ -564,6 +789,8 @@ do
 		end
 	end
 end
+
+-- General
 
 do
 	local feast = GetSpellInfo(66477)
