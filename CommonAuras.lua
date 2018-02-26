@@ -354,6 +354,10 @@ local function GetOptions()
 		return GetSpellInfo(a) < GetSpellInfo(b)
 	end)
 
+	local function customMasterSet(info, value)
+		local key = info[#info-1]
+		mod.db.profile[key] = value and C.MESSAGE or 0
+	end
 	local function customGet(info)
 		local option = info[#info]
 		local key = info[#info-1]
@@ -389,7 +393,7 @@ local function GetOptions()
 					desc = GetSpellDescription(key), descStyle = "inline",
 					image = GetSpellTexture(key),
 					get = masterGet,
-					set = masterSet,
+					set = customMasterSet,
 					order = 1,
 					width = "full",
 				},
