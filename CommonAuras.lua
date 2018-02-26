@@ -120,9 +120,6 @@ local function GetOptions()
 
 	local function masterGet(info)
 		local key = info[#info-1]
-		if type(mod.db.profile[key]) ~= "number" then
-			mod.db.profile[key] = 0
-		end
 		return mod.db.profile[key] > 0
 	end
 	local function masterSet(info, value)
@@ -134,12 +131,12 @@ local function GetOptions()
 		end
 	end
 
-	local function get(info)
+	local function flagGet(info)
 		local key = info[#info-1]
 		local flag = C[info[#info]]
 		return bit_band(mod.db.profile[key], flag) == flag
 	end
-	local function set(info, value)
+	local function flagSet(info, value)
 		local key = info[#info-1]
 		local flag = C[info[#info]]
 		if value then
@@ -150,8 +147,7 @@ local function GetOptions()
 	end
 	local function hidden(info)
 		local key = info[#info-1]
-		local value = mod.db.profile[key] or 0
-		return value == 0
+		return mod.db.profile[key] == 0
 	end
 
 	local cModule = BigWigs:GetPlugin("Colors")
@@ -184,10 +180,10 @@ local function GetOptions()
 	}
 	local bitflags = {"MESSAGE", "BAR", "EMPHASIZE"}
 	local parentGroup
-	local isTankCD = false
+	local header
 	for index, key in ipairs(toggleOptions) do
 		if optionHeaders[key] then
-			local header = optionHeaders[key]
+			header = optionHeaders[key]
 			parentGroup = {
 				type = "group",
 				name = header,
@@ -195,7 +191,6 @@ local function GetOptions()
 				args = {},
 			}
 			options.args[header] = parentGroup
-			isTankCD = key == 48792
 		end
 
 		local isSpell = type(key) == "number"
@@ -280,13 +275,13 @@ local function GetOptions()
 				},
 			},
 		}
-		if isTankCD then
+		if header == L.self then
 			group.args.TANK = {
 				type = "toggle",
 				name = BigWigs:GetOptionDetails("TANK"),
 				desc = L.TANK_desc, descStyle = "inline",
-				get = get,
-				set = set,
+				get = flagGet,
+				set = flagSet,
 				hidden = hidden,
 				order = 10,
 				width = "full",
@@ -298,8 +293,8 @@ local function GetOptions()
 				type = "toggle",
 				name = name,
 				desc = desc,
-				get = get,
-				set = set,
+				get = flagGet,
+				set = flagSet,
 				hidden = hidden,
 				order = i + 10,
 			}
@@ -346,7 +341,6 @@ local function GetOptions()
 			},
 		},
 	}
-	parentGroup = options.args["Custom"]
 
 	local customOptions = {}
 	for key in next, mod.db.profile.custom do
@@ -510,14 +504,14 @@ local function GetOptions()
 				type = "toggle",
 				name = name,
 				desc = desc,
-				get = get,
-				set = set,
+				get = flagGet,
+				set = flagSet,
 				hidden = hidden,
 				order = i + 10,
 			}
 		end
 
-		parentGroup.args[key] = group
+		options.args["Custom"].args[key] = group
 	end
 
 	return options
@@ -705,7 +699,7 @@ end
 local icons = setmetatable({}, {__index =
 	function(self, key)
 		local icon = GetSpellTexture(key)
-		self[key] = icon
+		self[key] = icon or nil
 		return icon
 	end
 })
