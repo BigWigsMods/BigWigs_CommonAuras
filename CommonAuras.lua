@@ -645,12 +645,14 @@ function mod:OnRegister()
 end
 
 function mod:OnPluginEnable()
-	self:RegisterMessage("BigWigs_OnBossWin")
-	self:RegisterMessage("BigWigs_OnBossWipe", "BigWigs_OnBossWin")
-	self:RegisterEvent("PLAYER_REGEN_DISABLED")
-	self:RegisterEvent("UNIT_SPELLCAST_SUCCEEDED") -- for tracking Codex casts
+	if self.db.profile.enabled then
+		self:RegisterMessage("BigWigs_OnBossWin")
+		self:RegisterMessage("BigWigs_OnBossWipe", "BigWigs_OnBossWin")
+		self:RegisterEvent("PLAYER_REGEN_DISABLED")
+		self:RegisterEvent("UNIT_SPELLCAST_SUCCEEDED") -- for tracking Codex casts
 
-	CAFrame:RegisterEvent("COMBAT_LOG_EVENT_UNFILTERED")
+		CAFrame:RegisterEvent("COMBAT_LOG_EVENT_UNFILTERED")
+	end
 end
 
 function mod:OnPluginDisable()
