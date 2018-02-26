@@ -68,10 +68,10 @@ if locale == "deDE" then
 	L.rebirth_desc = "Zeigt ausgeführte Battle-Rezzes an."
 elseif locale == "esES" or locale == "esMX" then
 	L.commonAuras = "Auras Comunes"
-	--L.outOfCombat = "Out of combat"
-	--L.group = "Group"
+	L.outOfCombat = "Fuera de combate"
+	L.group = "Grupo"
 	--L.self = "Self"
-	--L.healer = "Healer"
+	L.healer = "Sanador"
 	--L.TANK_desc = "Some abilities are only important for tanks. Set this option to only see messages and bars for players with their assigned role set to Tank."
 	--L.barBackground = "Bar background"
 	--L.barText = "Bar text"
@@ -129,9 +129,9 @@ elseif locale == "frFR" then
 elseif locale == "itIT" then
 	L.commonAuras = "Auree Comuni"
 	L.outOfCombat = "Fuori dal Combattimento"
-	--L.group = "Group"
-	--L.self = "Self"
-	--L.healer = "Healer"
+	L.group = "Gruppo"
+	L.self = "Se stesso"
+	L.healer = "Guaritore"
 	--L.TANK_desc = "Some abilities are only important for tanks. Set this option to only see messages and bars for players with their assigned role set to Tank."
 	--L.barBackground = "Bar background"
 	--L.barText = "Bar text"
@@ -188,10 +188,10 @@ elseif locale == "koKR" then
 	L.rebirth_desc = "전투 부활 표시를 전환합니다."
 elseif locale == "ptBR" then
 	L.commonAuras = "Auras Comunes"
-	--L.outOfCombat = "Out of combat"
-	--L.group = "Group"
-	--L.self = "Self"
-	--L.healer = "Healer"
+	L.outOfCombat = "Fora de combate"
+	L.group = "Grupo"
+	-- L.self = "Self"
+	L.healer = "Cura"
 	--L.TANK_desc = "Some abilities are only important for tanks. Set this option to only see messages and bars for players with their assigned role set to Tank."
 	--L.barBackground = "Bar background"
 	--L.barText = "Bar text"
@@ -307,4 +307,3 @@ elseif locale == "zhTW" then
 	L.rebirth = "戰鬥復活"
 	L.rebirth_desc = "切換戰復計時"
 end
-
