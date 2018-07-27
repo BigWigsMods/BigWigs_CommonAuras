@@ -310,31 +310,32 @@ local function GetOptions()
 			add = {
 				type = "input",
 				name = L.addSpell,
+				desc = L.addSpellDesc,
 				get = false,
 				set = function(info, value)
-					value = tonumber(value)
-					mod.db.profile.custom[value] = {
+					local _, _, _, _, _, _, spellId = GetSpellInfo(value)
+					mod.db.profile.custom[spellId] = {
 						event = "SPELL_CAST_SUCCESS",
 						format = "used_cast",
 						duration = 0,
 					}
-					mod.db.profile[value] = 0
+					mod.db.profile[spellId] = 0
 				end,
 				validate = function(info, value)
-					value = tonumber(value)
-					if not value or not GetSpellInfo(value) then
+					local _, _, _, _, _, _, spellId = GetSpellInfo(value)
+					if not spellId then
 						return ("%s: %s"):format(L.commonAuras, L.customErrorInvalid)
-					elseif mod.db.profile[value] then
+					elseif mod.db.profile[spellId] then
 						return ("%s: %s"):format(L.commonAuras, L.customErrorExists)
 					end
 					return true
 				end,
 				confirm = function(info, value)
-					local spell, _, texture = GetSpellInfo(value)
+					local spell, _, texture, _, _, _, spellId = GetSpellInfo(value)
 					if not spell then return false end
-					local desc = GetSpellDescription(value) or ""
+					local desc = GetSpellDescription(spellId) or ""
 					if desc ~= "" then desc = "\n" .. desc:gsub("%%", "%%%%") end
-					return ("%s\n\n|T%d:0|t|cffffd200%s|r%s"):format(L.customConfirmAdd, texture, spell, desc)
+					return ("%s\n\n|T%d:0|t|cffffd200%s|r (%d)%s"):format(L.customConfirmAdd, texture, spell, spellId, desc)
 				end,
 				order = 1,
 			},
@@ -388,7 +389,7 @@ local function GetOptions()
 			args = {
 				master = {
 					type = "toggle",
-					name = ("|cfffed000%s|r"):format((GetSpellInfo(key))),
+					name = ("|cfffed000%s|r (%d)"):format((GetSpellInfo(key)), key),
 					desc = GetSpellDescription(key), descStyle = "inline",
 					image = GetSpellTexture(key),
 					get = masterGet,
