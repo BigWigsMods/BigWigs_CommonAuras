@@ -674,26 +674,25 @@ local nonCombat = { -- Map of spells to only show out of combat.
 }
 local firedNonCombat = {} -- Bars that we fired that should be hidden on combat.
 
-local green = "Positive"   -- utility and healing cds
-local orange = "Urgent"    -- damaging cds
-local yellow = "Attention" -- targeted cds
-local red = "Important"    -- dps cds
-local blue = "Personal"    -- everything else
-
+-- green:  utility and healing cds
+-- orange: damaging cds
+-- yellow: targeted cds
+-- red:    dps cds
+-- blue:   everything else
 colors = {
-	[102342] = yellow, -- Ironbark
-	[106898] = green, -- Stampeding Roar
-	[740] = green, -- Tranquility
-	rebirth = green,
-	[116849] = yellow, -- Life Cocoon
-	[115310] = green, -- Revival
-	[6940] = orange, -- Blessing of Sacrifice
-	[64843] = green, -- Divine Hymn
-	[47788] = yellow, -- Guardian Spirit
-	[33206] = yellow, -- Pain Suppression
-	[2825] = red, -- Bloodlust
-	[108280] = green, -- Healing Tide Totem
-	[98008] = orange, -- Spirit Link Totem
+	[102342] = "yellow", -- Ironbark
+	[106898] = "green", -- Stampeding Roar
+	[740] = "green", -- Tranquility
+	rebirth = "green",
+	[116849] = "yellow", -- Life Cocoon
+	[115310] = "green", -- Revival
+	[6940] = "orange", -- Blessing of Sacrifice
+	[64843] = "green", -- Divine Hymn
+	[47788] = "yellow", -- Guardian Spirit
+	[33206] = "yellow", -- Pain Suppression
+	[2825] = "red", -- Bloodlust
+	[108280] = "green", -- Healing Tide Totem
+	[98008] = "orange", -- Spirit Link Totem
 }
 
 local function checkFlag(key, flag, player)
@@ -711,7 +710,7 @@ local icons = setmetatable({}, {__index =
 })
 local function message(key, text, player, icon)
 	if checkFlag(key, C.MESSAGE, player) then
-		mod:SendMessage("BigWigs_Message", mod, key, text, colors[key] or blue, icons[icon or key])
+		mod:SendMessage("BigWigs_Message", mod, key, text, colors[key] or "blue", icons[icon or key])
 	end
 end
 local function bar(key, length, player, text, icon)
