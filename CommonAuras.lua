@@ -41,7 +41,7 @@ local toggleOptions = {
 	6940, -- Blessing of Sacrifice
 	2825, -- Bloodlust
 	192077, -- Wind Rush Totem
-	97462, -- Commanding Shout
+	97462, -- Rallying Cry
 
 	--[[ Self ]]--
 	48792, -- Icebound Fortitude
@@ -49,7 +49,6 @@ local toggleOptions = {
 	204021, -- Fiery Brand
 	187827, -- Metamorphosis
 	22812, -- Barkskin
-	200851, -- Rage of the Sleeper (Artifact ability)
 	61336, -- Survival Instincts
 	122278, -- Dampen Harm
 	122783, -- Diffuse Magic
@@ -557,7 +556,7 @@ function mod:OnRegister()
 		[29893] = "Soulwell", -- Create Soulwell
 		[43987] = "Refreshment", -- Conjure Refreshment Table
 		-- Group
-		[97462] = "CommandingShout",
+		[97462] = "RallyingCry",
 		[106898] = "StampedingRoar",
 		[1022] = "BlessinOfProtection",
 		[204018] ="BlessingOfSpellwarding",
@@ -570,8 +569,7 @@ function mod:OnRegister()
 		[2825] = "Bloodlust", -- Bloodlust
 		[32182] = "Bloodlust", -- Heroism
 		[80353] = "Bloodlust", -- Time Warp
-		[90355] = "Bloodlust", -- Ancient Hysteria
-		[160452] = "Bloodlust", -- Netherwinds
+		[264667] = "Bloodlust", -- Hunter pet: Primal Rage
 		[178207] = "Bloodlust", -- Leatherworking: Drums of Fury
 		[230935] = "Bloodlust", -- Leatherworking: Drums of the Mountain
 		-- Tank
@@ -585,7 +583,6 @@ function mod:OnRegister()
 		[48792] = "IceboundFortitude",
 		[55233] = "VampiricBlood",
 		[22812] = "Barkskin",
-		[200851] = "RageOfTheSleeper",
 		[61336] = "SurvivalInstincts",
 		[115203] = "FortifyingBrew",
 		[115176] = "ZenMeditation",
@@ -596,6 +593,7 @@ function mod:OnRegister()
 		-- Healer
 		[33206] = "PainSuppression",
 		[62618] = "PowerWordBarrier",
+		[271466] = "PowerWordBarrier", -- Luminous Barrier
 		[47788] = "GuardianSpirit",
 		[64843] = "DivineHymn",
 		[102342] = "Ironbark",
@@ -615,6 +613,7 @@ function mod:OnRegister()
 		[115176] = "ZenMeditationOff",
 		[116849] = "LifeCocoonOff",
 		[204150] = "AegisOfLightOff",
+		[6940] = "BlessingOfSacrificeOff",
 	}
 	combatLogMap.SPELL_CREATE = {
 		[11419] = "Portals", -- Darnassus
@@ -632,11 +631,14 @@ function mod:OnRegister()
 		[53142] = "Portals", -- Dalaran - Northrend
 		[88345] = "Portals", -- Tol Barad (Alliance)
 		[88346] = "Portals", -- Tol Barad (Horde)
+		[120146] = "Portals", -- Ancient Portal: Dalaran
 		[132620] = "Portals", -- Vale of Eternal Blossoms (Alliance)
 		[132626] = "Portals", -- Vale of Eternal Blossoms (Horde)
 		[176246] = "Portals", -- Stormshield (Alliance)
 		[176244] = "Portals", -- Warspear (Horde)
 		[224871] = "Portals", -- Dalaran - Broken Isles
+		[281400] = "Portals", -- Boralus (Alliance)
+		[281402] = "Portals", -- Dazar'alor (Horde)
 	}
 	combatLogMap.SPELL_RESURRECT = {
 		[20484] = "Rebirth", -- Rebirth
@@ -749,7 +751,8 @@ end
 --
 
 -- Dedicated COMBAT_LOG_EVENT_UNFILTERED handler for efficiency
-CAFrame:SetScript("OnEvent", function(_, _, _, event, _, _, source, _, _, _, target, _, _, spellId, spellName)
+CAFrame:SetScript("OnEvent", function()
+	local _, event, _, _, source, _, _, _, target, _, _, spellId, spellName = CombatLogGetCurrentEventInfo()
 	if not combatLogMap[event] then return end
 
 	local f = combatLogMap[event][spellId]
@@ -887,11 +890,6 @@ function mod:Ironbark(target, spellId, nick, spellName)
 	bar(spellId, 12, target, spellName)
 end
 
-function mod:RageOfTheSleeper(_, spellId, nick, spellName)
-	message(spellId, L.used_cast:format(nick, spellName), nick)
-	bar(spellId, 10, nick, spellName)
-end
-
 function mod:StampedingRoar(_, spellId, nick, spellName)
 	message(spellId, L.used_cast:format(nick, spellName))
 	bar(spellId, 8, nick, spellName)
@@ -974,12 +972,12 @@ end
 
 function mod:ArdentDefender(_, spellId, nick, spellName)
 	message(spellId, L.used_cast:format(nick, spellName), nick)
-	bar(spellId, 10, nick, spellName)
+	bar(spellId, 8, nick, spellName)
 end
 
 function mod:AuraMastery(_, spellId, nick, spellName)
 	message(spellId, L.used_cast:format(nick, spellName))
-	bar(spellId, 6, nick, spellName)
+	bar(spellId, 8, nick, spellName)
 end
 
 function mod:DivineProtection(_, spellId, nick, spellName)
@@ -1012,6 +1010,10 @@ function mod:BlessingOfSacrifice(target, spellId, nick, spellName)
 	bar(spellId, 12, target, spellName)
 end
 
+function mod:BlessingOfSacrificeOff(target, spellId, nick, spellName)
+	stopbar(spellName, target)
+end
+
 -- Priest
 
 function mod:DivineHymn(_, spellId, nick, spellName)
@@ -1038,8 +1040,8 @@ function mod:PainSuppression(target, spellId, nick, spellName)
 end
 
 function mod:PowerWordBarrier(_, spellId, nick, spellName)
-	message(spellId, L.used_cast:format(nick, spellName))
-	bar(spellId, 10, nick, spellName)
+	message(62618, L.used_cast:format(nick, spellName))
+	bar(62618, 10, nick, spellName)
 end
 
 -- Shaman
@@ -1068,7 +1070,7 @@ end
 
 function mod:WindRushTotem(_, spellId, nick, spellName)
 	message(spellId, L.used_cast:format(nick, spellName))
-	bar(spellId, 10, nick, spellName)
+	bar(spellId, 15, nick, spellName)
 end
 
 -- Warlock
@@ -1093,7 +1095,7 @@ function mod:LastStand(_, spellId, nick, spellName)
 	bar(spellId, 15, nick, spellName)
 end
 
-function mod:CommandingShout(_, spellId, nick, spellName)
+function mod:RallyingCry(_, spellId, nick, spellName)
 	message(spellId, L.used_cast:format(nick, spellName))
 	bar(spellId, 10, nick, spellName)
 end
