@@ -164,12 +164,12 @@ local function GetOptions()
 	end
 	local function messageColorGet(info)
 		local key = info[#info-1]
-		local color = colors[key] or "Personal"
+		local color = colors[key] or "blue"
 		return cModule:GetColor(color, mod.name, key)
 	end
 	local function messageColorSet(info, r, g, b)
 		local key = info[#info-1]
-		local color = colors[key] or "Personal"
+		local color = colors[key] or "blue"
 		cModule.db.profile[color][mod.name][key] = {r, g, b, 1}
 	end
 
