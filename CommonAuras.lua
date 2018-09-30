@@ -719,7 +719,7 @@ local icons = setmetatable({}, {__index =
 })
 local function message(key, text, player, icon)
 	if checkFlag(key, C.MESSAGE, player) then
-		mod:SendMessage("BigWigs_Message", mod, key, text, colors[key] or "blue", icons[icon or key])
+		mod:SendMessage("BigWigs_Message", mod, key, text, colors[key] or "blue", icons[icon or key], checkFlag(key, C.EMPHASIZE))
 	end
 end
 local function bar(key, length, player, text, icon)
