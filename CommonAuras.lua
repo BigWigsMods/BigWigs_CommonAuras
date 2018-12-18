@@ -93,6 +93,32 @@ function mod:CheckOption(key, flag)
 	return self.db.profile[key] and bit_band(self.db.profile[key], C[flag]) == C[flag]
 end
 
+local GetDescription do
+	local acr = LibStub("AceConfigRegistry-3.0")
+	local needsUpdate = {}
+
+	local function RefreshOnUpdate(self)
+		acr:NotifyChange("BigWigs")
+		self:SetScript("OnUpdate", nil)
+	end
+
+	function mod:SPELL_DATA_LOAD_RESULT(_, spellId, success)
+		if success and needsUpdate[spellId] then
+			CAFrame:SetScript("OnUpdate", RefreshOnUpdate)
+		end
+		needsUpdate[spellId] = nil
+	end
+
+	function GetDescription(info)
+		local spellId = info[#info-1]
+		if spellId and not C_Spell.IsSpellDataCached(spellId) then
+			needsUpdate[spellId] = true
+			C_Spell.RequestLoadSpellData(spellId)
+		end
+		return GetSpellDescription(spellId)
+	end
+end
+
 local function GetOptions()
 	local options = {
 		name = L.commonAuras,
@@ -204,7 +230,7 @@ local function GetOptions()
 				master = {
 					type = "toggle",
 					name = ("|cfffed000%s|r"):format(isSpell and GetSpellInfo(key) or L[key] or key),
-					desc = isSpell and GetSpellDescription(key) or L[key.."_desc"], descStyle = "inline",
+					desc = isSpell and GetDescription or L[key.."_desc"], descStyle = "inline",
 					image = GetSpellTexture(isSpell and key or L[key.."_icon"]),
 					get = masterGet,
 					set = masterSet,
@@ -392,7 +418,7 @@ local function GetOptions()
 				master = {
 					type = "toggle",
 					name = ("|cfffed000%s|r (%d)"):format((GetSpellInfo(key)), key),
-					desc = GetSpellDescription(key), descStyle = "inline",
+					desc = GetDescription, descStyle = "inline",
 					image = GetSpellTexture(key),
 					get = masterGet,
 					set = customMasterSet,
@@ -661,6 +687,7 @@ function mod:OnPluginEnable()
 		self:RegisterMessage("BigWigs_OnBossWipe", "BigWigs_OnBossWin")
 		self:RegisterEvent("PLAYER_REGEN_DISABLED")
 		self:RegisterEvent("UNIT_SPELLCAST_SUCCEEDED") -- for tracking Codex casts
+		self:RegisterEvent("SPELL_DATA_LOAD_RESULT")
 
 		CAFrame:RegisterEvent("COMBAT_LOG_EVENT_UNFILTERED")
 	end
@@ -1043,7 +1070,7 @@ end
 
 function mod:SymbolOfHope(_, spellId, nick, spellName)
 	message(spellId, L.used_cast:format(nick, spellName))
-	bar(spellId, 6, target, spellName)
+	bar(spellId, 6, nick, spellName)
 end
 
 function mod:HolyWordSalvation(_, spellId, nick, spellName)
