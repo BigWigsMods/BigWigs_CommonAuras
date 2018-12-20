@@ -94,11 +94,10 @@ function mod:CheckOption(key, flag)
 end
 
 local GetDescription do
-	local acr = LibStub("AceConfigRegistry-3.0")
 	local needsUpdate = {}
 
 	local function RefreshOnUpdate(self)
-		acr:NotifyChange("BigWigs")
+		LibStub("AceConfigRegistry-3.0"):NotifyChange("BigWigs")
 		self:SetScript("OnUpdate", nil)
 	end
 
