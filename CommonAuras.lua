@@ -674,9 +674,7 @@ function mod:OnRegister()
 		[20484] = "Rebirth", -- Rebirth
 		[95750] = "Rebirth", -- Soulstone Resurrection
 		[61999] = "Rebirth", -- Raise Ally
-		[126393] = "Rebirth", -- Eternal Guardian (Hunter pet)
-		[159931] = "Rebirth", -- Gift of Chi-Ji (Hunter pet)
-		[159956] = "Rebirth", -- Dust of Life (Hunter pet)
+		[265116] = "Rebirth", -- Unstable Temporal Time Shifter (Engineer)
 	}
 end
 
