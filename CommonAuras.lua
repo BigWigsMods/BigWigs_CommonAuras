@@ -601,6 +601,7 @@ function mod:OnRegister()
 		[264667] = "Bloodlust", -- Hunter pet: Primal Rage
 		[178207] = "Bloodlust", -- Leatherworking: Drums of Fury
 		[230935] = "Bloodlust", -- Leatherworking: Drums of the Mountain
+		[292686] = "Bloodlust", -- Leatherworking: Mallet of Thunderous Skins
 		-- Tank
 		[871] = "ShieldWall",
 		[12975] = "LastStand",
