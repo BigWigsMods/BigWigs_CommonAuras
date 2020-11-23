@@ -1,5 +1,2 @@
 package-as: BigWigs_CommonAuras
 wowi-archive-previous: no
-
-ignore:
-  - README.md
