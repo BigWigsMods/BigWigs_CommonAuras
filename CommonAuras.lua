@@ -35,11 +35,11 @@ local toggleOptions = {
 	196718, -- Darkness
 	106898, -- Stampeding Roar
 	"rebirth",
-	204150, -- Aegis of Light
 	1022, -- Blessing of Protection
 	204018, -- Blessing of Spellwarding
 	6940, -- Blessing of Sacrifice
 	2825, -- Bloodlust
+	16191, -- Mana Tide Totem
 	192077, -- Wind Rush Totem
 	97462, -- Rallying Cry
 
@@ -51,7 +51,6 @@ local toggleOptions = {
 	22812, -- Barkskin
 	61336, -- Survival Instincts
 	122278, -- Dampen Harm
-	122783, -- Diffuse Magic
 	115203, -- Fortifying Brew
 	115176, -- Zen Meditation
 	31850, -- Ardent Defender
@@ -74,6 +73,7 @@ local toggleOptions = {
 	265202, -- Holy Word: Salvation
 	33206, -- Pain Suppression
 	62618, -- Power Word: Barrier
+	109964, -- Spirit Shell
 	108280, -- Healing Tide Totem
 	98008, -- Spirit Link Totem
 }
@@ -591,7 +591,7 @@ function mod:OnRegister()
 		[204018] ="BlessingOfSpellwarding",
 		[6940] = "BlessingOfSacrifice",
 		[108199] = "GorefiendsGrasp",
-		[204150] = "AegisOfLight",
+		[16191] = "ManaTideTotem",
 		[192077] = "WindRushTotem",
 		[196718] = "Darkness",
 		-- DPS
@@ -617,13 +617,12 @@ function mod:OnRegister()
 		[115203] = "FortifyingBrew",
 		[115176] = "ZenMeditation",
 		[122278] = "DampenHarm",
-		[122783] = "DiffuseMagic",
 		[187827] = "Metamorphosis",
 		[204021] = "FieryBrand",
 		-- Healer
 		[33206] = "PainSuppression",
 		[62618] = "PowerWordBarrier",
-		[271466] = "PowerWordBarrier", -- Luminous Barrier
+		[109964] = "SpiritShell",
 		[47788] = "GuardianSpirit",
 		[64843] = "DivineHymn",
 		[64901] = "SymbolOfHope",
@@ -644,7 +643,6 @@ function mod:OnRegister()
 		[47788] = "GuardianSpiritOff",
 		[115176] = "ZenMeditationOff",
 		[116849] = "LifeCocoonOff",
-		[204150] = "AegisOfLightOff",
 		[6940] = "BlessingOfSacrificeOff",
 	}
 	combatLogMap.SPELL_CREATE = {
@@ -713,10 +711,10 @@ local firedNonCombat = {} -- Bars that we fired that should be hidden on combat.
 -- red:    dps cds
 -- blue:   everything else
 colors = {
-	[106898] = "green", -- Stampeding Roar
 	[740] = "green", -- Tranquility
 	rebirth = "green", -- Rebirth
 	[115310] = "green", -- Revival
+	[109964] = "green", -- Spirit Shell
 	[64843] = "green", -- Divine Hymn
 	[265202] = "green", -- Holy Word: Salvation
 	[64901] = "green", -- Symbol of Hope
@@ -955,11 +953,6 @@ function mod:DampenHarm(_, spellId, nick, spellName)
 	bar(spellId, 10, nick, spellName)
 end
 
-function mod:DiffuseMagic(_, spellId, nick, spellName)
-	message(spellId, L.used_cast:format(nick, spellName), nick)
-	bar(spellId, 6, nick, spellName)
-end
-
 function mod:FortifyingBrew(_, spellId, nick, spellName)
 	message(spellId, L.used_cast:format(nick, spellName), nick)
 	bar(spellId, 15, nick, spellName)
@@ -988,15 +981,6 @@ function mod:ZenMeditationOff(_, _, nick, spellName)
 end
 
 -- Paladin
-
-function mod:AegisOfLight(_, spellId, nick, spellName)
-	message(spellId, L.used_cast:format(nick, spellName), nick)
-	bar(spellId, 6, nick, spellName)
-end
-
-function mod:AegisOfLightOff(_, spellId, nick, spellName)
-	stopbar(spellName, nick)
-end
 
 function mod:ArdentDefender(_, spellId, nick, spellName)
 	message(spellId, L.used_cast:format(nick, spellName), nick)
@@ -1064,7 +1048,7 @@ end
 
 function mod:SymbolOfHope(_, spellId, nick, spellName)
 	message(spellId, L.used_cast:format(nick, spellName))
-	bar(spellId, 6, nick, spellName)
+	bar(spellId, 5, nick, spellName)
 end
 
 function mod:HolyWordSalvation(_, spellId, nick, spellName)
@@ -1079,6 +1063,11 @@ end
 function mod:PowerWordBarrier(_, spellId, nick, spellName)
 	message(62618, L.used_cast:format(nick, spellName))
 	bar(62618, 10, nick, spellName)
+end
+
+function mod:SpiritShell(_, spellId, nick, spellName)
+	message(spellId, L.used_cast:format(nick, spellName))
+	bar(spellId, 10, nick, spellName)
 end
 
 -- Shaman
@@ -1102,7 +1091,12 @@ end
 
 function mod:HealingTide(_, spellId, nick, spellName)
 	message(spellId, L.used_cast:format(nick, spellName))
-	bar(spellId, 10, nick, spellName)
+	bar(spellId, 12, nick, spellName) -- base 10s, 12s at lv52
+end
+
+function mod:ManaTideTotem(_, spellId, nick, spellName)
+	message(spellId, L.used_cast:format(nick, spellName))
+	bar(spellId, 8, nick, spellName)
 end
 
 function mod:WindRushTotem(_, spellId, nick, spellName)
