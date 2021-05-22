@@ -5,6 +5,7 @@ L.commonAuras = "Common Auras"
 L.outOfCombat = "Out of combat"
 L.group = "Group"
 L.self = "Self"
+L.tank = _G.TANK
 L.healer = "Healer"
 L.TANK_desc = "Some abilities are only important for tanks. Set this option to only see messages and bars for players with their assigned role set to Tank."
 L.barBackground = "Bar background"

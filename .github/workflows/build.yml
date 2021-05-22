@@ -3,14 +3,13 @@ name: Package addon
 on:
   push:
     branches:
-      - master
+      - classic
     tags:
       - '*'
 
 jobs:
   build:
     runs-on: ubuntu-latest
-    if: startsWith(github.ref, 'refs/tags') == true || contains(github.event.head_commit.message, 'skip ci') != true
 
     steps:
       - name: Checkout addon
