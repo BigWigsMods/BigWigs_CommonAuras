@@ -636,6 +636,7 @@ function mod:OnPluginEnable()
 		self:RegisterMessage("BigWigs_OnBossWipe", "BigWigs_OnBossWin")
 		self:RegisterEvent("PLAYER_REGEN_DISABLED")
 		self:RegisterEvent("SPELL_DATA_LOAD_RESULT")
+		self:RegisterEvent("UNIT_SPELLCAST_SUCCEEDED") -- Portals
 
 		CAFrame:RegisterEvent("COMBAT_LOG_EVENT_UNFILTERED")
 	end
@@ -762,6 +763,18 @@ CAFrame:SetScript("OnEvent", function()
 	end
 end)
 
+do
+	local prev = nil
+	function mod:UNIT_SPELLCAST_SUCCEEDED(_, unit, castId, spellId)
+		if castId == prev then return end
+		if combatLogMap.SPELL_CREATE[spellId] and (UnitIsUnit(unit, "player") or UnitInRaid(unit) or UnitInParty(unit)) then
+			prev = castId
+			local source = self:UnitName(unit, true)
+			local spellName = GetSpellInfo(spellId)
+			self:Portals(nil, spellId, source, spellName)
+		end
+	end
+end
 
 -- Custom spells
 function mod:Custom(info, target, spellId, source, spellName)
@@ -841,7 +854,7 @@ do
 	local last = {}
 	function mod:Portals(_, spellId, nick, spellName)
 		message("portal", L.portal_cast:format(nick, spellName), nil, spellId)
-		bar("portal", 60, nick, spellName, spellId)
+		bar("portal", 65, nick, spellName, spellId)
 		-- only show the last portal from a mage
 		if last[nick] then stopbar(last[nick], nick) end
 		last[nick] = spellName
