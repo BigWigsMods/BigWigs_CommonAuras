@@ -769,7 +769,7 @@ function mod:PLAYER_REGEN_DISABLED()
 	for text, player in next, firedNonCombat do
 		stopbar(text, player)
 	end
-	wipe(firedNonCombat)
+	firedNonCombat = {}
 end
 
 function mod:BigWigs_OnBossWin()
