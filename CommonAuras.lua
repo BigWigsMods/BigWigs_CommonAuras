@@ -31,6 +31,7 @@ local toggleOptions = {
 	698, -- Ritual of Summoning
 
 	--[[ Group ]]--
+	51052, -- Anti-Magic Zone
 	108199, -- Gorefiend's Grasp
 	196718, -- Darkness
 	106898, -- Stampeding Roar
@@ -200,7 +201,7 @@ local function GetOptions()
 
 	local optionHeaders = {
 		feast = L.outOfCombat,
-		[108199] = L.group,
+		[51052] = L.group,
 		[48792] = L.self,
 		[102342] = L.healer,
 	}
@@ -594,6 +595,7 @@ function mod:OnRegister()
 		[16191] = "ManaTideTotem",
 		[192077] = "WindRushTotem",
 		[196718] = "Darkness",
+		[51052] = "AntiMagicZone",
 		-- DPS
 		[2825] = "Bloodlust", -- Bloodlust
 		[32182] = "Bloodlust", -- Heroism
@@ -872,6 +874,16 @@ function mod:Reincarnation(_, spellId, nick, spellName)
 end
 
 -- Death Knight
+
+function mod:AntiMagicZone(_, spellId, nick, spellName)
+	message(spellId, L.used_cast:format(nick, spellName), nick)
+	bar(spellId, 8, nick, spellName)
+end
+
+-- XXX Need to check if there's a good way to tell if it hit absorb max vs someone walking out
+-- function mod:AntiMagicZoneOff(_, spellId, nick, spellName)
+-- 	stopbar(spellName, nick)
+-- end
 
 function mod:GorefiendsGrasp(_, spellId, nick, spellName)
 	message(spellId, L.used_cast:format(nick, spellName))
