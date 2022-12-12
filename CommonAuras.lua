@@ -24,34 +24,47 @@ local toggleOptions = {
 	--[[ Out of combat ]]--
 	"feast",
 	"repair",
-	226241, -- Codex of the Tranquil Mind
 	43987, -- Conjure Refreshment Table
 	"portal",
 	29893, -- Create Soulwell
 	698, -- Ritual of Summoning
+	114018, -- Shroud of Concealment
 
 	--[[ Group ]]--
 	51052, -- Anti-Magic Zone
 	108199, -- Gorefiend's Grasp
+	315443, -- Abomination Limb
 	196718, -- Darkness
+	29166, -- Innervate
 	106898, -- Stampeding Roar
 	"rebirth",
+	374227, -- Zephyr
 	1022, -- Blessing of Protection
 	204018, -- Blessing of Spellwarding
 	6940, -- Blessing of Sacrifice
 	2825, -- Bloodlust
+	198103, -- Earth Elemental
 	16191, -- Mana Tide Totem
 	192077, -- Wind Rush Totem
+	111771, -- Demonic Gateway
 	97462, -- Rallying Cry
 
 	--[[ Self ]]--
+	49028, -- Dancing Rune Weapon
+	48743, -- Death Pact
 	48792, -- Icebound Fortitude
 	55233, -- Vampiric Blood
+	198589, -- Blur
 	204021, -- Fiery Brand
 	187827, -- Metamorphosis
+	196555, -- Netherwalk
 	22812, -- Barkskin
+	102558, -- Incarnation (Guardian)
 	61336, -- Survival Instincts
+	363916, -- Obsidian Scales
+	374348, -- Renewing Blaze
 	122278, -- Dampen Harm
+	122783, -- Diffuse Magic
 	115203, -- Fortifying Brew
 	115176, -- Zen Meditation
 	31850, -- Ardent Defender
@@ -63,18 +76,22 @@ local toggleOptions = {
 	871, -- Shield Wall
 
 	--[[ Healer ]]--
+	33891, -- Incarnation (Tree of Life)
 	102342, -- Ironbark
 	740, -- Tranquility
+	357170, -- Time Dilation
+	363534, -- Rewind
 	116849, -- Life Cocoon
+	322118, -- Invoke Yu'lon
 	115310, -- Revival
 	31821, -- Aura Mastery
 	64843, -- Divine Hymn
 	47788, -- Guardian Spirit
+	126135, -- Lightwell
 	64901, -- Symbol of Hope
 	265202, -- Holy Word: Salvation
 	33206, -- Pain Suppression
 	62618, -- Power Word: Barrier
-	109964, -- Spirit Shell
 	108280, -- Healing Tide Totem
 	98008, -- Spirit Link Totem
 }
@@ -202,8 +219,8 @@ local function GetOptions()
 	local optionHeaders = {
 		feast = L.outOfCombat,
 		[51052] = L.group,
-		[48792] = L.self,
-		[102342] = L.healer,
+		[49028] = L.self,
+		[33891] = L.healer,
 	}
 	local bitflags = {"MESSAGE", "BAR", "EMPHASIZE"}
 	local parentGroup
@@ -565,13 +582,18 @@ function mod:OnRegister()
 	combatLogMap.SPELL_SUMMON = {
 		-- Reaves (Pylon doesn't have a _SUCCESS, so we'll just use _SUMMON for all of them)
 		[200205] = "AutoHammer", -- Auto-Hammer Mode
-		[200211] = "Pylon", -- Failure Detection Mode
+		[200211] = "Pylon", -- Failure Detection Mode (50)
 	}
 	combatLogMap.SPELL_CAST_START = {
-		[259409] = "Feasts", -- Galley Banquet (+75 primary stat)
-		[259410] = "Feasts", -- Bountiful Captain's Feast (+100 primary stat)
-		[286050] = "Feasts", -- Sanguinated Feast (+100 primary stat)
-		[297048] = "Feasts", -- Famine Evaluator And Snack Table (+131 primary stat)
+		[259409] = "Feasts", -- Galley Banquet (+17 primary stat)
+		[259410] = "Feasts", -- Bountiful Captain's Feast (+23 primary stat)
+		[286050] = "Feasts", -- Sanguinated Feast (+23 primary stat)
+		[297048] = "Feasts", -- Famine Evaluator And Snack Table (+25 primary stat)
+		[308458] = "Feasts", -- Surprisingly Palatable Feast (+18 primary stat)
+		[308462] = "Feasts", -- Feast of Gluttonous Hedonism (+20 primary stat)
+		[382423] = "Feasts", -- Yusa's Hearty Stew (+70 lowest secondary)
+		[382427] = "Feasts", -- Grand Banquet of the Kalu'ak (+76 primary stat)
+		[383063] = "Feasts", -- Prepare Growing Hoard of Draconic Delicacies (+76 primary stat)
 	}
 	combatLogMap.SPELL_CAST_SUCCESS = {
 		-- OOC
@@ -581,29 +603,40 @@ function mod:OnRegister()
 		[67826] = "Repair", -- Jeeves
 		[157066] = "Repair", -- Walter
 		[199109] = "AutoHammer", -- Auto-Hammer
-		[199115] = "Pylon", -- Failure Detection Pylon
+		[199115] = "Pylon", -- Failure Detection Pylon (50)
+		[385969] = "Pylon", -- S.A.V.I.O.R. (70)
 		[698] = "SummoningStone", -- Ritual of Summoning
 		[29893] = "Soulwell", -- Create Soulwell
 		[43987] = "Refreshment", -- Conjure Refreshment Table
 		-- Group
 		[97462] = "RallyingCry",
+		[29166] = "Innervate",
 		[106898] = "StampedingRoar",
-		[1022] = "BlessinOfProtection",
+		[1022] = "BlessingOfProtection",
 		[204018] ="BlessingOfSpellwarding",
 		[6940] = "BlessingOfSacrifice",
 		[108199] = "GorefiendsGrasp",
+		[315443] = "AbominationLimb",
 		[16191] = "ManaTideTotem",
+		[198103] = "EarthElemental",
 		[192077] = "WindRushTotem",
 		[196718] = "Darkness",
 		[51052] = "AntiMagicZone",
+		[111771] = "DemonicGateway",
+		[114018] = "ShroudOfConcealment",
 		-- DPS
 		[2825] = "Bloodlust", -- Bloodlust
 		[32182] = "Bloodlust", -- Heroism
 		[80353] = "Bloodlust", -- Time Warp
 		[264667] = "Bloodlust", -- Hunter pet: Primal Rage
-		[178207] = "Bloodlust", -- Leatherworking: Drums of Fury
-		[230935] = "Bloodlust", -- Leatherworking: Drums of the Mountain
-		[292686] = "Bloodlust", -- Leatherworking: Mallet of Thunderous Skins
+		[390386] = "Bloodlust", -- Fury of the Aspects
+		[146555] = "Bloodlust", -- LW: Drums of Rage (50)
+		[178207] = "Bloodlust", -- LW: Drums of Fury (50)
+		[230935] = "Bloodlust", -- LW: Drums of the Mountain (50)
+		[256740] = "Bloodlust", -- LW: Drums of the Maelstrom (50)
+		[292686] = "Bloodlust", -- LW: Mallet of Thunderous Skins (50)
+		[309658] = "Bloodlust", -- LW: Drums of Deathly Ferocity (60)
+		[381301] = "Bloodlust", -- LW: Feral Hide Drums (70)
 		-- Tank
 		[871] = "ShieldWall",
 		[12975] = "LastStand",
@@ -612,30 +645,42 @@ function mod:OnRegister()
 		[86659] = "GuardianOfAncientKings",
 		[498] = "DivineProtection",
 		[642] = "DivineShield",
+		[49028] = "DancingRuneWeapon",
+		[48743] = "DeathPact",
 		[48792] = "IceboundFortitude",
 		[55233] = "VampiricBlood",
 		[22812] = "Barkskin",
+		[102558] = "IncarnationGuardian",
+		[33891] = "IncarnationTree",
 		[61336] = "SurvivalInstincts",
+		[122278] = "DampenHarm",
+		[122783] = "DiffuseMagic",
 		[115203] = "FortifyingBrew",
 		[115176] = "ZenMeditation",
-		[122278] = "DampenHarm",
-		[187827] = "Metamorphosis",
+		[198589] = "Blur",
 		[204021] = "FieryBrand",
+		[187827] = "Metamorphosis",
+		[196555] = "Netherwalk",
+		[363916] = "ObsidianScales",
+		[374348] = "RenewingBlaze",
 		-- Healer
+		[64843] = "DivineHymn",
+		[47788] = "GuardianSpirit",
+		[265202] = "HolyWordSalvation",
+		[126135] = "Lightwell",
 		[33206] = "PainSuppression",
 		[62618] = "PowerWordBarrier",
-		[109964] = "SpiritShell",
-		[47788] = "GuardianSpirit",
-		[64843] = "DivineHymn",
 		[64901] = "SymbolOfHope",
-		[265202] = "HolyWordSalvation",
 		[102342] = "Ironbark",
 		[740] = "Tranquility",
 		[31821] = "AuraMastery",
 		[98008] = "SpiritLink",
 		[108280] = "HealingTide",
 		[116849] = "LifeCocoon",
+		[322118] = "InvokeYulon",
 		[115310] = "Revival",
+		[357170] = "TimeDilation",
+		[363534] = "Rewind",
 		-- Reincarnation
 		[21169] = "Reincarnation",
 	}
@@ -646,6 +691,8 @@ function mod:OnRegister()
 		[115176] = "ZenMeditationOff",
 		[116849] = "LifeCocoonOff",
 		[6940] = "BlessingOfSacrificeOff",
+		[48743] = "DeathPactOff",
+		[196555] = "NetherwalkOff",
 	}
 	combatLogMap.SPELL_CREATE = {
 		[11419] = "Portals", -- Darnassus
@@ -671,12 +718,17 @@ function mod:OnRegister()
 		[224871] = "Portals", -- Dalaran - Broken Isles
 		[281400] = "Portals", -- Boralus (Alliance)
 		[281402] = "Portals", -- Dazar'alor (Horde)
+		[344597] = "Portal", -- Oribos
+		[395289] = "Portal", -- Valdrakken
 	}
 	combatLogMap.SPELL_RESURRECT = {
-		[20484] = "Rebirth", -- Rebirth
-		[95750] = "Rebirth", -- Soulstone Resurrection
-		[61999] = "Rebirth", -- Raise Ally
-		[265116] = "Rebirth", -- Unstable Temporal Time Shifter (Engineer)
+		[20484] = "Rebirth", -- Rebirth (Druid)
+		[61999] = "Rebirth", -- Raise Ally (Death Knight)
+		[95750] = "Rebirth", -- Soulstone Resurrection (Warlock)
+		[391054] = "Rebirth", -- Intercession (Paladin)
+		[265116] = "Rebirth", -- Unstable Temporal Time Shifter (Engineer) (60)
+		[345130] = "Rebirth", -- Disposable Spectrophasic Reanimator (Engineer)
+		[393795] = "Rebirth", -- Arclight Vital Correctors (Engineer)
 	}
 end
 
@@ -685,7 +737,6 @@ function mod:OnPluginEnable()
 		self:RegisterMessage("BigWigs_OnBossWin")
 		self:RegisterMessage("BigWigs_OnBossWipe", "BigWigs_OnBossWin")
 		self:RegisterEvent("PLAYER_REGEN_DISABLED")
-		self:RegisterEvent("UNIT_SPELLCAST_SUCCEEDED") -- for tracking Codex casts
 		self:RegisterEvent("SPELL_DATA_LOAD_RESULT")
 
 		CAFrame:RegisterEvent("COMBAT_LOG_EVENT_UNFILTERED")
@@ -703,7 +754,7 @@ local nonCombat = { -- Map of spells to only show out of combat.
 	[698] = true, -- Rital of Summoning
 	[29893] = true, -- Create Soulwell
 	[43987] = true, -- Conjure Refreshment Table
-	[226241] = true, -- Codex of the Tranquil Mind
+	[114018] = true, -- Shroud of Concealment
 }
 local firedNonCombat = {} -- Bars that we fired that should be hidden on combat.
 
@@ -812,19 +863,6 @@ function mod:Custom(info, target, spellId, source, spellName)
 	end
 end
 
--- Codex handling. There are no CLEU events for this, unfortunately
-do
-	local prev = ""
-	function mod:UNIT_SPELLCAST_SUCCEEDED(_, unit, spellName, _, castGUID, spellId)
-		if spellId == 226241 and castGUID ~= prev then
-			prev = castGUID
-			local nick = self:UnitName(unit, true)
-			message(spellId, L.used_cast:format(nick, spellName))
-			bar(spellId, 300, nick, L.codex)
-		end
-	end
-end
-
 -- General
 
 do
@@ -875,6 +913,11 @@ end
 
 -- Death Knight
 
+function mod:AbominationLimb(_, spellId, nick, spellName)
+	message(spellId, L.used_cast:format(nick, spellName))
+	bar(spellId, 12, nick, spellName)
+end
+
 function mod:AntiMagicZone(_, spellId, nick, spellName)
 	message(spellId, L.used_cast:format(nick, spellName), nick)
 	bar(spellId, 8, nick, spellName)
@@ -884,6 +927,20 @@ end
 -- function mod:AntiMagicZoneOff(_, spellId, nick, spellName)
 -- 	stopbar(spellName, nick)
 -- end
+
+function mod:DancingRuneWeapon(_, spellId, nick, spellName)
+	message(spellId, L.used_cast:format(nick, spellName), nick)
+	bar(spellId, 8, nick, spellName)
+end
+
+function mod:DeathPact(_, spellId, nick, spellName)
+	message(spellId, L.used_cast:format(nick, spellName), nick)
+	bar(spellId, 15, nick, spellName)
+end
+
+function mod:DeathPactOff(_, _, nick, spellName)
+	stopbar(spellName, nick)
+end
 
 function mod:GorefiendsGrasp(_, spellId, nick, spellName)
 	message(spellId, L.used_cast:format(nick, spellName))
@@ -901,6 +958,11 @@ end
 
 -- Demon Hunter
 
+function mod:Blur(_, spellId, nick, spellName)
+	message(spellId, L.used_cast:format(nick, spellName), nick)
+	bar(spellId, 10, nick, spellName)
+end
+
 function mod:Darkness(_, spellId, nick, spellName)
 	message(spellId, L.used_cast:format(nick, spellName), nick)
 	bar(spellId, 8, nick, spellName)
@@ -916,6 +978,15 @@ function mod:Metamorphosis(_, spellId, nick, spellName)
 	bar(spellId, 15, nick, spellName)
 end
 
+function mod:Netherwalk(_, spellId, nick, spellName)
+	message(spellId, L.used_cast:format(nick, spellName), nick)
+	bar(spellId, 6, nick, spellName)
+end
+
+function mod:NetherwalkOff(_, _, nick, spellName)
+	stopbar(spellName, nick)
+end
+
 -- Druid
 
 function mod:Barkskin(_, spellId, nick, spellName)
@@ -923,9 +994,24 @@ function mod:Barkskin(_, spellId, nick, spellName)
 	bar(spellId, 12, nick, spellName)
 end
 
+function mod:IncarnationGuardian(_, spellId, nick, spellName)
+	message(spellId, L.used_cast:format(nick, spellName))
+	-- bar(spellId, 30, nick, spellName)
+end
+
+function mod:IncarnationTree(_, spellId, nick, spellName)
+	message(spellId, L.used_cast:format(nick, spellName))
+	-- bar(spellId, 30, nick, spellName)
+end
+
 function mod:Ironbark(target, spellId, nick, spellName)
 	message(spellId, L.usedon_cast:format(nick, spellName, target))
 	bar(spellId, 12, target, spellName)
+end
+
+function mod:Innervate(target, spellId, nick, spellName)
+	message(spellId, L.usedon_cast:format(nick, spellName, target))
+	bar(spellId, 10, target, spellName)
 end
 
 function mod:StampedingRoar(_, spellId, nick, spellName)
@@ -947,6 +1033,31 @@ function mod:TranquilityOff(_, _, nick, spellName)
 	stopbar(spellName, nick)
 end
 
+-- Evoker
+
+function mod:ObsidianScales(_, spellId, nick, spellName)
+	message(spellId, L.used_cast:format(nick, spellName))
+	bar(spellId, 12, nick, spellName)
+end
+
+function mod:RenewingBlaze(_, spellId, nick, spellName)
+	message(spellId, L.used_cast:format(nick, spellName))
+	bar(spellId, 8, nick, spellName)
+end
+
+function mod:Rewind(_, spellId, nick, spellName)
+	message(spellId, L.used_cast:format(nick, spellName))
+end
+
+function mod:TimeDilation(target, spellId, nick, spellName)
+	message(spellId, L.usedon_cast:format(nick, spellName, target))
+	bar(spellId, 8, nick, spellName)
+end
+
+function mod:Zephyr(_, spellId, nick, spellName)
+	message(spellId, L.used_cast:format(nick, spellName))
+end
+
 -- Mage
 
 function mod:Portals(_, spellId, nick, spellName)
@@ -965,9 +1076,19 @@ function mod:DampenHarm(_, spellId, nick, spellName)
 	bar(spellId, 10, nick, spellName)
 end
 
+function mod:DiffuseMagic(_, spellId, nick, spellName)
+	message(spellId, L.used_cast:format(nick, spellName), nick)
+	bar(spellId, 6, nick, spellName)
+end
+
 function mod:FortifyingBrew(_, spellId, nick, spellName)
 	message(spellId, L.used_cast:format(nick, spellName), nick)
 	bar(spellId, 15, nick, spellName)
+end
+
+function mod:InvokeYulon(_, spellId, nick, spellName)
+	message(spellId, L.used_cast:format(nick, spellName), nick)
+	bar(spellId, 25, nick, spellName)
 end
 
 function mod:LifeCocoon(target, spellId, nick, spellName)
@@ -1004,6 +1125,25 @@ function mod:AuraMastery(_, spellId, nick, spellName)
 	bar(spellId, 8, nick, spellName)
 end
 
+function mod:BlessingOfProtection(target, spellId, nick, spellName)
+	message(spellId, L.usedon_cast:format(nick, spellName, target))
+	bar(spellId, 10, target, spellName)
+end
+
+function mod:BlessingOfSacrifice(target, spellId, nick, spellName)
+	message(spellId, L.usedon_cast:format(nick, spellName, target))
+	bar(spellId, 12, target, spellName)
+end
+
+function mod:BlessingOfSacrificeOff(target, spellId, nick, spellName)
+	stopbar(spellName, target)
+end
+
+function mod:BlessingOfSpellwarding(target, spellId, nick, spellName)
+	message(spellId, L.usedon_cast:format(nick, spellName, target))
+	bar(spellId, 10, target, spellName)
+end
+
 function mod:DivineProtection(_, spellId, nick, spellName)
 	message(spellId, L.used_cast:format(nick, spellName), nick)
 	bar(spellId, 8, nick, spellName)
@@ -1017,25 +1157,6 @@ end
 function mod:GuardianOfAncientKings(_, spellId, nick, spellName)
 	message(spellId, L.used_cast:format(nick, spellName), nick)
 	bar(spellId, 8, nick, spellName)
-end
-
-function mod:BlessinOfProtection(target, spellId, nick, spellName)
-	message(spellId, L.usedon_cast:format(nick, spellName, target))
-	bar(spellId, 10, target, spellName)
-end
-
-function mod:BlessingOfSpellwarding(target, spellId, nick, spellName)
-	message(spellId, L.usedon_cast:format(nick, spellName, target))
-	bar(spellId, 10, target, spellName)
-end
-
-function mod:BlessingOfSacrifice(target, spellId, nick, spellName)
-	message(spellId, L.usedon_cast:format(nick, spellName, target))
-	bar(spellId, 12, target, spellName)
-end
-
-function mod:BlessingOfSacrificeOff(target, spellId, nick, spellName)
-	stopbar(spellName, target)
 end
 
 -- Priest
@@ -1058,12 +1179,11 @@ function mod:GuardianSpiritOff(_, _, nick, spellName)
 	stopbar(spellName, nick) -- removed on absorbed fatal blow
 end
 
-function mod:SymbolOfHope(_, spellId, nick, spellName)
+function mod:HolyWordSalvation(_, spellId, nick, spellName)
 	message(spellId, L.used_cast:format(nick, spellName))
-	bar(spellId, 5, nick, spellName)
 end
 
-function mod:HolyWordSalvation(_, spellId, nick, spellName)
+function mod:Lightwell(_, spellId, nick, spellName)
 	message(spellId, L.used_cast:format(nick, spellName))
 end
 
@@ -1077,9 +1197,16 @@ function mod:PowerWordBarrier(_, spellId, nick, spellName)
 	bar(62618, 10, nick, spellName)
 end
 
-function mod:SpiritShell(_, spellId, nick, spellName)
+function mod:SymbolOfHope(_, spellId, nick, spellName)
 	message(spellId, L.used_cast:format(nick, spellName))
-	bar(spellId, 10, nick, spellName)
+	bar(spellId, 5, nick, spellName)
+end
+
+-- Rogue
+
+function mod:ShroudOfConcealment(_, spellId, nick, spellName)
+	message(spellId, L.used_cast:format(nick, spellName))
+	bar(spellId, 15, nick, spellName)
 end
 
 -- Shaman
@@ -1094,6 +1221,10 @@ do
 			bar(2825, 40, nick, spellName, spellId)
 		end
 	end
+end
+
+function mod:EarthElemental(_, spellId, nick, spellName)
+	message(spellId, L.used_cast:format(nick, spellName))
 end
 
 function mod:SpiritLink(_, spellId, nick, spellName)
@@ -1117,6 +1248,10 @@ function mod:WindRushTotem(_, spellId, nick, spellName)
 end
 
 -- Warlock
+
+function mod:DemonicGateway(_, spellId, nick, spellName)
+	message(spellId, L.used_cast:format(nick, spellName))
+end
 
 function mod:Soulwell(_, spellId, nick, spellName)
 	message(spellId, L.used_cast:format(nick, spellName))
