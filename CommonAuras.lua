@@ -624,6 +624,7 @@ function mod:OnRegister()
 		[51052] = "AntiMagicZone",
 		[111771] = "DemonicGateway",
 		[114018] = "ShroudOfConcealment",
+		[374227] = "Zephyr",
 		-- DPS
 		[2825] = "Bloodlust", -- Bloodlust
 		[32182] = "Bloodlust", -- Heroism
@@ -718,8 +719,8 @@ function mod:OnRegister()
 		[224871] = "Portals", -- Dalaran - Broken Isles
 		[281400] = "Portals", -- Boralus (Alliance)
 		[281402] = "Portals", -- Dazar'alor (Horde)
-		[344597] = "Portal", -- Oribos
-		[395289] = "Portal", -- Valdrakken
+		[344597] = "Portals", -- Oribos
+		[395289] = "Portals", -- Valdrakken
 	}
 	combatLogMap.SPELL_RESURRECT = {
 		[20484] = "Rebirth", -- Rebirth (Druid)
@@ -767,15 +768,18 @@ colors = {
 	[740] = "green", -- Tranquility
 	rebirth = "green", -- Rebirth
 	[115310] = "green", -- Revival
-	[109964] = "green", -- Spirit Shell
 	[64843] = "green", -- Divine Hymn
 	[265202] = "green", -- Holy Word: Salvation
 	[64901] = "green", -- Symbol of Hope
+	[126135] = "green", -- Lightwell
 	[108280] = "green", -- Healing Tide Totem
+	[322118] = "green", -- Invoke Yu'lon
+	[363534] = "green", -- Rewind
 	[102342] = "yellow", -- Ironbark
 	[116849] = "yellow", -- Life Cocoon
 	[47788] = "yellow", -- Guardian Spirit
 	[33206] = "yellow", -- Pain Suppression
+	[357170] = "yellow", -- Time Dilation
 	[6940] = "orange", -- Blessing of Sacrifice
 	[98008] = "orange", -- Spirit Link Totem
 	[2825] = "red", -- Bloodlust
@@ -825,7 +829,7 @@ end
 
 function mod:BigWigs_OnBossWin()
 	local _, zoneType = GetInstanceInfo()
-	if zoneType == "raid" then
+	if zoneType == "raid" or zoneType == "party" then
 		self:SendMessage("BigWigs_StopBars", self)
 	end
 end
