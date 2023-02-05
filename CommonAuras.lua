@@ -92,6 +92,7 @@ local toggleOptions = {
 	265202, -- Holy Word: Salvation
 	33206, -- Pain Suppression
 	62618, -- Power Word: Barrier
+	114052, -- Ascendance
 	108280, -- Healing Tide Totem
 	98008, -- Spirit Link Totem
 }
@@ -677,6 +678,7 @@ function mod:OnRegister()
 		[31821] = "AuraMastery",
 		[98008] = "SpiritLink",
 		[108280] = "HealingTide",
+		[114052]= "Ascendance",
 		[116849] = "LifeCocoon",
 		[322118] = "InvokeYulon",
 		[115310] = "Revival",
@@ -773,6 +775,7 @@ colors = {
 	[64901] = "green", -- Symbol of Hope
 	[126135] = "green", -- Lightwell
 	[108280] = "green", -- Healing Tide Totem
+	[114052] = "green", -- Ascendance
 	[322118] = "green", -- Invoke Yu'lon
 	[363534] = "green", -- Rewind
 	[102342] = "yellow", -- Ironbark
@@ -1214,6 +1217,11 @@ function mod:ShroudOfConcealment(_, spellId, nick, spellName)
 end
 
 -- Shaman
+
+function mod:Ascendance(_, spellId, nick, spellName)
+	message(spellId, L.used_cast:format(nick, spellName))
+	bar(spellId, 15, nick, spellName)
+end
 
 do
 	local prev = 0
