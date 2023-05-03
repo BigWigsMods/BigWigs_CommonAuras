@@ -26,6 +26,7 @@
 
 ## Author: Funkydude, Nebula169
 ## Version: @project-version@
+## IconTexture: Interface\AddOns\BigWigs\Media\Icons\core-enabled
 ## X-Category: Raid
 ## X-License: All Rights Reserved: You are free to fork and modify on GitHub, please ask us about anything else.
 ## X-Curse-Project-ID: 13530
