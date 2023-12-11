@@ -279,7 +279,7 @@ local function GetOptions()
 					order = 21,
 				},
 				barColor = {
-					name = PL.regularBars,
+					name = PL.bars,
 					type = "color", hasAlpha = true,
 					get = barColorGet,
 					set = barColorSet,
@@ -494,7 +494,7 @@ local function GetOptions()
 					order = 21,
 				},
 				barColor = {
-					name = PL.regularBars,
+					name = PL.bars,
 					type = "color", hasAlpha = true,
 					get = barColorGet,
 					set = barColorSet,
