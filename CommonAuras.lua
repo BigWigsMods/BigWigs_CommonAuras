@@ -20,6 +20,19 @@ function mod:GetLocale() return L end
 -- Options
 --
 
+local GetSpellName = BigWigsLoader.GetSpellName
+local GetSpellDescription = BigWigsLoader.GetSpellDescription
+local GetSpellTexture = BigWigsLoader.GetSpellTexture
+local SpellInfoOld = GetSpellInfo
+local GetSpellInfo = function(spellID)
+	local spellInfo = C_Spell and C_Spell.GetSpellInfo and C_Spell.GetSpellInfo(spellID)
+	if spellInfo then
+		return spellInfo.name, nil, spellInfo.iconID, spellInfo.castTime, spellInfo.minRange, spellInfo.maxRange, spellInfo.spellID, spellInfo.originalIconID;
+	else
+		return SpellInfoOld(spellID)
+	end
+end
+
 local toggleOptions = {
 	--[[ Out of combat ]]--
 	"feast",
@@ -145,7 +158,7 @@ local function GetOptions()
 		args = {
 			header = {
 				type = "description",
-				name = GetAddOnMetadata(addonName, "Notes") .. "\n",
+				name = C_AddOns.GetAddOnMetadata(addonName, "Notes") .. "\n",
 				fontSize = "medium",
 				order = 0,
 			},
@@ -247,7 +260,7 @@ local function GetOptions()
 			args = {
 				master = {
 					type = "toggle",
-					name = ("|cfffed000%s|r"):format(isSpell and GetSpellInfo(key) or L[key] or key),
+					name = ("|cfffed000%s|r"):format(isSpell and GetSpellName(key) or L[key] or key),
 					desc = isSpell and GetDescription or L[key.."_desc"], descStyle = "inline",
 					image = GetSpellTexture(isSpell and key or L[key.."_icon"]),
 					get = masterGet,
@@ -390,14 +403,14 @@ local function GetOptions()
 
 	local customOptions = {}
 	for key in next, mod.db.profile.custom do
-		if GetSpellInfo(key) then
+		if GetSpellName(key) then
 			customOptions[#customOptions+1] = key
 		else
 			mod.db.profile.custom[key] = nil
 		end
 	end
 	table.sort(customOptions, function(a, b)
-		return GetSpellInfo(a) < GetSpellInfo(b)
+		return GetSpellName(a) < GetSpellName(b)
 	end)
 
 	local function customMasterSet(info, value)
@@ -435,7 +448,7 @@ local function GetOptions()
 			args = {
 				master = {
 					type = "toggle",
-					name = ("|cfffed000%s|r (%d)"):format((GetSpellInfo(key)), key),
+					name = ("|cfffed000%s|r (%d)"):format(GetSpellName(key), key),
 					desc = GetDescription, descStyle = "inline",
 					image = GetSpellTexture(key),
 					get = masterGet,
@@ -873,7 +886,7 @@ end
 -- General
 
 do
-	local feast = GetSpellInfo(66477)
+	local feast = GetSpellName(66477)
 	function mod:Feasts(_, spellId, nick, spellName)
 		message("feast", L.feast_cast:format(nick, spellName), nil, spellId)
 		bar("feast", 180, nick, feast, spellId)
@@ -896,7 +909,7 @@ do
 end
 
 do
-	local hammer = GetSpellInfo(199109)
+	local hammer = GetSpellName(199109)
 	function mod:AutoHammer(_, spellId, nick, spellName)
 		message("repair", L.used_cast:format(nick, hammer), nil, spellId)
 		bar("repair", 660, nick, hammer, spellId) -- 11min
@@ -904,7 +917,7 @@ do
 end
 
 do
-	local pylon = GetSpellInfo(199115)
+	local pylon = GetSpellName(199115)
 	function mod:Pylon(_, spellId, nick, spellName)
 		message("rebirth", L.used_cast:format(nick, pylon), nil, spellId)
 	end
