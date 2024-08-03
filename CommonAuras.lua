@@ -54,7 +54,7 @@ local toggleOptions = {
 	111771, -- Demonic Gateway
 	97462, -- Rallying Cry
 
-	--[[ Self ]]--
+	--[[ Defensive ]]--
 	49028, -- Dancing Rune Weapon
 	48743, -- Death Pact
 	48792, -- Icebound Fortitude
@@ -225,7 +225,7 @@ local function GetOptions()
 	local optionHeaders = {
 		feast = L.outOfCombat,
 		[51052] = L.group,
-		[49028] = L.self,
+		[49028] = L.defensive,
 		[33891] = L.healer,
 	}
 	local bitflags = {"MESSAGE", "BAR", "EMPHASIZE"}
@@ -325,7 +325,7 @@ local function GetOptions()
 				},
 			},
 		}
-		if header == L.self then
+		if header == L.defensive then
 			group.args.TANK = {
 				type = "toggle",
 				name = BigWigs:GetOptionDetails("TANK"),
