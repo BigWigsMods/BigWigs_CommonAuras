@@ -23,15 +23,7 @@ function mod:GetLocale() return L end
 local GetSpellName = BigWigsLoader.GetSpellName
 local GetSpellDescription = BigWigsLoader.GetSpellDescription
 local GetSpellTexture = BigWigsLoader.GetSpellTexture
-local SpellInfoOld = GetSpellInfo
-local GetSpellInfo = function(spellID)
-	local spellInfo = C_Spell and C_Spell.GetSpellInfo and C_Spell.GetSpellInfo(spellID)
-	if spellInfo then
-		return spellInfo.name, nil, spellInfo.iconID, spellInfo.castTime, spellInfo.minRange, spellInfo.maxRange, spellInfo.spellID, spellInfo.originalIconID;
-	else
-		return SpellInfoOld(spellID)
-	end
-end
+local GetSpellInfo = C_Spell.GetSpellInfo
 
 local toggleOptions = {
 	--[[ Out of combat ]]--
@@ -372,29 +364,31 @@ local function GetOptions()
 				desc = L.addSpellDesc,
 				get = false,
 				set = function(info, value)
-					local _, _, _, _, _, _, spellId = GetSpellInfo(value)
-					mod.db.profile.custom[spellId] = {
-						event = "SPELL_CAST_SUCCESS",
-						format = "used_cast",
-						duration = 0,
-					}
-					mod.db.profile[spellId] = 0
+					local info = GetSpellInfo(value)
+					if info then
+						mod.db.profile.custom[info.spellID] = {
+							event = "SPELL_CAST_SUCCESS",
+							format = "used_cast",
+							duration = 0,
+						}
+						mod.db.profile[info.spellID] = 0
+					end
 				end,
 				validate = function(info, value)
-					local _, _, _, _, _, _, spellId = GetSpellInfo(value)
-					if not spellId then
+					local info = GetSpellInfo(value)
+					if not info then
 						return ("%s: %s"):format(L.commonAuras, L.customErrorInvalid)
-					elseif mod.db.profile[spellId] then
+					elseif mod.db.profile[info.spellID] then
 						return ("%s: %s"):format(L.commonAuras, L.customErrorExists)
 					end
 					return true
 				end,
 				confirm = function(info, value)
-					local spell, _, texture, _, _, _, spellId = GetSpellInfo(value)
-					if not spell then return false end
-					local desc = GetSpellDescription(spellId) or ""
+					local info = GetSpellInfo(value)
+					if not info then return false end
+					local desc = GetSpellDescription(info.spellID) or ""
 					if desc ~= "" then desc = "\n" .. desc:gsub("%%", "%%%%") end
-					return ("%s\n\n|T%d:0|t|cffffd200%s|r (%d)%s"):format(L.customConfirmAdd, texture, spell, spellId, desc)
+					return ("%s\n\n|T%d:0|t|cffffd200%s|r (%d)%s"):format(L.customConfirmAdd, info.iconID, info.name, info.spellID, desc)
 				end,
 				order = 1,
 			},
