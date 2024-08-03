@@ -109,7 +109,7 @@ mod.defaultDB = toggleDefaults
 
 
 local C = BigWigs.C
-local bit_band = bit.band
+local bit_band, bit_bor = bit.band, bit.bor
 local colors = nil -- key to message color map
 
 -- for emphasized options
@@ -849,23 +849,27 @@ end
 --
 
 -- Dedicated COMBAT_LOG_EVENT_UNFILTERED handler for efficiency
-CAFrame:SetScript("OnEvent", function()
-	local _, event, _, _, source, _, _, _, target, _, _, spellId, spellName = CombatLogGetCurrentEventInfo()
-	if not combatLogMap[event] then return end
+do
+	local FILTER_GROUP = bit_bor(COMBATLOG_OBJECT_AFFILIATION_MINE, COMBATLOG_OBJECT_AFFILIATION_PARTY, COMBATLOG_OBJECT_AFFILIATION_RAID)
+	CAFrame:SetScript("OnEvent", function()
+		local _, event, _, _, source, srcFlags, _, _, target, dstFlags, _, spellId, spellName = CombatLogGetCurrentEventInfo()
+		if not combatLogMap[event] then return end
+		if bit_band(bit_bor(srcFlags, dstFlags), FILTER_GROUP) == 0 then return end
 
-	local f = combatLogMap[event][spellId]
-	if f then
-		mod[f](mod, target and target:gsub("%-.+", "*"), spellId, source:gsub("%-.+", "*"), spellName)
-		return
-	end
+		local f = combatLogMap[event][spellId]
+		if f then
+			mod[f](mod, target and target:gsub("%-.+", "*"), spellId, source:gsub("%-.+", "*"), spellName)
+			return
+		end
 
-	f = mod.db.profile.custom[spellId]
-	if f and f.event == event then
-		-- we could end up with string.format errors so include fallback for player names
-		mod:Custom(f, target and target:gsub("%-.+", "*") or UNKNOWN, spellId, source and source:gsub("%-.+", "*") or UNKNOWN, spellName)
-		return
-	end
-end)
+		f = mod.db.profile.custom[spellId]
+		if f and f.event == event then
+			-- we could end up with string.format errors so include fallback for player names
+			mod:Custom(f, target and target:gsub("%-.+", "*") or UNKNOWN, spellId, source and source:gsub("%-.+", "*") or UNKNOWN, spellName)
+			return
+		end
+	end)
+end
 
 
 -- Custom spells
