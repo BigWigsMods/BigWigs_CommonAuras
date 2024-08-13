@@ -7,6 +7,8 @@ local mod, CL = BigWigs:NewPlugin("Common Auras")
 if not mod then return end
 local CAFrame = CreateFrame("Frame")
 
+-- luacheck: globals C_AddOns C_Spell UnitGroupRolesAssigned
+
 --------------------------------------------------------------------------------
 -- Localization
 --
