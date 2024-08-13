@@ -38,60 +38,93 @@ local toggleOptions = {
 	114018, -- Shroud of Concealment
 
 	--[[ Group ]]--
+	-- Death Knight
 	51052, -- Anti-Magic Zone
 	108199, -- Gorefiend's Grasp
-	315443, -- Abomination Limb
+	383269, -- Abomination Limb
+	-- Demon Hunter
 	196718, -- Darkness
+	-- Druid
 	29166, -- Innervate
 	106898, -- Stampeding Roar
+	124974, -- Nature's Vigil
 	"rebirth",
+	-- Evoker
 	374227, -- Zephyr
+	-- Hunter
+	53480, -- Roar of Sacrifice
+	-- Mage
+	414660, -- Mass Barrier
+	-- Monk
+	116841, -- Tiger's Lust
+	-- Paladin
+	1044, -- Blessing of Freedom
 	1022, -- Blessing of Protection
 	204018, -- Blessing of Spellwarding
 	6940, -- Blessing of Sacrifice
+	-- Priest
+	15286, -- Vampiric Embrace
+	-- Shaman
 	2825, -- Bloodlust
+	108281, -- Ancestral Guidance
+	207399, -- Ancestral Protection Totem
 	198103, -- Earth Elemental
 	16191, -- Mana Tide Totem
 	192077, -- Wind Rush Totem
+	-- Warlock
 	111771, -- Demonic Gateway
+	-- Warrior
 	97462, -- Rallying Cry
 
 	--[[ Defensive ]]--
+	-- Death Knight
 	49028, -- Dancing Rune Weapon
 	48743, -- Death Pact
 	48792, -- Icebound Fortitude
 	55233, -- Vampiric Blood
+	-- Demon Hunter
 	198589, -- Blur
 	204021, -- Fiery Brand
 	187827, -- Metamorphosis
 	196555, -- Netherwalk
+	-- Druid
 	22812, -- Barkskin
 	102558, -- Incarnation (Guardian)
 	61336, -- Survival Instincts
+	-- Evoker
 	363916, -- Obsidian Scales
 	374348, -- Renewing Blaze
+	-- Monk
 	122278, -- Dampen Harm
 	122783, -- Diffuse Magic
 	115203, -- Fortifying Brew
 	115176, -- Zen Meditation
+	-- Paladin
 	31850, -- Ardent Defender
 	498, -- Divine Protection
 	642, -- Divine Shield
 	86659, -- Guardian of Ancient Kings
+	-- Warrior
 	1160, -- Demoralizing Shout
 	12975, -- Last Stand
 	871, -- Shield Wall
+	392966, -- Spell Block
 
 	--[[ Healer ]]--
+	-- Druid
 	33891, -- Incarnation (Tree of Life)
 	102342, -- Ironbark
 	740, -- Tranquility
+	-- Evoker
 	357170, -- Time Dilation
 	363534, -- Rewind
+	-- Monk
 	116849, -- Life Cocoon
 	322118, -- Invoke Yu'lon
 	115310, -- Revival
+	-- Paladin
 	31821, -- Aura Mastery
+	-- Priest
 	64843, -- Divine Hymn
 	47788, -- Guardian Spirit
 	126135, -- Lightwell
@@ -99,8 +132,12 @@ local toggleOptions = {
 	265202, -- Holy Word: Salvation
 	33206, -- Pain Suppression
 	62618, -- Power Word: Barrier
+	271466, -- Luminous Barrier
+	108968, -- Void Shift
+	-- Shaman
 	114052, -- Ascendance
 	108280, -- Healing Tide Totem
+	198838, -- Earthen Wall Totem
 	98008, -- Spirit Link Totem
 }
 local toggleDefaults = { enabled = true, custom = {} }
@@ -622,11 +659,17 @@ function mod:OnRegister()
 		[97462] = "RallyingCry",
 		[29166] = "Innervate",
 		[106898] = "StampedingRoar",
+		[124974] = "NaturesVigil",
+		[1044] = "BlessingOfFreedom",
 		[1022] = "BlessingOfProtection",
 		[204018] ="BlessingOfSpellwarding",
 		[6940] = "BlessingOfSacrifice",
+		[199448] = "BlessingOfSacrifice", -- Ultimate Sacrifice
+		[15286] = "VampiricEmbrace",
 		[108199] = "GorefiendsGrasp",
-		[315443] = "AbominationLimb",
+		[383269] = "AbominationLimb",
+		[108281] = "AncestralGuidance",
+		[207399] = "AncestralProtectionTotem",
 		[16191] = "ManaTideTotem",
 		[198103] = "EarthElemental",
 		[192077] = "WindRushTotem",
@@ -635,6 +678,9 @@ function mod:OnRegister()
 		[111771] = "DemonicGateway",
 		[114018] = "ShroudOfConcealment",
 		[374227] = "Zephyr",
+		[116841] = "TigersLust",
+		[53480] = "RoarOfSacrifice",
+		[414660] = "MassBarrier",
 		-- DPS
 		[2825] = "Bloodlust", -- Bloodlust
 		[32182] = "Bloodlust", -- Heroism
@@ -652,6 +698,7 @@ function mod:OnRegister()
 		[871] = "ShieldWall",
 		[12975] = "LastStand",
 		[1160] = "DemoralizingShout",
+		[392966] = "SpellBlock",
 		[31850] = "ArdentDefender",
 		[86659] = "GuardianOfAncientKings",
 		[498] = "DivineProtection",
@@ -681,16 +728,20 @@ function mod:OnRegister()
 		[126135] = "Lightwell",
 		[33206] = "PainSuppression",
 		[62618] = "PowerWordBarrier",
+		[271466] = "LuminousBarrier",
+		[108968] = "VoidShift",
 		[64901] = "SymbolOfHope",
 		[102342] = "Ironbark",
 		[740] = "Tranquility",
 		[31821] = "AuraMastery",
-		[98008] = "SpiritLink",
-		[108280] = "HealingTide",
+		[98008] = "SpiritLinkTotem",
+		[108280] = "HealingTideTotem",
+		[198838] = "EarthenWallTotem",
 		[114052]= "Ascendance",
 		[116849] = "LifeCocoon",
 		[322118] = "InvokeYulon",
 		[115310] = "Revival",
+		[388615] = "Revival", -- Restoral
 		[357170] = "TimeDilation",
 		[363534] = "Rewind",
 		-- Reincarnation
@@ -703,6 +754,7 @@ function mod:OnRegister()
 		[115176] = "ZenMeditationOff",
 		[116849] = "LifeCocoonOff",
 		[6940] = "BlessingOfSacrificeOff",
+		[199448] = "BlessingOfSacrificeOff", -- Ultimate Sacrifice
 		[48743] = "DeathPactOff",
 		[196555] = "NetherwalkOff",
 	}
@@ -781,6 +833,7 @@ colors = {
 	[115310] = "green", -- Revival
 	[64843] = "green", -- Divine Hymn
 	[265202] = "green", -- Holy Word: Salvation
+	[271466] = "green", -- Luminous Barrier
 	[64901] = "green", -- Symbol of Hope
 	[126135] = "green", -- Lightwell
 	[108280] = "green", -- Healing Tide Totem
@@ -792,6 +845,9 @@ colors = {
 	[47788] = "yellow", -- Guardian Spirit
 	[33206] = "yellow", -- Pain Suppression
 	[357170] = "yellow", -- Time Dilation
+	[48743] = "orange", -- Death Pact
+	[53480] = "orange", -- Roar of Sacrifice
+	[108968] = "orange", -- Void Shift
 	[6940] = "orange", -- Blessing of Sacrifice
 	[98008] = "orange", -- Spirit Link Totem
 	[2825] = "red", -- Bloodlust
@@ -1039,6 +1095,11 @@ function mod:StampedingRoar(_, spellId, nick, spellName)
 	bar(spellId, 8, nick, spellName)
 end
 
+function mod:NaturesVigil(_, spellId, nick, spellName)
+	message(spellId, L.used_cast:format(nick, spellName))
+	bar(spellId, 15, nick, spellName)
+end
+
 function mod:SurvivalInstincts(_, spellId, nick, spellName)
 	message(spellId, L.used_cast:format(nick, spellName), nick)
 	bar(spellId, 6, nick, spellName)
@@ -1078,6 +1139,13 @@ function mod:Zephyr(_, spellId, nick, spellName)
 	message(spellId, L.used_cast:format(nick, spellName))
 end
 
+-- Hunter
+
+function mod:RoarOfSacrifice(target, spellId, nick, spellName)
+	message(spellId, L.usedon_cast:format(nick, spellName, target))
+	bar(spellId, 12, nick, spellName)
+end
+
 -- Mage
 
 function mod:Portals(_, spellId, nick, spellName)
@@ -1087,6 +1155,10 @@ end
 
 function mod:Refreshment(_, spellId, nick, spellName)
 	message(spellId, L.used_cast:format(nick, spellName))
+end
+
+function mod:MassBarrier(_, spellId, nick, spellName)
+	message(spellId, L.used_cast:format(nick, spellName), nick)
 end
 
 -- Monk
@@ -1121,7 +1193,7 @@ function mod:LifeCocoonOff(target, _, _, spellName)
 end
 
 function mod:Revival(_, spellId, nick, spellName)
-	message(spellId, L.used_cast:format(nick, spellName))
+	message(115310, L.used_cast:format(nick, spellName))
 end
 
 function mod:ZenMeditation(_, spellId, nick, spellName)
@@ -1131,6 +1203,11 @@ end
 
 function mod:ZenMeditationOff(_, _, nick, spellName)
 	stopbar(spellName, nick) -- removed on melee
+end
+
+function mod:TigersLust(target, spellId, nick, spellName)
+	message(spellId, L.usedon_cast:format(nick, spellName, target))
+	bar(spellId, 6, target, spellName)
 end
 
 -- Paladin
@@ -1145,14 +1222,19 @@ function mod:AuraMastery(_, spellId, nick, spellName)
 	bar(spellId, 8, nick, spellName)
 end
 
+function mod:BlessingOfFreedom(target, spellId, nick, spellName)
+	message(spellId, L.usedon_cast:format(nick, spellName, target))
+	bar(spellId, 8, target, spellName)
+end
+
 function mod:BlessingOfProtection(target, spellId, nick, spellName)
 	message(spellId, L.usedon_cast:format(nick, spellName, target))
 	bar(spellId, 10, target, spellName)
 end
 
 function mod:BlessingOfSacrifice(target, spellId, nick, spellName)
-	message(spellId, L.usedon_cast:format(nick, spellName, target))
-	bar(spellId, 12, target, spellName)
+	message(6940, L.usedon_cast:format(nick, spellName, target))
+	bar(6940, 12, target, spellName)
 end
 
 function mod:BlessingOfSacrificeOff(target, spellId, nick, spellName)
@@ -1217,9 +1299,22 @@ function mod:PowerWordBarrier(_, spellId, nick, spellName)
 	bar(62618, 10, nick, spellName)
 end
 
+function mod:LuminousBarrier(_, spellId, nick, spellName)
+	message(62618, L.used_cast:format(nick, spellName))
+end
+
 function mod:SymbolOfHope(_, spellId, nick, spellName)
 	message(spellId, L.used_cast:format(nick, spellName))
 	bar(spellId, 5, nick, spellName)
+end
+
+function mod:VampiricEmbrace(_, spellId, nick, spellName)
+	message(spellId, L.used_cast:format(nick, spellName))
+	bar(spellId, 12, nick, spellName)
+end
+
+function mod:VoidShift(target, spellId, nick, spellName)
+	message(spellId, L.usedon_cast:format(nick, spellName, target))
 end
 
 -- Rogue
@@ -1248,16 +1343,30 @@ do
 	end
 end
 
+function mod:AncestralGuidance(_, spellId, nick, spellName)
+	message(spellId, L.used_cast:format(nick, spellName))
+	bar(spellId, 10, nick, spellName)
+end
+
+function mod:AncestralProtectionTotem(_, spellId, nick, spellName)
+	message(spellId, L.used_cast:format(nick, spellName))
+end
+
 function mod:EarthElemental(_, spellId, nick, spellName)
 	message(spellId, L.used_cast:format(nick, spellName))
 end
 
-function mod:SpiritLink(_, spellId, nick, spellName)
+function mod:SpiritLinkTotem(_, spellId, nick, spellName)
 	message(spellId, L.used_cast:format(nick, spellName))
 	bar(spellId, 6, nick, spellName)
 end
 
-function mod:HealingTide(_, spellId, nick, spellName)
+function mod:EarthenWallTotem(_, spellId, nick, spellName)
+	message(spellId, L.used_cast:format(nick, spellName))
+	bar(spellId, 15, nick, spellName)
+end
+
+function mod:HealingTideTotem(_, spellId, nick, spellName)
 	message(spellId, L.used_cast:format(nick, spellName))
 	bar(spellId, 12, nick, spellName) -- base 10s, 12s at lv52
 end
@@ -1296,6 +1405,11 @@ end
 function mod:LastStand(_, spellId, nick, spellName)
 	message(spellId, L.used_cast:format(nick, spellName), nick)
 	bar(spellId, 15, nick, spellName)
+end
+
+function mod:SpellBlock(_, spellId, nick, spellName)
+	message(spellId, L.used_cast:format(nick, spellName), nick)
+	bar(spellId, 30, nick, spellName)
 end
 
 function mod:RallyingCry(_, spellId, nick, spellName)
