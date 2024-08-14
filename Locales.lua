@@ -330,7 +330,7 @@ elseif locale == "zhCN" then
 	L.commonAuras = "共同光环"
 	L.outOfCombat = "脱离战斗"
 	L.group = "队伍"
-	-- L.defensive = "Defensive"
+	L.defensive = "防御型"
 	L.healer = "治疗"
 	L.TANK_desc = "一些技能对坦克重要。设置此选项将只能看到对于选为坦克职能的信息和计时条。"
 	L.barBackground = "计时条背景"
