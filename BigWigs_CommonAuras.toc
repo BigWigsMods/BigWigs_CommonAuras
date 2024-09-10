@@ -1,4 +1,4 @@
-## Interface: 110000, 110002
+## Interface: 110000, 110002, 110005
 
 ## Title: BigWigs |cffff0000+|r|cffffffffCommon Auras|r
 ## Title-deDE: BigWigs |cffff0000+|r|cffffffffHäufige Auren|r
