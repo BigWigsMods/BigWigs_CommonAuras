@@ -15,7 +15,7 @@ local CAFrame = CreateFrame("Frame")
 
 local addonName, L = ...
 
-local PL = BigWigsAPI:GetLocale("BigWigs: Plugins")
+local PL = BigWigsAPI:GetLocale("BigWigs")
 function mod:GetLocale() return L end
 
 --------------------------------------------------------------------------------
