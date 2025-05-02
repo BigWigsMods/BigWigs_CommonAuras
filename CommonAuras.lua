@@ -402,32 +402,32 @@ local function GetOptions()
 				name = L.addSpell,
 				desc = L.addSpellDesc,
 				get = false,
-				set = function(info, value)
-					local info = GetSpellInfo(value)
-					if info then
-						mod.db.profile.custom[info.spellID] = {
+				set = function(_, value)
+					local tbl = GetSpellInfo(value)
+					if tbl then
+						mod.db.profile.custom[tbl.spellID] = {
 							event = "SPELL_CAST_SUCCESS",
 							format = "used_cast",
 							duration = 0,
 						}
-						mod.db.profile[info.spellID] = 0
+						mod.db.profile[tbl.spellID] = 0
 					end
 				end,
-				validate = function(info, value)
-					local info = GetSpellInfo(value)
-					if not info then
+				validate = function(_, value)
+					local tbl = GetSpellInfo(value)
+					if not tbl then
 						return ("%s: %s"):format(L.commonAuras, L.customErrorInvalid)
-					elseif mod.db.profile[info.spellID] then
+					elseif mod.db.profile[tbl.spellID] then
 						return ("%s: %s"):format(L.commonAuras, L.customErrorExists)
 					end
 					return true
 				end,
-				confirm = function(info, value)
-					local info = GetSpellInfo(value)
-					if not info then return false end
-					local desc = GetSpellDescription(info.spellID) or ""
+				confirm = function(_, value)
+					local tbl = GetSpellInfo(value)
+					if not tbl then return false end
+					local desc = GetSpellDescription(tbl.spellID) or ""
 					if desc ~= "" then desc = "\n" .. desc:gsub("%%", "%%%%") end
-					return ("%s\n\n|T%d:0|t|cffffd200%s|r (%d)%s"):format(L.customConfirmAdd, info.iconID, info.name, info.spellID, desc)
+					return ("%s\n\n|T%d:0|t|cffffd200%s|r (%d)%s"):format(L.customConfirmAdd, tbl.iconID, tbl.name, tbl.spellID, desc)
 				end,
 				order = 1,
 			},
