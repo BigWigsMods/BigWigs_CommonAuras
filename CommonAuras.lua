@@ -3,7 +3,7 @@
 -- Module Declaration
 --
 
-local mod, CL = BigWigs:NewPlugin("Common Auras")
+local mod, PL = BigWigs:NewPlugin("Common Auras")
 if not mod then return end
 local CAFrame = CreateFrame("Frame")
 
@@ -15,7 +15,7 @@ local CAFrame = CreateFrame("Frame")
 
 local addonName, L = ...
 
-local PL = BigWigsAPI:GetLocale("BigWigs")
+local CL = BigWigsAPI:GetLocale("BigWigs: Common")
 function mod:GetLocale() return L end
 
 --------------------------------------------------------------------------------
