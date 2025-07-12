@@ -1,4 +1,4 @@
-## Interface: 110107, 110100, 110105
+## Interface: 110107, 110200, 110105
 
 ## Title: BigWigs |cffff0000+|r|cffffffffCommon Auras|r
 ## Title-deDE: BigWigs |cffff0000+|r|cffffffffHäufige Auren|r
@@ -24,7 +24,7 @@
 ## Notes-zhCN: 显示团队通用的增益效果与负面影响。
 ## Notes-zhTW: Notifies you about common raid cooldowns.
 
-## Author: Funkydude, Nebula
+## Author: Funkeh, Nebula
 ## Version: @project-version@
 ## IconTexture: Interface\AddOns\BigWigs\Media\Icons\core-enabled
 ## X-Category: Raid
