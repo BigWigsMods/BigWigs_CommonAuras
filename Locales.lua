@@ -360,7 +360,7 @@ elseif locale == "zhCN" then
 	L.repair = "修理机器人"
 	L.repair_desc = "打开或关闭显示修理机器人可用时提示。"
 
-	L.feasts = "盛宴"
+	L.feast = "盛宴"
 	L.feast_desc = "打开或关闭显示盛宴可用时提示。"
 	L.feast_cast = "%s准备了一顿%s！"
 
