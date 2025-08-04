@@ -80,7 +80,7 @@ if locale == "deDE" then
 	L.repair = "Reparaturbots"
 	L.repair_desc = "Zeigt Reparaturbots an, sobald sie aufgestellt wurden."
 
-	L.feasts = "Festmähler"
+	L.feast = "Festmähler"
 	L.feast_cast = "%s hat %s zubereitet!"
 	L.feast_desc = "Zeigt Festmähler an, sobald sie zubereitet wurden."
 
@@ -160,7 +160,7 @@ elseif locale == "frFR" then
 	L.repair = "Robot réparateur"
 	L.repair_desc = "Prévient quand un robot réparateur est déployé."
 
-	L.feasts = "Festins"
+	L.feast = "Festins"
 	L.feast_desc = "Prévient quand des festins sont préparés."
 	L.feast_cast = "%s a préparé un %s !"
 
@@ -200,7 +200,7 @@ elseif locale == "itIT" then
 	L.repair = "Robot di Riparazione"
 	L.repair_desc = "Avvisa quando un Robot di Riparazione è disponibile."
 
-	L.feasts = "Banchetti"
+	L.feast = "Banchetti"
 	L.feast_desc = "Avvisa quando vengono messi a disposizione dei Banchetti."
 	L.feast_cast = "%s ha preparato un %s !"
 
@@ -320,7 +320,7 @@ elseif locale == "ruRU" then
 	L.repair = "Ремонтный робот"
 	L.repair_desc = "Вкл/выкл оповещения о доступности ремонтного робота."
 
-	L.feasts = "Пиршества"
+	L.feast = "Пиршества"
 	L.feast_desc = "Вкл/выкл оповещения о приготовленных пиршествах."
 	L.feast_cast = "%s приготовил %s!"
 
@@ -360,7 +360,7 @@ elseif locale == "zhCN" then
 	L.repair = "修理机器人"
 	L.repair_desc = "打开或关闭显示修理机器人可用时提示。"
 
-	L.feasts = "盛宴"
+	L.feast = "盛宴"
 	L.feast_desc = "打开或关闭显示盛宴可用时提示。"
 	L.feast_cast = "%s准备了一顿%s！"
 
