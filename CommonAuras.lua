@@ -41,7 +41,6 @@ local toggleOptions = {
 	-- Death Knight
 	51052, -- Anti-Magic Zone
 	108199, -- Gorefiend's Grasp
-	383269, -- Abomination Limb
 	-- Demon Hunter
 	196718, -- Darkness
 	-- Druid
@@ -691,7 +690,6 @@ function mod:OnRegister()
 		[199448] = "BlessingOfSacrifice", -- Ultimate Sacrifice
 		[15286] = "VampiricEmbrace",
 		[108199] = "GorefiendsGrasp",
-		[383269] = "AbominationLimb",
 		[108281] = "AncestralGuidance",
 		[207399] = "AncestralProtectionTotem",
 		[16191] = "ManaTideTotem",
@@ -1012,11 +1010,6 @@ function mod:Reincarnation(_, spellId, nick, spellName)
 end
 
 -- Death Knight
-
-function mod:AbominationLimb(_, spellId, nick, spellName)
-	message(spellId, L.used_cast:format(nick, spellName))
-	bar(spellId, 12, nick, spellName)
-end
 
 function mod:AntiMagicZone(_, spellId, nick, spellName)
 	message(spellId, L.used_cast:format(nick, spellName), nick)
