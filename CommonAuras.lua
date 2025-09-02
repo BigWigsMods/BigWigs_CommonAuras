@@ -1013,13 +1013,8 @@ end
 
 function mod:AntiMagicZone(_, spellId, nick, spellName)
 	message(spellId, L.used_cast:format(nick, spellName), nick)
-	bar(spellId, 8, nick, spellName)
+	bar(spellId, 6, nick, spellName)
 end
-
--- XXX Need to check if there's a good way to tell if it hit absorb max vs someone walking out
--- function mod:AntiMagicZoneOff(_, spellId, nick, spellName)
--- 	stopbar(spellName, nick)
--- end
 
 function mod:DancingRuneWeapon(_, spellId, nick, spellName)
 	message(spellId, L.used_cast:format(nick, spellName), nick)
