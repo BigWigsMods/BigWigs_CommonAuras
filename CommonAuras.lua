@@ -400,7 +400,7 @@ local function GetOptions()
 			}
 		end
 
-		parentGroup.args[key] = group
+		parentGroup.args[tostring(key)] = group
 	end
 
 	options.args["Custom"] = {
@@ -631,7 +631,7 @@ local function GetOptions()
 			}
 		end
 
-		options.args["Custom"].args[key] = group
+		options.args["Custom"].args[tostring(key)] = group
 	end
 
 	return options
